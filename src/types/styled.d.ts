@@ -14,6 +14,7 @@ declare module "styled-components" {
 
       onSurface: string;
       surface: string;
+      surfaceStroke: string;
 
       error: string;
       onError: string;
