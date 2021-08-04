@@ -1,9 +1,9 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { cssStep } from "../../helpers/cssScale";
+import { cssStep } from "src/helpers/cssScale";
 
 import classnames from "classnames";
-import { MinorSizes } from "../../types/sizes";
+import { LARGE, MEDIUM, SMALL } from "src/types/sizes";
 
 export interface ButtonProps {
   text: string;
@@ -20,7 +20,7 @@ export interface ButtonProps {
   isLoading: boolean;
 
   // Sizes
-  size: MinorSizes;
+  size: SMALL | MEDIUM | LARGE;
 }
 
 const BtnStyle = {
