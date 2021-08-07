@@ -1,9 +1,16 @@
+// import cxs, { CSSObject } from "cxs";
 import React from "react";
-import styled, { css } from "styled-components";
-import { cssStep } from "src/helpers/cssScale";
+import { LARGE, MEDIUM, SMALL } from "types/sizes";
 
-import classnames from "classnames";
-import { LARGE, MEDIUM, SMALL } from "src/types/sizes";
+export const PRIMARY = "primary";
+export const SECONDARY = "secondary";
+export const LINK = "link";
+
+export type PRIMARY = typeof PRIMARY;
+export type SECONDARY = typeof SECONDARY;
+export type LINK = typeof LINK;
+
+export type ButtonAppearance = PRIMARY | SECONDARY | LINK;
 
 export interface ButtonProps {
   text: string;
@@ -11,9 +18,7 @@ export interface ButtonProps {
   submit: boolean;
 
   // Appearance
-  primary: boolean;
-  secondary: boolean;
-  link: boolean;
+  type: ButtonAppearance;
 
   // States
   disabled: boolean;
@@ -23,29 +28,26 @@ export interface ButtonProps {
   size: SMALL | MEDIUM | LARGE;
 }
 
-const BtnStyle = {
-  padding: {
-    sm: `${cssStep(1)} ${cssStep(2)}`,
-    md: `${cssStep(1)} ${cssStep(3)}`,
-    lg: `${cssStep(1)} ${cssStep(4)}`,
-  },
-};
-
-const Wrapper = styled.button`
-  padding: ${cssStep(1)} ${cssStep(2)};
-`;
+// const appearance = {
+//   primary: (theme) => {},
+//   secondary: (theme) => {},
+//   link: (theme) => {},
+// };
 
 export function Button(props: ButtonProps) {
-  const { text, submit, size, isLoading, disabled, ...rest } = props;
+  const {
+    text,
+    submit,
+    size,
+    isLoading,
+    disabled,
+    type,
+    ...rest
+  } = props;
+
+  console.log(rest);
 
   return (
-    <Wrapper
-      type={(submit && "submit") || "button"}
-      className={classnames({
-        ...rest,
-      })}
-    >
-      {text}
-    </Wrapper>
+    <button type={(submit && "submit") || "button"}>{text}</button>
   );
 }

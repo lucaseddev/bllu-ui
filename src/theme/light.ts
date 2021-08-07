@@ -1,7 +1,6 @@
-import "styled-components";
-import { DefaultTheme } from "styled-components";
+import { Theme } from "types/theme";
 
-export const LightTheme: DefaultTheme = {
+export const LightTheme: Theme = {
   colors: {
     primary: "#3B75FA",
     onPrimary: "#fff",

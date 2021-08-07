@@ -1,6 +1,5 @@
-import "styled-components";
-import { DefaultTheme } from "styled-components";
+import { Theme } from "../types/theme";
 
-export const DarkTheme: DefaultTheme = {
-  colors: {},
-};
+// export const DarkTheme: Theme = {
+//   // colors: {},
+// };

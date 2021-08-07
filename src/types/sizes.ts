@@ -1,6 +1,13 @@
-export type SMALL = "sm";
-export type MEDIUM = "md";
-export type LARGE = "lg";
-export type EXTRA_LARGE = "xl";
-export type EXTRA_LARGE2 = "2xl";
-export type EXTRA_LARGE3 = "4xl";
+export const SMALL = "sm";
+export const MEDIUM = "md";
+export const LARGE = "lg";
+export const EXTRA_LARGE = "xl";
+export const EXTRA_LARGE2 = "2xl";
+export const EXTRA_LARGE3 = "4xl";
+
+export type SMALL = typeof SMALL;
+export type MEDIUM = typeof MEDIUM;
+export type LARGE = typeof LARGE;
+export type EXTRA_LARGE = typeof EXTRA_LARGE;
+export type EXTRA_LARGE2 = typeof EXTRA_LARGE2;
+export type EXTRA_LARGE3 = typeof EXTRA_LARGE3;
