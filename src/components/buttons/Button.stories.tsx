@@ -2,14 +2,13 @@ import React from "react";
 import { Meta, Story } from "@storybook/react";
 import { Button, ButtonProps, SECONDARY } from "./Button";
 import { MEDIUM } from "../../types/sizes";
+import { ThemeProvider } from "../../contexts";
+import { LightTheme } from "../../theme";
 
 export default {
   title: "Components/Button",
   component: Button,
 } as Meta;
-
-import { LightTheme } from "../../theme/light";
-import ThemeProvider from "cxs/ThemeProvider";
 
 const Template: Story<ButtonProps> = (args) => (
   <ThemeProvider theme={LightTheme}>

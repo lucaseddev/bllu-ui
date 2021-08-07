@@ -1,6 +1,9 @@
-// import cxs, { CSSObject } from "cxs";
+import cxs, { CSSObject } from "cxs";
+import { cssStep, StepSize } from "helpers/cssScale";
+import { useTheme } from "hooks/useTheme";
 import React from "react";
 import { LARGE, MEDIUM, SMALL } from "types/sizes";
+import { Theme } from "types/theme";
 
 export const PRIMARY = "primary";
 export const SECONDARY = "secondary";
@@ -18,7 +21,7 @@ export interface ButtonProps {
   submit: boolean;
 
   // Appearance
-  type: ButtonAppearance;
+  appearance: ButtonAppearance;
 
   // States
   disabled: boolean;
@@ -28,11 +31,16 @@ export interface ButtonProps {
   size: SMALL | MEDIUM | LARGE;
 }
 
-// const appearance = {
-//   primary: (theme) => {},
-//   secondary: (theme) => {},
-//   link: (theme) => {},
-// };
+const buttonAppearance = {
+  primary: (theme: Theme): CSSObject => ({
+    background: theme.colors.primary,
+    color: theme.colors.onPrimary,
+    padding: `${cssStep(1)} ${cssStep(2)}`,
+    borderRadius: cssStep(1, StepSize.MINOR_REM),
+  }),
+  secondary: (theme: Theme): CSSObject => ({}),
+  link: (theme: Theme): CSSObject => ({}),
+};
 
 export function Button(props: ButtonProps) {
   const {
@@ -41,13 +49,20 @@ export function Button(props: ButtonProps) {
     size,
     isLoading,
     disabled,
-    type,
+    appearance,
     ...rest
   } = props;
 
-  console.log(rest);
+  const { theme } = useTheme();
 
   return (
-    <button type={(submit && "submit") || "button"}>{text}</button>
+    <button
+      className={cxs(
+        buttonAppearance[appearance || "primary"](theme)
+      )}
+      type={(submit && "submit") || "button"}
+    >
+      {text}
+    </button>
   );
 }

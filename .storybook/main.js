@@ -3,12 +3,17 @@ const path = require("path");
 module.exports = {
   stories: ["../src/**/*.stories.tsx"],
   // Add any Storybook addons you want here: https://storybook.js.org/addons/
-  addons: [],
+  addons: [
+    "@storybook/addon-actions",
+    "@storybook/addon-docs",
+    "@storybook/addon-essentials",
+    "@storybook/addon-links",
+  ],
   webpackFinal: async (config) => {
     config.module.rules.push({
       test: /\.scss$/,
       use: ["style-loader", "css-loader", "sass-loader"],
-      include: path.resolve(__dirname, "../"),
+      include: path.resolve(__dirname, "../src"),
     });
 
     config.module.rules.push({
@@ -18,12 +23,12 @@ module.exports = {
         presets: [["react-app", { flow: false, typescript: true }]],
       },
     });
-    config.resolve.extensions.push(".ts", ".tsx");
+    config.resolve.extensions.push(".ts", ".tsx", ".js", ".jsx");
+    config.resolve.modules.push(path.resolve(__dirname, "../src"));
 
     return config;
   },
   reactOptions: {
     fastRefresh: true,
-    strictMode: true,
   },
 };

@@ -13,5 +13,5 @@ export function cssStep(
     throw new TypeError("x is not a number.");
   }
 
-  return x * size;
+  return x * size + ((size % 1 === 0 && "px") || "rem");
 }
