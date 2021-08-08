@@ -1,6 +1,7 @@
 export enum StepSize {
   MINOR_PX = 4,
   MAJOR_PX = 8,
+  XMINOR_REM = 0.125,
   MINOR_REM = 0.25,
   MAJOR_REM = 0.5,
 }
@@ -13,5 +14,5 @@ export function cssStep(
     throw new TypeError("x is not a number.");
   }
 
-  return x * size + ((size % 1 === 0 && "px") || "rem");
+  return x * size + ((Number.isInteger(size) && "px") || "rem");
 }
