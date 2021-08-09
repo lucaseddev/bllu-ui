@@ -1,7 +1,11 @@
-import { Theme } from "types/theme";
+import { ThemeColors } from "types/theme";
 
-export const LightTheme: Theme = {
+export const themeLight: ThemeColors = {
   colors: {
+    default: "#fff",
+    onDefault: "#242424",
+    defaultStroke: "#C4C4C4",
+
     primary: "#3B75FA",
     onPrimary: "#fff",
 

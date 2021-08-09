@@ -3,7 +3,7 @@ import { Meta, Story } from "@storybook/react";
 import { Button, ButtonProps, SECONDARY } from "./Button";
 import { MEDIUM } from "../../types/sizes";
 import { ThemeProvider } from "../../contexts";
-import { LightTheme } from "../../theme";
+import { themeLight } from "../../theme";
 
 export default {
   title: "Components/Button",
@@ -11,7 +11,7 @@ export default {
 } as Meta;
 
 const Template: Story<ButtonProps> = (args) => (
-  <ThemeProvider theme={LightTheme}>
+  <ThemeProvider theme={themeLight}>
     <Button {...args} />
   </ThemeProvider>
 );

@@ -1,7 +1,8 @@
 import cxs, { CSSObject } from "cxs";
-import { cssStep, StepSize } from "helpers/cssScale";
+import { combine, StyleFunction } from "helpers/combine";
+import { pxStep, remStep, StepSize } from "helpers/scale";
 import { useTheme } from "hooks/useTheme";
-import React from "react";
+import React, { useMemo } from "react";
 import {
   EXTRA_SMALL,
   SMALL,
@@ -34,47 +35,60 @@ export interface ButtonProps {
   isLoading: boolean;
 
   // Sizes
-  size: EXTRA_SMALL | SMALL | MEDIUM | LARGE | EXTRA_LARGE;
+  size: SMALL | MEDIUM | LARGE;
 }
 
-const buttonBaseStyle: CSSObject = {
-  paddingLeft: cssStep(2),
-  paddingRight: cssStep(2),
-  borderRadius: cssStep(1, StepSize.MINOR_REM),
+const buttonBaseStyle: StyleFunction = ({ theme }) => ({
+  paddingLeft: pxStep(2),
+  paddingRight: pxStep(2),
+  borderRadius: pxStep(1, StepSize.PX4),
+  transition: `background 0.2s, color 0.2s, border 0.2s ${theme.easings.inOutCubic}`,
+  ":hover": {
+    cursor: "pointer",
+  },
+});
+
+const buttonSize: { [size: string]: StyleFunction } = {
+  sm: () => ({
+    height: pxStep(4),
+  }),
+  md: () => ({
+    height: pxStep(5),
+  }),
+  lg: () => ({
+    height: pxStep(6),
+    fontSize: remStep(7, StepSize.REM125),
+  }),
 };
 
-const buttonSize: { [size: string]: CSSObject } = {
-  xs: {
-    height: cssStep(3),
-  },
-  sm: {
-    height: cssStep(4),
-  },
-  md: {
-    height: cssStep(5),
-    fontSize: cssStep(7, StepSize.XMINOR_REM),
-  },
-  lg: {
-    height: cssStep(6),
-    fontSize: cssStep(8, StepSize.XMINOR_REM),
-  },
-  xl: {
-    height: cssStep(7),
-    fontSize: cssStep(9, StepSize.XMINOR_REM),
-  },
-};
-
-const buttonAppearance = {
-  primary: (theme: Theme): CSSObject => ({
+const buttonAppearance: { [appearance: string]: StyleFunction } = {
+  primary: ({ theme, prev }) => ({
     background: theme.colors.primary,
     color: theme.colors.onPrimary,
     ":hover": {
+      ...prev[":hover"],
       background: theme.colors.secondary,
-      cursor: "pointer",
+    },
+    border: `1px solid ${theme.colors.primary}`,
+  }),
+  secondary: ({ theme, prev }) => ({
+    background: theme.colors.default,
+    color: theme.colors.onDefault,
+    border: `1px solid ${theme.colors.defaultStroke}`,
+    ":hover": {
+      ...prev[":hover"],
+      background: theme.colors.surface,
     },
   }),
-  secondary: (theme: Theme): CSSObject => ({}),
-  link: (theme: Theme): CSSObject => ({}),
+  link: ({ theme, prev }) => ({
+    color: theme.colors.primary,
+    background: "transparent",
+    border: "none",
+    ":hover": {
+      ...prev[":hover"],
+      color: theme.colors.secondary,
+    },
+  }),
 };
 
 export function Button(props: ButtonProps) {
@@ -85,18 +99,22 @@ export function Button(props: ButtonProps) {
     isLoading,
     disabled,
     appearance,
-    ...rest
   } = props;
-
   const { theme } = useTheme();
+
+  const styles = useMemo(() => {
+    return cxs(
+      combine(theme, [
+        buttonBaseStyle,
+        buttonSize[size || "md"],
+        buttonAppearance[appearance || "primary"],
+      ])
+    );
+  }, [size, appearance, isLoading]);
 
   return (
     <button
-      className={cxs({
-        ...buttonBaseStyle,
-        ...buttonSize[size || "md"],
-        ...buttonAppearance[appearance || "primary"](theme),
-      })}
+      className={styles}
       type={(submit && "submit") || "button"}
     >
       {text}

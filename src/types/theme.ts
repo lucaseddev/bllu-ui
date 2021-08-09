@@ -1,5 +1,11 @@
-export interface Theme {
+export type Theme = ThemeColors & ThemeAnimations;
+
+export interface ThemeColors {
   colors: {
+    default: string;
+    onDefault: string;
+    defaultStroke: string;
+
     primary: string;
     onPrimary: string;
 
@@ -20,5 +26,11 @@ export interface Theme {
     onSuccess: string;
     success: string;
     underSuccess: string;
+  };
+}
+
+export interface ThemeAnimations {
+  easings: {
+    inOutCubic: string;
   };
 }

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
-import { LightTheme } from "theme";
-import { Theme } from "types/theme";
+import { themeAnimations, themeLight } from "theme";
+import { Theme, ThemeColors } from "types/theme";
 
 interface ThemeContextProps {
   theme: Theme;
@@ -12,15 +12,21 @@ export const ThemeContext: React.Context<ThemeContextProps> = React.createContex
 );
 
 interface ThemeProviderProps {
-  theme: Theme;
+  theme: ThemeColors;
   children: any;
 }
 
 export const ThemeProvider = (props: ThemeProviderProps) => {
-  const [theme, setTheme] = useState<Theme>(props.theme);
+  const [theme, setTheme] = useState<Theme>({
+    ...themeAnimations,
+    ...props.theme,
+  });
 
-  const changeTheme = useCallback((theme: Theme) => {
-    setTheme(theme);
+  const changeTheme = useCallback((theme: ThemeColors) => {
+    setTheme({
+      ...themeAnimations,
+      ...theme,
+    });
   }, []);
 
   return (
