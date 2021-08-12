@@ -1,8 +1,8 @@
-import cxs, { CSSObject } from "cxs";
-import { combine, StyleFunction } from "helpers/combine";
+import { Spinner } from "components/spinner";
 import { pxStep, remStep, StepSize } from "helpers/scale";
+import { StyleFunction, useStyles } from "hooks/useStyles";
 import { useTheme } from "hooks/useTheme";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   EXTRA_SMALL,
   SMALL,
@@ -62,34 +62,35 @@ const buttonSize: { [size: string]: StyleFunction } = {
 };
 
 const buttonAppearance: { [appearance: string]: StyleFunction } = {
-  primary: ({ theme, prev }) => ({
+  primary: ({ theme }) => ({
     background: theme.colors.primary,
     color: theme.colors.onPrimary,
     ":hover": {
-      ...prev[":hover"],
       background: theme.colors.secondary,
     },
     border: `1px solid ${theme.colors.primary}`,
   }),
-  secondary: ({ theme, prev }) => ({
+  secondary: ({ theme }) => ({
     background: theme.colors.default,
     color: theme.colors.onDefault,
     border: `1px solid ${theme.colors.defaultStroke}`,
     ":hover": {
-      ...prev[":hover"],
       background: theme.colors.surface,
     },
   }),
-  link: ({ theme, prev }) => ({
+  link: ({ theme }) => ({
     color: theme.colors.primary,
     background: "transparent",
     border: "none",
     ":hover": {
-      ...prev[":hover"],
       color: theme.colors.secondary,
     },
   }),
 };
+
+const stateStyle: StyleFunction<ButtonProps> = ({ disabled }) => ({
+  background: disabled && "transparent", // CSS Has a feature to detect if button is disabled, use it instead of deciding with code.
+});
 
 export function Button(props: ButtonProps) {
   const {
@@ -100,23 +101,22 @@ export function Button(props: ButtonProps) {
     disabled,
     appearance,
   } = props;
-  const { theme } = useTheme();
-
-  const styles = useMemo(() => {
-    return cxs(
-      combine(theme, [
-        buttonBaseStyle,
-        buttonSize[size || "md"],
-        buttonAppearance[appearance || "primary"],
-      ])
-    );
-  }, [size, appearance, isLoading]);
+  const styles = useStyles(
+    [
+      buttonBaseStyle,
+      buttonAppearance[appearance || "primary"], // TODO: Pass this decision inside the style method.
+      buttonSize[size || "md"], // TODO: Pass this decision inside the style method.
+      stateStyle,
+    ],
+    { disabled }
+  );
 
   return (
     <button
       className={styles}
       type={(submit && "submit") || "button"}
     >
+      {isLoading && <Spinner />}
       {text}
     </button>
   );
