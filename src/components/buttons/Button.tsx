@@ -1,4 +1,5 @@
 import { Spinner } from "components/spinner";
+import { css } from "glamor";
 import { pxStep, remStep, StepSize } from "helpers/scale";
 import { StyleFunction, useStyles } from "hooks/useStyles";
 import { useTheme } from "hooks/useTheme";
@@ -25,27 +26,44 @@ export type ButtonAppearance = PRIMARY | SECONDARY | LINK;
 export interface ButtonProps {
   text: string;
 
-  submit: boolean;
+  submit?: boolean;
 
   // Appearance
-  appearance: ButtonAppearance;
+  appearance?: ButtonAppearance;
 
   // States
-  disabled: boolean;
-  isLoading: boolean;
+  disabled?: boolean;
+  isLoading?: boolean;
 
   // Sizes
-  size: SMALL | MEDIUM | LARGE;
+  size?: SMALL | MEDIUM | LARGE;
+
+  ref?: React.LegacyRef<HTMLButtonElement>;
+
+  onClick?: () => void;
 }
 
 const buttonBaseStyle: StyleFunction = ({ theme }) => ({
   paddingLeft: pxStep(2),
   paddingRight: pxStep(2),
   borderRadius: pxStep(1, StepSize.PX4),
-  transition: `background 0.2s, color 0.2s, border 0.2s ${theme.easings.inOutCubic}`,
+  transition: `background 0.2s, color 0.2s, border 0.2s, fill 0.2s ${theme.easings.inOutCubic}`,
   ":hover": {
     cursor: "pointer",
   },
+  ":disabled": {
+    background: "transparent",
+    color: theme.colors.defaultStroke,
+    border: `1px solid ${theme.colors.defaultStroke}`,
+    cursor: "not-allowed",
+    fill: theme.colors.defaultStroke,
+    ":hover": {
+      background: "transparent",
+    },
+  },
+
+  display: "flex",
+  alignItems: "center",
 });
 
 const buttonSize: { [size: string]: StyleFunction } = {
@@ -88,10 +106,6 @@ const buttonAppearance: { [appearance: string]: StyleFunction } = {
   }),
 };
 
-const stateStyle: StyleFunction<ButtonProps> = ({ disabled }) => ({
-  background: disabled && "transparent", // CSS Has a feature to detect if button is disabled, use it instead of deciding with code.
-});
-
 export function Button(props: ButtonProps) {
   const {
     text,
@@ -100,23 +114,30 @@ export function Button(props: ButtonProps) {
     isLoading,
     disabled,
     appearance,
+    ...rest
   } = props;
-  const styles = useStyles(
+  const themedStyle = useStyles(
     [
       buttonBaseStyle,
-      buttonAppearance[appearance || "primary"], // TODO: Pass this decision inside the style method.
-      buttonSize[size || "md"], // TODO: Pass this decision inside the style method.
-      stateStyle,
+      buttonAppearance[appearance || "primary"],
+      buttonSize[size || "md"],
     ],
-    { disabled }
+    { appearance, size }
   );
 
   return (
     <button
-      className={styles}
+      {...rest}
+      className={themedStyle}
       type={(submit && "submit") || "button"}
+      disabled={disabled || isLoading}
     >
-      {isLoading && <Spinner />}
+      {isLoading && (
+        <Spinner
+          className={css({ marginRight: pxStep(2, StepSize.PX4) })}
+          size={"md"}
+        />
+      )}
       {text}
     </button>
   );

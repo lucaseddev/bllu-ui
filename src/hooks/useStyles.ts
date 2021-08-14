@@ -6,19 +6,23 @@ import cx from "classnames";
 import { isFunction } from "helpers/validations";
 import { css, Rule } from "glamor";
 
+export type CSSRule = Rule & React.CSSProperties;
+
 export interface StyleProps {
   theme: Theme;
 }
 
-export type StyleFunction<T = {}> = (props: T & StyleProps) => Rule;
+export type StyleFunction<T = {}> = (
+  props: T & StyleProps
+) => CSSRule;
 
 export interface StyleParams<T> {
-  styles: (Rule | StyleFunction<T>)[];
+  styles: (CSSRule | StyleFunction<T>)[];
   props?: T;
 }
 
 export function useStyles<T = {}>(
-  styles: (Rule | StyleFunction<T>)[],
+  styles: (CSSRule | StyleFunction<T>)[],
   props?: T
 ): string {
   const { theme } = useTheme();
@@ -36,7 +40,7 @@ export function useStyles<T = {}>(
             theme,
           })
         );
-      else return css(style as Rule);
+      else return css(style as CSSRule);
     });
 
     return cx(result);

@@ -1,108 +1,62 @@
+import cx from "classnames";
 import { css, keyframes, Rule } from "glamor";
 import { pxStep, StepSize } from "helpers/scale";
-import { useStyles } from "hooks/useStyles";
+import { CSSRule, useStyles } from "hooks/useStyles";
 import React from "react";
-// import styled from "styled-components";
 
-// export const Spinner = styled(SpinnerComponent)`
-//   .lds-ring {
-//     display: inline-block;
-//     position: relative;
-//     width: 80px;
-//     height: 80px;
-//   }
-//   .lds-ring div {
-//     box-sizing: border-box;
-//     display: block;
-//     position: absolute;
-//     width: 64px;
-//     height: 64px;
-//     margin: 8px;
-//     border: 8px solid #fff;
-//     border-radius: 50%;
-//     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-//     border-color: #fff transparent transparent transparent;
-//   }
-//   .lds-ring div:nth-child(1) {
-//     animation-delay: -0.45s;
-//   }
-//   .lds-ring div:nth-child(2) {
-//     animation-delay: -0.3s;
-//   }
-//   .lds-ring div:nth-child(3) {
-//     animation-delay: -0.15s;
-//   }
-//   @keyframes lds-ring {
-//     0% {
-//       transform: rotate(0deg);
-//     }
-//     100% {
-//       transform: rotate(360deg);
-//     }
-//   }
-// `;
+const baseStyle: CSSRule = {};
 
-const ldsRing = keyframes({
-  "0%": {
-    transform: "rotate(0deg)",
+const style: { [size: string]: CSSRule } = {
+  sm: {
+    width: pxStep(3, StepSize.PX4),
+    height: pxStep(3, StepSize.PX4),
   },
-  "100%": {
-    transform: "rotate(360deg)",
-  },
-});
-
-const style: Rule = {
-  display: "inline-block",
-  position: "relative",
-  width: pxStep(2),
-  height: pxStep(2),
-
-  "& div": {
-    boxSizing: "border-box",
-    display: "block",
-    position: "absolute",
+  md: {
     width: pxStep(4, StepSize.PX4),
     height: pxStep(4, StepSize.PX4),
-    border: "2px solid #fff",
-    borderRadius: "100%",
-    animation: `${ldsRing} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite`,
-    borderColor: "#fff transparent transparent transparent",
   },
-
-  "& div:nth-child(1)": {
-    animationDelay: "-0.45s",
+  lg: {
+    width: pxStep(5, StepSize.PX4),
+    height: pxStep(5, StepSize.PX4),
   },
-
-  "& div:nth-child(2)": {
-    animationDelay: "-0.3s",
-  },
-
-  "& div:nth-child(3)": {
-    animationDelay: "-0.15s",
+  xl: {
+    width: pxStep(6, StepSize.PX4),
+    height: pxStep(6, StepSize.PX4),
   },
 };
 
 interface SpinnerProps {
   size?: "sm" | "md" | "lg" | "xl" | number;
+  className?: string | CSSRule;
 }
 
 export function Spinner(props: SpinnerProps) {
-  const { size } = props;
+  const { size, className } = props;
 
-  const styles = useStyles(
-    () => ({
-      styles: [style],
-      props: { size },
-    }),
-    [size]
-  );
+  const themedStyles = useStyles([baseStyle, style[size || "md"]], {
+    size,
+  });
 
   return (
-    <div className={styles}>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <div className={cx(themedStyles, className)}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 100 100"
+        shapeRendering="geometricPrecision"
+        textRendering="geometricPrecision"
+      >
+        <path d="M96.856 50.341C96.856 24.47 75.872 3.485 50 3.485S3.144 24.47 3.144 50.341m7.945 0c0-21.39 17.317-38.91 38.911-38.91s38.91 17.52 38.91 38.91">
+          <animateTransform
+            attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            dur="1s"
+            from="0 50 50"
+            to="360 50 50"
+            repeatCount="indefinite"
+          />
+        </path>
+      </svg>
     </div>
   );
 }
