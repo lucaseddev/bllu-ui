@@ -5,9 +5,13 @@ export interface ThemeColors {
     default: string;
     onDefault: string;
     defaultStroke: string;
+    hoverDefault: string;
+    activeDefault: string;
 
     primary: string;
     onPrimary: string;
+    hoverPrimary: string;
+    activePrimary: string;
 
     secondary: string;
     onSecondary: string;
@@ -19,9 +23,11 @@ export interface ThemeColors {
     surface: string;
     surfaceStroke: string;
 
-    error: string;
-    onError: string;
-    underError: string;
+    danger: string;
+    onDanger: string;
+    underDanger: string;
+    hoverDanger: string;
+    activeDanger: string;
 
     onSuccess: string;
     success: string;

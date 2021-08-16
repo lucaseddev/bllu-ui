@@ -3880,6 +3880,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-is@npm:^17.0.2":
+  version: 17.0.2
+  resolution: "@types/react-is@npm:17.0.2"
+  dependencies:
+    "@types/react": "*"
+  checksum: ecd4f59e66858ebf13988c13de32e0f1753e9f0ec9a330bbf99c7c8ec75d3b52ad01965a7912c463615c0498965c1f17ea8a1a06606cf8edeb4b723f7ab74879
+  languageName: node
+  linkType: hard
+
 "@types/react-syntax-highlighter@npm:11.0.5":
   version: 11.0.5
   resolution: "@types/react-syntax-highlighter@npm:11.0.5"
@@ -5367,6 +5376,7 @@ __metadata:
     "@types/jest": ^26.0.24
     "@types/react": ^17.0.15
     "@types/react-dom": ^17.0.9
+    "@types/react-is": ^17.0.2
     arrify: ^3.0.0
     babel-loader: ^8.2.2
     babel-preset-react-app: ^10.0.0
@@ -5380,7 +5390,10 @@ __metadata:
     postcss: ^8.3.6
     react: ^17.0.2
     react-dom: ^17.0.2
+    react-fast-compare: ^3.2.0
     react-hook-form: ^7.12.2
+    react-icons: ^4.2.0
+    react-is: ^17.0.2
     react-table: ^7.7.0
     react-tiny-virtual-list: ^2.2.0
     rollup: ^2.55.1
@@ -14090,6 +14103,15 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ^16.8.0 || ^17
   checksum: 77779cc10f2a8024b2b96cdea6398ec311dc23768f084d0175f53b6632f221a9e2966fb5ab27cf00b6670dfb4a5754990809f2949ffd41c4a910eabe66000c98
+  languageName: node
+  linkType: hard
+
+"react-icons@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "react-icons@npm:4.2.0"
+  peerDependencies:
+    react: "*"
+  checksum: 2b42d9b0ac85a57f8de28819b5f452b2c851f4caec09a855596d47557b775a434802fce1f3dc3811eebf46cf4d7c79fa4650330d5772345d6839f86c83afc01d
   languageName: node
   linkType: hard
 

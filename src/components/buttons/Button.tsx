@@ -2,16 +2,10 @@ import { Spinner } from "components/spinner";
 import { css } from "glamor";
 import { pxStep, remStep, StepSize } from "helpers/scale";
 import { StyleFunction, useStyles } from "hooks/useStyles";
-import { useTheme } from "hooks/useTheme";
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  EXTRA_SMALL,
-  SMALL,
-  MEDIUM,
-  LARGE,
-  EXTRA_LARGE,
-} from "types/sizes";
-import { Theme } from "types/theme";
+import { SMALL, MEDIUM, LARGE } from "types/sizes";
+import React from "react";
+import { IconType } from "react-icons";
+import Icon from "components/icon/Icon";
 
 export const PRIMARY = "primary";
 export const SECONDARY = "secondary";
@@ -22,11 +16,16 @@ export type SECONDARY = typeof SECONDARY;
 export type LINK = typeof LINK;
 
 export type ButtonAppearance = PRIMARY | SECONDARY | LINK;
+export type ButtonSize = SMALL | MEDIUM | LARGE;
 
 export interface ButtonProps {
-  text: string;
+  children: any;
 
   submit?: boolean;
+  danger?: boolean;
+
+  beforeIcon?: IconType | JSX.Element;
+  afterIcon?: IconType | JSX.Element;
 
   // Appearance
   appearance?: ButtonAppearance;
@@ -36,11 +35,11 @@ export interface ButtonProps {
   isLoading?: boolean;
 
   // Sizes
-  size?: SMALL | MEDIUM | LARGE;
-
-  ref?: React.LegacyRef<HTMLButtonElement>;
+  size?: ButtonSize;
 
   onClick?: () => void;
+
+  className: string | CSSRule | StyleFunction;
 }
 
 const buttonBaseStyle: StyleFunction = ({ theme }) => ({
@@ -48,6 +47,7 @@ const buttonBaseStyle: StyleFunction = ({ theme }) => ({
   paddingRight: pxStep(2),
   borderRadius: pxStep(1, StepSize.PX4),
   transition: `background 0.2s, color 0.2s, border 0.2s, fill 0.2s ${theme.easings.inOutCubic}`,
+  fontWeight: 500,
   ":hover": {
     cursor: "pointer",
   },
@@ -59,6 +59,7 @@ const buttonBaseStyle: StyleFunction = ({ theme }) => ({
     fill: theme.colors.defaultStroke,
     ":hover": {
       background: "transparent",
+      borderColor: theme.colors.defaultStroke,
     },
   },
 
@@ -79,23 +80,61 @@ const buttonSize: { [size: string]: StyleFunction } = {
   }),
 };
 
-const buttonAppearance: { [appearance: string]: StyleFunction } = {
-  primary: ({ theme }) => ({
-    background: theme.colors.primary,
-    color: theme.colors.onPrimary,
-    ":hover": {
-      background: theme.colors.secondary,
-    },
-    border: `1px solid ${theme.colors.primary}`,
-  }),
-  secondary: ({ theme }) => ({
-    background: theme.colors.default,
-    color: theme.colors.onDefault,
-    border: `1px solid ${theme.colors.defaultStroke}`,
-    ":hover": {
-      background: theme.colors.surface,
-    },
-  }),
+const buttonAppearance: {
+  [appearance: string]: StyleFunction<ButtonProps>;
+} = {
+  primary: ({ theme, danger }) => {
+    const primaryColor = danger
+      ? theme.colors.danger
+      : theme.colors.primary;
+
+    const hoverPrimary = danger
+      ? theme.colors.hoverDanger
+      : theme.colors.hoverPrimary;
+
+    const activePrimary = danger
+      ? theme.colors.activeDanger
+      : theme.colors.activePrimary;
+
+    return {
+      background: primaryColor,
+      color: theme.colors.onPrimary,
+      border: `1px solid ${primaryColor}`,
+      ":hover": {
+        background: hoverPrimary,
+        borderColor: hoverPrimary,
+      },
+      ":active": {
+        background: activePrimary,
+        borderColor: activePrimary,
+      },
+    };
+  },
+  secondary: ({ theme, danger }) => {
+    const secondaryColor = danger
+      ? theme.colors.danger
+      : theme.colors.onDefault;
+
+    const stroke = danger
+      ? theme.colors.danger
+      : theme.colors.defaultStroke;
+
+    const hoverSecondary = theme.colors.hoverDefault;
+
+    const activeSecondary = theme.colors.activeDefault;
+
+    return {
+      background: theme.colors.default,
+      color: secondaryColor,
+      border: `1px solid ${stroke}`,
+      ":hover": {
+        background: hoverSecondary,
+      },
+      ":active": {
+        background: activeSecondary,
+      },
+    };
+  },
   link: ({ theme }) => ({
     color: theme.colors.primary,
     background: "transparent",
@@ -106,39 +145,72 @@ const buttonAppearance: { [appearance: string]: StyleFunction } = {
   }),
 };
 
-export function Button(props: ButtonProps) {
-  const {
-    text,
-    submit,
-    size,
-    isLoading,
-    disabled,
-    appearance,
-    ...rest
-  } = props;
-  const themedStyle = useStyles(
-    [
-      buttonBaseStyle,
-      buttonAppearance[appearance || "primary"],
-      buttonSize[size || "md"],
-    ],
-    { appearance, size }
-  );
+export const Button = React.memo(
+  React.forwardRef(function Button(
+    props: ButtonProps,
+    ref?: React.LegacyRef<HTMLButtonElement>
+  ) {
+    const {
+      children,
+      submit,
+      size,
+      isLoading,
+      disabled,
+      appearance,
+      danger,
+      beforeIcon: leftIcon,
+      afterIcon: rightIcon,
+      className,
+      ...rest
+    } = props;
+    const themedStyle = useStyles(
+      [
+        buttonBaseStyle,
+        buttonAppearance[appearance || "primary"],
+        buttonSize[size || "md"],
+        className,
+      ],
+      { appearance, size, danger }
+    );
 
-  return (
-    <button
-      {...rest}
-      className={themedStyle}
-      type={(submit && "submit") || "button"}
-      disabled={disabled || isLoading}
-    >
-      {isLoading && (
-        <Spinner
-          className={css({ marginRight: pxStep(2, StepSize.PX4) })}
-          size={"md"}
-        />
-      )}
-      {text}
-    </button>
-  );
-}
+    let iconSize = 16;
+
+    if (size === "md") {
+      iconSize = 18;
+    } else if (size === "lg") {
+      iconSize = 20;
+    }
+
+    return (
+      <button
+        {...rest}
+        ref={ref}
+        className={themedStyle}
+        type={(submit && "submit") || "button"}
+        disabled={disabled || isLoading}
+      >
+        {isLoading && (
+          <Spinner
+            className={css({ marginRight: pxStep(2, StepSize.PX4) })}
+            size={"md"}
+          />
+        )}
+        {leftIcon && (
+          <Icon
+            icon={leftIcon}
+            size={iconSize}
+            className={{ marginRight: pxStep(1, StepSize.PX4) }}
+          />
+        )}
+        <span>{children}</span>
+        {rightIcon && (
+          <Icon
+            icon={rightIcon}
+            size={iconSize}
+            className={{ marginLeft: pxStep(1, StepSize.PX4) }}
+          />
+        )}
+      </button>
+    );
+  })
+);

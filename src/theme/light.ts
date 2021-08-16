@@ -5,9 +5,13 @@ export const themeLight: ThemeColors = {
     default: "#fff",
     onDefault: "#242424",
     defaultStroke: "#C4C4C4",
+    hoverDefault: "#fcfcfc",
+    activeDefault: "#fafafa",
 
     primary: "#3B75FA",
     onPrimary: "#fff",
+    hoverPrimary: "#006ddf",
+    activePrimary: "#005cbd",
 
     secondary: "#004ac6",
     onSecondary: "#fff",
@@ -15,9 +19,11 @@ export const themeLight: ThemeColors = {
     background: "#fff",
     onBackground: "#242424",
 
-    error: "#FF4848",
-    onError: "#fff",
-    underError: "rgba(255, 72, 72, 0.08)",
+    danger: "#ff3c3f",
+    onDanger: "#fff",
+    underDanger: "rgba(255, 72, 72, 0.08)",
+    hoverDanger: "#e84d5a",
+    activeDanger: "#c4414c",
 
     success: "#3FC94D",
     onSuccess: "#fff",
