@@ -6,11 +6,11 @@ import {
   LINK,
   PRIMARY,
   SECONDARY,
-} from "./Button";
-import { IconButton, IconButtonProps } from "./IconButton";
-import { MEDIUM } from "../../types/sizes";
-import { ThemeProvider } from "../../contexts";
-import { themeLight } from "../../theme";
+} from "../Button";
+import { IconButton, IconButtonProps } from "../IconButton";
+import { MEDIUM } from "../../../types/sizes";
+import { ThemeProvider } from "../../../contexts";
+import { themeLight } from "../../../theme";
 import { BiBell, BiSearch } from "react-icons/bi";
 
 export default {
