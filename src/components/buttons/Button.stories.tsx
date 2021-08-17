@@ -7,6 +7,7 @@ import {
   PRIMARY,
   SECONDARY,
 } from "./Button";
+import { IconButton, IconButtonProps } from "./IconButton";
 import { MEDIUM } from "../../types/sizes";
 import { ThemeProvider } from "../../contexts";
 import { themeLight } from "../../theme";
@@ -24,11 +25,15 @@ const Template: Story<ButtonProps> = (args) => (
 );
 
 export const Primary = Template.bind({});
-Primary.args = { text: "Primary", appearance: PRIMARY, size: MEDIUM };
+Primary.args = {
+  children: "Primary",
+  appearance: PRIMARY,
+  size: MEDIUM,
+};
 
 export const PrimaryDanger = Template.bind({});
 PrimaryDanger.args = {
-  text: "Primary Danger",
+  children: "Primary Danger",
   appearance: PRIMARY,
   size: MEDIUM,
   danger: true,
@@ -36,14 +41,14 @@ PrimaryDanger.args = {
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  text: "Secondary",
+  children: "Secondary",
   appearance: SECONDARY,
   size: MEDIUM,
 };
 
 export const SecondaryDanger = Template.bind({});
 SecondaryDanger.args = {
-  text: "Secondary Danger",
+  children: "Secondary Danger",
   appearance: SECONDARY,
   size: MEDIUM,
   danger: true,
@@ -51,14 +56,14 @@ SecondaryDanger.args = {
 
 export const Link = Template.bind({});
 Link.args = {
-  text: "Link",
+  children: "Link",
   appearance: LINK,
   size: MEDIUM,
 };
 
 export const WithLeftIcon = Template.bind({});
 WithLeftIcon.args = {
-  text: "Left Icon",
+  children: "Left Icon",
   appearance: PRIMARY,
   size: MEDIUM,
   beforeIcon: BiSearch,
@@ -66,7 +71,7 @@ WithLeftIcon.args = {
 
 export const WithRightIcon = Template.bind({});
 WithRightIcon.args = {
-  text: "Right Icon",
+  children: "Right Icon",
   appearance: PRIMARY,
   size: MEDIUM,
   afterIcon: BiSearch,
@@ -74,12 +79,12 @@ WithRightIcon.args = {
 
 export const Loading = Template.bind({});
 Loading.args = {
-  text: "Is Loading",
+  children: "Is Loading",
   isLoading: true,
 };
 
 export const Disabled = Template.bind({});
 Disabled.args = {
-  text: "Disabled",
+  children: "Disabled",
   disabled: true,
 };

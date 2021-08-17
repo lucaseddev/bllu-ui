@@ -39,7 +39,7 @@ export interface ButtonProps {
 
   onClick?: () => void;
 
-  className: string | CSSRule | StyleFunction;
+  className?: string | CSSRule | StyleFunction;
 }
 
 const buttonBaseStyle: StyleFunction = ({ theme }) => ({
@@ -59,10 +59,10 @@ const buttonBaseStyle: StyleFunction = ({ theme }) => ({
     fill: theme.colors.defaultStroke,
     ":hover": {
       background: "transparent",
+      color: theme.colors.defaultStroke,
       borderColor: theme.colors.defaultStroke,
     },
   },
-
   display: "flex",
   alignItems: "center",
 });
@@ -70,12 +70,15 @@ const buttonBaseStyle: StyleFunction = ({ theme }) => ({
 const buttonSize: { [size: string]: StyleFunction } = {
   sm: () => ({
     height: pxStep(4),
+    minWidth: pxStep(4),
   }),
   md: () => ({
     height: pxStep(5),
+    minWidth: pxStep(5),
   }),
   lg: () => ({
     height: pxStep(6),
+    minWidth: pxStep(6),
     fontSize: remStep(7, StepSize.REM125),
   }),
 };
@@ -153,14 +156,14 @@ export const Button = React.memo(
     const {
       children,
       submit,
-      size,
+      size = "md",
       isLoading,
       disabled,
-      appearance,
+      appearance = "primary",
       danger,
       beforeIcon: leftIcon,
       afterIcon: rightIcon,
-      className,
+      className = "",
       ...rest
     } = props;
     const themedStyle = useStyles(

@@ -28,7 +28,7 @@ const style: {
   custom: ({ size }) => ({ width: size, height: size }),
 };
 
-interface SpinnerProps {
+export interface SpinnerProps {
   size?: "sm" | "md" | "lg" | "xl" | number;
   className?: string | CSSRule;
 }

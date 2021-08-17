@@ -19,7 +19,7 @@ const wrapperStyle: StyleFunction<IconProps> = ({
   color,
 }) => {
   return {
-    display: "inline-flex",
+    display: "flex",
     alignItems: "center",
     fontSize: size || 16,
     color: color,

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Theme } from "types/theme";
 import { useTheme } from "./useTheme";
 
@@ -30,12 +30,12 @@ export function useStyles<T = {}>(
     (props && Object.keys(props).map((key: string) => props[key])) ||
     [];
 
-  const prevDeps = useRef<any[]>(deps);
+  const [prevDeps, setPrevDeps] = useState<any>(deps);
   const { theme } = useTheme();
 
   useEffect(() => {
-    if (!isEqual(prevDeps.current, deps)) {
-      prevDeps.current = deps;
+    if (!isEqual(prevDeps, deps)) {
+      setPrevDeps(deps);
     }
   }, [deps]);
 
@@ -60,5 +60,5 @@ export function useStyles<T = {}>(
     return cx(result);
   };
 
-  return useMemo(computeStyles, prevDeps.current);
+  return useMemo(computeStyles, prevDeps);
 }
