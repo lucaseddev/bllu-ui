@@ -1,28 +1,31 @@
 import cx from "classnames";
 import { css, keyframes, Rule } from "glamor";
 import { pxStep, StepSize } from "helpers/scale";
-import { CSSRule, useStyles } from "hooks/useStyles";
+import { CSSRule, StyleFunction, useStyles } from "hooks/useStyles";
 import React from "react";
 
 const baseStyle: CSSRule = {};
 
-const style: { [size: string]: CSSRule } = {
+const style: {
+  [size: string]: CSSRule | StyleFunction<SpinnerProps>;
+} = {
   sm: {
-    width: pxStep(3, StepSize.PX4),
-    height: pxStep(3, StepSize.PX4),
+    width: pxStep(8, StepSize.PX2),
+    height: pxStep(8, StepSize.PX2),
   },
   md: {
-    width: pxStep(4, StepSize.PX4),
-    height: pxStep(4, StepSize.PX4),
+    width: pxStep(9, StepSize.PX2),
+    height: pxStep(9, StepSize.PX2),
   },
   lg: {
-    width: pxStep(5, StepSize.PX4),
-    height: pxStep(5, StepSize.PX4),
+    width: pxStep(10, StepSize.PX2),
+    height: pxStep(10, StepSize.PX2),
   },
   xl: {
-    width: pxStep(6, StepSize.PX4),
-    height: pxStep(6, StepSize.PX4),
+    width: pxStep(11, StepSize.PX2),
+    height: pxStep(11, StepSize.PX2),
   },
+  custom: ({ size }) => ({ width: size, height: size }),
 };
 
 interface SpinnerProps {
@@ -31,7 +34,7 @@ interface SpinnerProps {
 }
 
 export function Spinner(props: SpinnerProps) {
-  const { size, className } = props;
+  const { size = "md", className } = props;
 
   const themedStyles = useStyles([baseStyle, style[size || "md"]], {
     size,
