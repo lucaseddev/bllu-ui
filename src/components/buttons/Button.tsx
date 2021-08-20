@@ -1,7 +1,11 @@
 import { Spinner } from "components/spinner";
 import { css } from "glamor";
 import { pxStep, remStep, StepSize } from "helpers/scale";
-import { StyleFunction, useStyles } from "hooks/useStyles";
+import {
+  StyleFunction,
+  StyleObject,
+  useStyles,
+} from "hooks/useStyles";
 import { SMALL, MEDIUM, LARGE } from "types/sizes";
 import React from "react";
 import { IconType } from "react-icons";
@@ -39,7 +43,7 @@ export interface ButtonProps {
 
   onClick?: () => void;
 
-  className?: string | CSSRule | StyleFunction;
+  className?: string | StyleObject | StyleFunction;
 }
 
 const buttonBaseStyle: StyleFunction = ({ theme }) => ({

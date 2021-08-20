@@ -11,9 +11,5 @@ export default {
 } as Meta;
 
 export const IconOnly: Story<IconButtonProps> = (args) => {
-  return (
-    <ThemeProvider theme={themeLight}>
-      <IconButton {...args} icon={BiSearch} />
-    </ThemeProvider>
-  );
+  return <IconButton {...args} icon={BiSearch} />;
 };
