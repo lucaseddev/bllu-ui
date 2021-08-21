@@ -18,11 +18,7 @@ export default {
   component: Button,
 } as Meta;
 
-const Template: Story<ButtonProps> = (args) => (
-  <ThemeProvider theme={themeLight}>
-    <Button {...args} />
-  </ThemeProvider>
-);
+const Template: Story<ButtonProps> = (args) => <Button {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {

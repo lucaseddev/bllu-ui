@@ -2,7 +2,11 @@ import Icon from "components/icon/Icon";
 import { Spinner } from "components/spinner";
 import { css } from "glamor";
 import { pxStep, StepSize } from "helpers/scale";
-import { StyleFunction, useStyles } from "hooks/useStyles";
+import {
+  StyleFunction,
+  StyleObject,
+  useStyles,
+} from "hooks/useStyles";
 import React from "react";
 import { IconType } from "react-icons";
 import { Button, ButtonAppearance, ButtonSize } from "./Button";
@@ -19,7 +23,7 @@ export interface IconButtonProps {
   disabled?: boolean;
 
   onClick?: () => void;
-  className?: string | CSSRule | StyleFunction;
+  className?: StyleObject | StyleFunction;
 }
 
 export const IconButton = React.memo(

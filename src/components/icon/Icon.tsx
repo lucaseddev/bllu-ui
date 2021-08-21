@@ -1,4 +1,8 @@
-import { CSSRule, StyleFunction, useStyles } from "hooks/useStyles";
+import {
+  StyleFunction,
+  StyleObject,
+  useStyles,
+} from "hooks/useStyles";
 import React from "react";
 import { IconType } from "react-icons";
 import cx from "classnames";
@@ -10,7 +14,7 @@ export interface IconProps {
   size?: number;
   icon: IconType | JSX.Element;
   color?: string;
-  className?: string | CSSRule;
+  className?: StyleObject;
 }
 
 const wrapperStyle: StyleFunction<IconProps> = ({
@@ -22,7 +26,7 @@ const wrapperStyle: StyleFunction<IconProps> = ({
     display: "flex",
     alignItems: "center",
     fontSize: size || 16,
-    color: color,
+    color: color || "",
   };
 };
 

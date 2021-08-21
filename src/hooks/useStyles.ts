@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Theme } from "types/theme";
 import { useTheme } from "./useTheme";
 
@@ -7,7 +7,17 @@ import { isFunction, isObject } from "helpers/validations";
 import { css, Rule } from "glamor";
 import isEqual from "react-fast-compare";
 
-export type CSSRule = Rule & React.CSSProperties;
+// type Modify<T, R> = Omit<T, keyof R> & R;
+
+interface StyleInterface {
+  [key: string]:
+    | StyleInterface
+    | React.CSSProperties
+    | string
+    | number;
+}
+
+export type StyleObject = StyleInterface & React.CSSProperties;
 
 export interface StyleProps {
   theme: Theme;
@@ -15,15 +25,15 @@ export interface StyleProps {
 
 export type StyleFunction<T = {}> = (
   props: T & StyleProps
-) => CSSRule;
+) => StyleObject;
 
 export interface StyleParams<T> {
-  styles: (CSSRule | StyleFunction<T>)[];
+  styles: (StyleObject | StyleFunction<T>)[];
   props?: T;
 }
 
 export function useStyles<T = {}>(
-  styles: (CSSRule | StyleFunction<T> | string)[],
+  styles: (StyleObject | StyleFunction<T> | string)[],
   props?: T
 ): string {
   const deps =
@@ -50,7 +60,7 @@ export function useStyles<T = {}>(
           })
         );
       else if (isObject(style)) {
-        return css(style as CSSRule);
+        return css(style as StyleObject);
       }
 
       // Assumes its a string
