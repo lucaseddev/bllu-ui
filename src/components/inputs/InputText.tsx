@@ -6,9 +6,12 @@ import {
 } from "hooks/useStyles";
 import React, { useState } from "react";
 import { LARGE, MEDIUM, SMALL } from "types/sizes";
-import { NoEmitOnErrorsPlugin } from "webpack";
 
-export interface InputTextProps {
+export interface InputTextProps
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "size" | "prefix" | "type" | "className"
+  > {
   width?: string | number;
   size?: SMALL | MEDIUM | LARGE;
 
@@ -25,8 +28,35 @@ export interface InputTextProps {
 
   isInvalid?: boolean;
   disabled?: boolean;
-
   required?: boolean;
+
+  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
+
+  type?:
+    | "button"
+    | "checkbox"
+    | "color"
+    | "date"
+    | "datetime-local"
+    | "email"
+    | "file"
+    | "hidden"
+    | "image"
+    | "month"
+    | "number"
+    | "password"
+    | "radio"
+    | "range"
+    | "reset"
+    | "search"
+    | "submit"
+    | "tel"
+    | "text"
+    | "time"
+    | "url"
+    | "week"
+    | string;
 }
 
 const sizes = {
@@ -83,6 +113,8 @@ export const InputText = React.forwardRef(function InputText(
     size = MEDIUM,
     width,
     isInvalid = false,
+    prefix,
+    suffix,
     ...rest
   } = props;
 
