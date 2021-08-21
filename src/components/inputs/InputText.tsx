@@ -4,7 +4,7 @@ import {
   StyleObject,
   useStyles,
 } from "hooks/useStyles";
-import React, { useState } from "react";
+import React from "react";
 import { LARGE, MEDIUM, SMALL } from "types/sizes";
 
 export interface InputTextProps
@@ -14,13 +14,6 @@ export interface InputTextProps
   > {
   width?: string | number;
   size?: SMALL | MEDIUM | LARGE;
-
-  name?: string;
-  placeholder?: string;
-
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
-  defaultValue?: string;
 
   className?:
     | StyleObject
@@ -76,25 +69,26 @@ export const InputStyle: StyleFunction<InputTextProps> = ({
     borderRadius: pxStep(1, StepSize.PX4),
     width: width || "fit-content",
 
-    paddingLeft: pxStep(2),
-    paddingRight: pxStep(2),
+    paddingLeft: pxStep(3, StepSize.PX4),
+    paddingRight: pxStep(3, StepSize.PX4),
 
     transition: `border 0.2s, box-shadow 0.2s, background 0.2s ${theme.easings.inOutCubic}`,
 
-    ":focus": {
+    "&:focus, &:focus-within": {
       boxShadow: `0px 0px 1px 2px ${theme.colors.primary}45`,
       borderColor: `${theme.colors.primary}a3`,
     },
 
-    ":disabled": {
+    ":disabled, &[data-disabled='true']": {
       cursor: "not-allowed",
+      background: theme.colors.surface,
     },
 
     ":focus-visible": {
       outline: "none",
     },
 
-    '&[aria-invalid="true"]': {
+    '&[aria-invalid="true"], &[data-invalid="true"]': {
       borderColor: `${theme.colors.danger}a3`,
 
       "&:focus, &:focus-within": {
@@ -103,6 +97,73 @@ export const InputStyle: StyleFunction<InputTextProps> = ({
     },
   };
 };
+
+interface InputAffixProps {
+  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
+  children: React.ReactNode;
+
+  required?: boolean;
+  isInvalid?: boolean;
+  disabled?: boolean;
+
+  className?: string;
+}
+
+const InputAffixStyle: StyleObject = {
+  display: "flex",
+  alignItems: "center",
+
+  "& > input": {
+    outline: "none",
+    border: "none",
+    background: "none",
+
+    ":disabled": {
+      cursor: "not-allowed",
+    },
+  },
+
+  "& > span:last-child": {
+    display: "flex",
+    alignItems: "center",
+    marginLeft: pxStep(1, StepSize.PX4),
+  },
+
+  "& > span:first-child": {
+    display: "flex",
+    alignItems: "center",
+    marginRight: pxStep(1, StepSize.PX4),
+  },
+};
+
+const InputAffix = React.memo((props: InputAffixProps) => {
+  const {
+    className,
+    prefix,
+    suffix,
+    children,
+    disabled,
+    isInvalid,
+    ...rest
+  } = props;
+
+  const affixStyle = useStyles([className || "", InputAffixStyle], {
+    className,
+  });
+
+  return (
+    <div
+      className={affixStyle}
+      data-invalid={isInvalid}
+      data-disabled={disabled}
+    >
+      {prefix && <span>{prefix}</span>}
+      {children}
+      {suffix && <span>{suffix}</span>}
+    </div>
+  );
+});
 
 export const InputText = React.forwardRef(function InputText(
   props: InputTextProps,
@@ -120,14 +181,33 @@ export const InputText = React.forwardRef(function InputText(
 
   const inputStyle = useStyles([InputStyle], { width, size });
 
-  return (
-    <input
-      aria-invalid={isInvalid}
-      aria-required={props.required}
-      aria-disabled={props.disabled}
-      className={inputStyle}
-      ref={ref}
-      {...rest}
-    />
-  );
+  const element = React.createElement("input", {
+    "aria-invalid": isInvalid,
+    "aria-required": props.required,
+    "aria-disabled": props.disabled,
+    className: inputStyle,
+    ref: ref,
+    ...rest,
+  });
+
+  if (prefix || suffix) {
+    return (
+      <InputAffix
+        className={inputStyle}
+        prefix={prefix}
+        suffix={suffix}
+        isInvalid={isInvalid}
+        disabled={rest.disabled}
+        required={rest.required}
+      >
+        {React.cloneElement(element, {
+          className: "",
+          "aria-invalid": undefined,
+          "aria-required": undefined,
+          "aria-disabled": undefined,
+        })}
+      </InputAffix>
+    );
+  }
+  return element;
 });

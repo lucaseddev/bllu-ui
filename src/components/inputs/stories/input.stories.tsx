@@ -5,6 +5,9 @@ import { ThemeProvider } from "../../../contexts";
 import { themeLight } from "../../../theme";
 import { InputTextProps } from "../InputText";
 import "../../../theme/global";
+import { BiSearch } from "react-icons/bi";
+
+import { Icon } from "../../icon";
 
 export default {
   title: "Components/Input",
@@ -30,4 +33,16 @@ export const InvalidInput = Template.bind({});
 InvalidInput.args = {
   placeholder: "This is a invalid input...",
   isInvalid: true,
+};
+
+export const InputPrefix = Template.bind({});
+InputPrefix.args = {
+  placeholder: "This is input with prefix...",
+  prefix: "$",
+};
+
+export const InputSuffix = Template.bind({});
+InputSuffix.args = {
+  placeholder: "This is input with prefix...",
+  suffix: <Icon size={18} icon={BiSearch} />,
 };
