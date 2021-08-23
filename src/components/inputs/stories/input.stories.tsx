@@ -46,3 +46,9 @@ InputSuffix.args = {
   placeholder: "This is input with prefix...",
   suffix: <Icon size={18} icon={BiSearch} />,
 };
+
+export const InputIsLoading = Template.bind({});
+InputIsLoading.args = {
+  placeholder: "This is loading...",
+  isLoading: true,
+};

@@ -1,13 +1,20 @@
 import cx from "classnames";
 import { css, keyframes, Rule } from "glamor";
 import { pxStep, StepSize } from "helpers/scale";
-import { CSSRule, StyleFunction, useStyles } from "hooks/useStyles";
+import { isNumber, isString } from "helpers/validations";
+import {
+  StyleFunction,
+  StyleObject,
+  useStyles,
+} from "hooks/useStyles";
 import React from "react";
 
-const baseStyle: CSSRule = {};
+const baseStyle: StyleObject = {};
 
 const style: {
-  [size: string]: CSSRule | StyleFunction<SpinnerProps>;
+  [size: string]:
+    | StyleObject
+    | StyleFunction<Omit<SpinnerProps, "size"> & { size: number }>;
 } = {
   sm: {
     width: pxStep(8, StepSize.PX2),
@@ -30,14 +37,15 @@ const style: {
 
 export interface SpinnerProps {
   size?: "sm" | "md" | "lg" | "xl" | number;
-  className?: string | CSSRule;
+  className?: string | StyleObject;
 }
 
 export function Spinner(props: SpinnerProps) {
   const { size = "md", className } = props;
 
   const themedStyles = useStyles([baseStyle, style[size || "md"]], {
-    size,
+    size:
+      (isString(size) && size) || (isNumber(size) && size) || "md",
   });
 
   return (
