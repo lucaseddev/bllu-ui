@@ -32,6 +32,28 @@ export interface StyleParams<T> {
   props?: T;
 }
 
+function computeStyles<T>(
+  styles: (StyleObject | StyleFunction<T> | string)[],
+  theme: Theme,
+  props: T
+) {
+  return styles.map((style) => {
+    if (isFunction(style))
+      return css(
+        (style as StyleFunction<T>)({
+          ...(props || ({} as T)),
+          theme,
+        })
+      );
+    else if (isObject(style)) {
+      return css(style as StyleObject);
+    }
+
+    // Assumes its a string
+    return style;
+  });
+}
+
 export function useStyles<T = {}>(
   styles: (StyleObject | StyleFunction<T> | string)[],
   props?: T
@@ -40,35 +62,19 @@ export function useStyles<T = {}>(
     (props && Object.keys(props).map((key: string) => props[key])) ||
     [];
 
-  const [prevDeps, setPrevDeps] = useState<any>(deps);
+  // const [prevDeps, setPrevDeps] = useState<any>(deps);
+  const depsRef = useRef<any[]>();
+  const styleRef = useRef<any>();
   const { theme } = useTheme();
 
-  useEffect(() => {
-    if (!isEqual(prevDeps, deps)) {
-      setPrevDeps(deps);
+  return useMemo(() => {
+    if (!isEqual(depsRef.current, deps)) {
+      console.log("Computing style");
+
+      depsRef.current = deps;
+      styleRef.current = cx(computeStyles(styles, theme, props));
     }
+
+    return styleRef.current;
   }, [deps]);
-
-  const computeStyles = () => {
-    console.log("Computing style");
-    const result = styles.map((style) => {
-      if (isFunction(style))
-        return css(
-          (style as StyleFunction<T>)({
-            ...(props || ({} as T)),
-            theme,
-          })
-        );
-      else if (isObject(style)) {
-        return css(style as StyleObject);
-      }
-
-      // Assumes its a string
-      return style;
-    });
-
-    return cx(result);
-  };
-
-  return useMemo(computeStyles, prevDeps);
 }
