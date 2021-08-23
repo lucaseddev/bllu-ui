@@ -1,6 +1,6 @@
 import React from "react";
 import { Meta, Story } from "@storybook/react";
-import { InputText } from "../";
+import { InputText } from "..";
 import { ThemeProvider } from "../../../contexts";
 import { themeLight } from "../../../theme";
 import { InputTextProps } from "../InputText";
@@ -10,7 +10,7 @@ import { BiSearch } from "react-icons/bi";
 import { Icon } from "../../icon";
 
 export default {
-  title: "Components/Input",
+  title: "Components/InputText",
   component: InputText,
 } as Meta;
 

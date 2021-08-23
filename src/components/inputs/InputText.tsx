@@ -6,8 +6,6 @@ import {
 } from "hooks/useStyles";
 import React from "react";
 import { LARGE, MEDIUM, SMALL } from "types/sizes";
-
-import { BiErrorCircle } from "react-icons/bi";
 import { Spinner } from "components/spinner";
 
 export interface InputTextProps
@@ -86,6 +84,8 @@ export const InputStyle: StyleFunction<InputTextProps> = ({
       border: "none",
       background: "none",
       padding: 0,
+
+      flexGrow: 1,
 
       height: "100%",
 
