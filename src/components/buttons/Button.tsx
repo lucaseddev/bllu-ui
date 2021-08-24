@@ -52,6 +52,7 @@ const buttonBaseStyle: StyleFunction = ({ theme }) => ({
   borderRadius: pxStep(1, StepSize.PX4),
   transition: `background 0.2s, color 0.2s, border 0.2s, fill 0.2s ${theme.easings.inOutCubic}`,
   fontWeight: 500,
+  fontSize: remStep(7, StepSize.REM125),
   ":hover": {
     cursor: "pointer",
   },
@@ -83,7 +84,7 @@ const buttonSize: { [size: string]: StyleFunction } = {
   lg: () => ({
     height: pxStep(6),
     minWidth: pxStep(6),
-    fontSize: remStep(7, StepSize.REM125),
+    fontSize: remStep(8, StepSize.REM125),
   }),
 };
 
