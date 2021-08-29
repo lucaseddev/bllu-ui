@@ -24,6 +24,7 @@ export interface InputTextProps
   isInvalid?: boolean;
   disabled?: boolean;
   required?: boolean;
+  readonly?: boolean;
 
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
@@ -116,11 +117,11 @@ export const InputStyle: StyleFunction<InputTextProps> = ({
     },
 
     "&:focus, &:focus-within": {
-      boxShadow: `0px 0px 1px 2px ${theme.colors.primary}45`,
+      boxShadow: `0px 0px 1px 2px ${theme.colors.primary}20`,
       borderColor: `${theme.colors.primary}a3`,
     },
 
-    ":disabled, &[data-disabled='true']": {
+    ":disabled, &[data-disabled='true'], &[data-readonly='true']": {
       cursor: "not-allowed",
       background: theme.colors.surface,
     },
@@ -133,7 +134,7 @@ export const InputStyle: StyleFunction<InputTextProps> = ({
       borderColor: `${theme.colors.danger}a3`,
 
       "&:focus, &:focus-within": {
-        boxShadow: `0px 0px 1px 2px ${theme.colors.danger}45`,
+        boxShadow: `0px 0px 1px 2px ${theme.colors.danger}20`,
       },
 
       "& > div:last-child": {
@@ -152,6 +153,7 @@ interface InputAffixProps
   isInvalid?: boolean;
   isLoading?: boolean;
   disabled?: boolean;
+  readonly?: boolean;
 
   className?: string;
 }
@@ -163,6 +165,7 @@ const InputAffix = React.memo((props: InputAffixProps) => {
     suffix,
     children,
     disabled,
+    readonly,
     isInvalid,
     isLoading,
   } = props;
@@ -176,6 +179,7 @@ const InputAffix = React.memo((props: InputAffixProps) => {
       className={affixStyle}
       data-invalid={isInvalid}
       data-disabled={disabled || isLoading}
+      data-readonly={readonly}
     >
       {prefix && <span>{prefix}</span>}
       {children}
@@ -213,6 +217,7 @@ export const InputText = React.forwardRef(function InputText(
     prefix,
     suffix,
     disabled,
+    readOnly,
     ...rest
   } = props;
 
@@ -232,6 +237,7 @@ export const InputText = React.forwardRef(function InputText(
         aria-required={props.required}
         aria-disabled={disabled || isLoading}
         disabled={disabled || isLoading}
+        readOnly={readOnly}
         ref={ref}
         {...rest}
       />
