@@ -18,4 +18,11 @@ const Template: Story<SelectProps> = (args) => (
 );
 
 export const Select = Template.bind({});
-Select.args = {};
+Select.args = {
+  placeholder: "Selecione uma fruta...",
+  options: [
+    { label: "Maçã", value: 1 },
+    { label: "Banana", value: 2 },
+    { label: "Goiaba", value: 3 },
+  ],
+};
