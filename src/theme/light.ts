@@ -12,6 +12,7 @@ export const themeLight: ThemeColors = {
     onPrimary: "#fff",
     hoverPrimary: "#006ddf",
     activePrimary: "#005cbd",
+    underPrimary: "#E7EEFE",
 
     secondary: "#004ac6",
     onSecondary: "#fff",

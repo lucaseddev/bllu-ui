@@ -24,5 +24,7 @@ Select.args = {
     { label: "Maçã", value: 1 },
     { label: "Banana", value: 2 },
     { label: "Goiaba", value: 3 },
+    { label: "Abacaxi", value: 4 },
+    { label: "Siriguela", value: 5 },
   ],
 };
