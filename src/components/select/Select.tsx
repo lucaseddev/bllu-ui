@@ -11,7 +11,6 @@ import { pxStep, remStep, StepSize } from "helpers/scale";
 import { LARGE, MEDIUM, SMALL } from "types/sizes";
 import cx from "classnames";
 import { Portal } from "components/portal";
-import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 
 export interface SelectOptionProps {
