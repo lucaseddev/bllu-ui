@@ -11,12 +11,12 @@ import { pxStep, remStep, StepSize } from "helpers/scale";
 import { LARGE, MEDIUM, SMALL } from "types/sizes";
 import cx from "classnames";
 import { Portal } from "components/portal";
-import "simplebar/dist/simplebar.min.css";
 
 export interface SelectOptionProps {
   value: string | number;
   label: string | React.ReactNode;
 }
+
 export interface SelectProps {
   width?: string | number;
 
@@ -27,6 +27,8 @@ export interface SelectProps {
   placeholder?: string;
 
   onChange?: (value: SelectOptionProps | null) => void;
+  onBlur?: (value: SelectOptionProps | null) => void;
+  value?: string | number;
 }
 
 const sizes = {
@@ -38,7 +40,6 @@ const sizes = {
 type StyleSelectProps = Omit<SelectProps, "options">;
 
 const WrapperStyle: StyleFunction<StyleSelectProps> = ({
-  theme,
   width,
 }) => ({
   position: "relative",
@@ -53,6 +54,7 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
   display: "flex",
   alignItems: "center",
   width: "auto",
+  background: theme.colors.default,
 
   paddingLeft: pxStep(3, StepSize.PX4),
   paddingRight: pxStep(3, StepSize.PX4),
@@ -111,7 +113,7 @@ const ListStyle: StyleFunction<StyleSelectProps> = ({
   boxShadow: "0px 5px 11px 0px rgba(0,0,0, 0.06)",
 
   "& li": {
-    padding: `${pxStep(3, StepSize.PX4)} ${pxStep(6, StepSize.PX4)}`,
+    padding: `${pxStep(3, StepSize.PX4)} ${pxStep(4, StepSize.PX4)}`,
     fontSize: remStep(7, StepSize.REM125),
     userSelect: "none",
     whiteSpace: "nowrap",
@@ -145,18 +147,28 @@ export function Select(props: SelectProps) {
     options = [],
     width,
     placeholder,
+    value,
     onChange,
+    onBlur,
   } = props;
 
   const [dropdownWidth, setDropdownWidth] = useState<number>();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   const handleSelectedItemChange = useCallback(
     (value: UseSelectStateChange<SelectOptionProps>) => {
       onChange && onChange(value.selectedItem || null);
     },
-    [onChange]
+    [onChange, toggleRef.current]
+  );
+
+  const handleSelectedItemBlur = useCallback(
+    (value: UseSelectStateChange<SelectOptionProps>) => {
+      onBlur && onBlur(value.selectedItem || null);
+    },
+    [onBlur]
   );
 
   const {
@@ -167,10 +179,12 @@ export function Select(props: SelectProps) {
     highlightedIndex,
     getItemProps,
     selectItem,
+    inputValue,
   } = useSelect({
     items: options,
     itemToString: (item) => (item ? String(item.label) : ""),
     onSelectedItemChange: handleSelectedItemChange,
+    selectedItem: options.find((v) => v.value === value),
   });
 
   const wrapperStyle = useStyles([WrapperStyle], {
@@ -195,10 +209,21 @@ export function Select(props: SelectProps) {
 
   return (
     <div className={wrapperStyle} ref={wrapperRef}>
-      <div
+      <button
         className={selectStyle}
         role="button"
-        {...getToggleButtonProps()}
+        {...getToggleButtonProps({
+          // ref: toggleRef
+          onBlur: () =>
+            !isOpen &&
+            handleSelectedItemBlur({
+              selectedItem,
+              highlightedIndex,
+              inputValue,
+              isOpen,
+              type: useSelect.stateChangeTypes.MenuBlur,
+            }),
+        })}
       >
         <span>
           {selectedItem?.label ||
@@ -206,7 +231,7 @@ export function Select(props: SelectProps) {
             "Selecione um item..."}
         </span>
         <span>{isOpen ? <BiChevronUp /> : <BiChevronDown />}</span>
-      </div>
+      </button>
       <Portal>
         <ul
           {...getMenuProps({ ref: listRef })}
