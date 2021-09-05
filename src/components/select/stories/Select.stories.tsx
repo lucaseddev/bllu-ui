@@ -54,3 +54,16 @@ IsLoading.args = {
   ],
   isLoading: true,
 };
+
+export const IsInvalid = Template.bind({});
+IsInvalid.args = {
+  placeholder: "Selecione uma fruta...",
+  options: [
+    { label: "Maçã", value: 1 },
+    { label: "Banana", value: 2 },
+    { label: "Goiaba", value: 3 },
+    { label: "Abacaxi", value: 4 },
+    { label: "Siriguela", value: 5 },
+  ],
+  isInvalid: true,
+};

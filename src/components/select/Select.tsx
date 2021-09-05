@@ -39,6 +39,7 @@ export interface SelectProps {
 
   disabled?: boolean;
   isLoading?: boolean;
+  isInvalid?: boolean;
 }
 
 const sizes = {
@@ -116,9 +117,17 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
     marginLeft: pxStep(1),
   },
 
-  "&[aria-expanded='true']": {
+  "&[aria-expanded='true']:not([data-isinvalid='true'])": {
     boxShadow: `0px 0px 1px 2px ${theme.colors.primary}20`,
     borderColor: `${theme.colors.primary}a3`,
+  },
+
+  "&[data-isinvalid='true']": {
+    borderColor: `${theme.colors.danger}a3`,
+
+    "&[aria-expanded='true']": {
+      boxShadow: `0px 0px 1px 2px ${theme.colors.danger}20`,
+    },
   },
 
   "& > span:last-child[data-ishover]": {
@@ -196,6 +205,7 @@ export const Select = React.memo(
       suppressClear,
       disabled,
       isLoading,
+      isInvalid,
       onChange,
       onBlur,
     } = props;
@@ -277,6 +287,7 @@ export const Select = React.memo(
               selectedItem && !suppressClear && setIsHover(true),
             onMouseLeave: () => !suppressClear && setIsHover(false),
           })}
+          data-isinvalid={isInvalid}
         >
           <span data-isselected={(selectedItem && true) || false}>
             {selectedItem?.label ||
