@@ -15,6 +15,7 @@ import { pxStep, remStep, StepSize } from "helpers/scale";
 import { LARGE, MEDIUM, SMALL } from "types/sizes";
 import cx from "classnames";
 import { Portal } from "components/portal";
+import { Spinner } from "components/spinner";
 
 export interface SelectOptionProps {
   value: string | number;
@@ -37,6 +38,7 @@ export interface SelectProps {
   suppressClear?: boolean;
 
   disabled?: boolean;
+  isLoading?: boolean;
 }
 
 const sizes = {
@@ -101,11 +103,17 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
     borderRadius: "50%",
 
     marginLeft: pxStep(1),
+    marginRight: pxStep(1, StepSize.PX2),
     display: "flex",
     fontSize: 16,
 
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  "& > div:last-child": {
+    fill: theme.colors.defaultStroke,
+    marginLeft: pxStep(1),
   },
 
   "&[aria-expanded='true']": {
@@ -187,6 +195,7 @@ export const Select = React.memo(
       value,
       suppressClear,
       disabled,
+      isLoading,
       onChange,
       onBlur,
     } = props;
@@ -253,7 +262,7 @@ export const Select = React.memo(
           role="button"
           {...getToggleButtonProps({
             ref: ref,
-            disabled: disabled,
+            disabled: isLoading || disabled,
             onBlur: () =>
               !isOpen &&
               handleSelectedItemBlur({
@@ -291,9 +300,11 @@ export const Select = React.memo(
               <RiCloseCircleFill />
             </span>
           ) : (
-            <span>
-              {isOpen ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
-            </span>
+            (isLoading && <Spinner />) || (
+              <span>
+                {isOpen ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
+              </span>
+            )
           )}
         </button>
         <Portal>
