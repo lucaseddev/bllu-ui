@@ -5,13 +5,14 @@ export const themeLight: ThemeColors = {
     default: "#fff",
     onDefault: "#242424",
     defaultStroke: "#C4C4C4",
-    hoverDefault: "#fcfcfc",
+    hoverDefault: "#F3F3F3",
     activeDefault: "#fafafa",
 
     primary: "#3B75FA",
     onPrimary: "#fff",
     hoverPrimary: "#006ddf",
     activePrimary: "#005cbd",
+    underPrimary: "#E7EEFE",
 
     secondary: "#004ac6",
     onSecondary: "#fff",

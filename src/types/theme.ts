@@ -12,6 +12,7 @@ export interface ThemeColors {
     onPrimary: string;
     hoverPrimary: string;
     activePrimary: string;
+    underPrimary: string;
 
     secondary: string;
     onSecondary: string;
