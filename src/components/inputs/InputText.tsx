@@ -56,9 +56,9 @@ export interface InputTextProps
 }
 
 const sizes = {
-  sm: { height: pxStep(4), fontSize: remStep(7, StepSize.REM125) },
-  md: { height: pxStep(5), fontSize: remStep(7, StepSize.REM125) },
-  lg: { height: pxStep(6), fontSize: remStep(8, StepSize.REM125) },
+  sm: { height: pxStep(4), fontSize: remStep(6, StepSize.REM125) },
+  md: { height: pxStep(5), fontSize: remStep(6, StepSize.REM125) },
+  lg: { height: pxStep(6), fontSize: remStep(7, StepSize.REM125) },
 };
 
 export const InputStyle: StyleFunction<InputTextProps> = ({
