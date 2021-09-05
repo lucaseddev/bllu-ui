@@ -34,6 +34,8 @@ export interface SelectProps {
   onChange?: (value: SelectOptionProps | null) => void;
   onBlur?: (value: SelectOptionProps | null) => void;
   value?: string | number;
+  name?: string;
+  id?: string;
 
   suppressClear?: boolean;
 
@@ -205,6 +207,8 @@ export const Select = React.memo(
       disabled,
       isLoading,
       isInvalid,
+      name,
+      id,
       onChange,
       onBlur,
     } = props;
@@ -271,6 +275,9 @@ export const Select = React.memo(
           role="button"
           {...getToggleButtonProps({
             ref: ref,
+            name: name,
+            value: value,
+            id: id,
             disabled: isLoading || disabled,
             onBlur: () =>
               !isOpen &&
