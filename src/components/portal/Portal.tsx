@@ -26,25 +26,6 @@ export class Portal extends React.Component {
     blluPortal.appendChild(this.container);
   }
 
-  // useEffect(() => {
-  //   if (isDomValid) {
-  //     if (!blluPortal) {
-  //       blluPortal = document.createElement("div");
-  //       blluPortal.setAttribute("id", "bllu-portal");
-  //       document.body.appendChild(blluPortal);
-  //     }
-
-  //     portalRef.current = document.createElement("div");
-  //     blluPortal.appendChild(portalRef.current);
-  //   }
-
-  //   return () => {
-  //     if (isDomValid && portalRef.current) {
-  //       blluPortal.removeChild(portalRef.current);
-  //     }
-  //   };
-  // }, []);
-
   componentWillUnmount() {
     if (isDomValid && this.container)
       blluPortal.removeChild(this.container);
