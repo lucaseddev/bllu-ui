@@ -35,6 +35,8 @@ export interface SelectProps {
   value?: string | number;
 
   suppressClear?: boolean;
+
+  disabled?: boolean;
 }
 
 const sizes = {
@@ -61,6 +63,7 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
   alignItems: "center",
   width: "auto",
   background: theme.colors.default,
+  fontSize: remStep(6, StepSize.REM125),
 
   paddingLeft: pxStep(3, StepSize.PX4),
   paddingRight: pxStep(3, StepSize.PX4),
@@ -72,7 +75,12 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
 
   transition: `border 0.2s, box-shadow 0.2s, background 0.2s, fill 0.2s ${theme.easings.inOutCubic}`,
 
-  "&:hover, &[aria-expanded='true']": {
+  "&:disabled": {
+    cursor: "not-allowed",
+    background: theme.colors.surface,
+  },
+
+  "&:hover:not(:disabled), &[aria-expanded='true']": {
     "& > span:last-child:not([data-ishover])": {
       color: theme.colors.onDefault,
     },
@@ -80,7 +88,10 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
 
   "& > span:first-child": {
     flexGrow: 1,
-    fontSize: remStep(7, StepSize.REM125),
+
+    "&[data-isselected='false']": {
+      opacity: 0.5,
+    },
   },
 
   "& > span:last-child": {
@@ -126,6 +137,7 @@ const ListStyle: StyleFunction<StyleSelectProps> = ({
   padding: `${pxStep(1, StepSize.PX4)} 0`,
   border: `1px solid ${theme.colors.defaultStroke}`,
   borderRadius: pxStep(1, StepSize.PX4),
+  fontSize: remStep(6, StepSize.REM125),
 
   position: "absolute",
   display: "block",
@@ -136,7 +148,6 @@ const ListStyle: StyleFunction<StyleSelectProps> = ({
 
   "& li": {
     padding: `${pxStep(3, StepSize.PX4)} ${pxStep(4, StepSize.PX4)}`,
-    fontSize: remStep(7, StepSize.REM125),
     userSelect: "none",
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
@@ -175,6 +186,7 @@ export const Select = React.memo(
       placeholder,
       value,
       suppressClear,
+      disabled,
       onChange,
       onBlur,
     } = props;
@@ -241,6 +253,7 @@ export const Select = React.memo(
           role="button"
           {...getToggleButtonProps({
             ref: ref,
+            disabled: disabled,
             onBlur: () =>
               !isOpen &&
               handleSelectedItemBlur({
@@ -256,7 +269,7 @@ export const Select = React.memo(
             onMouseLeave: () => !suppressClear && setIsHover(false),
           })}
         >
-          <span>
+          <span data-isselected={(selectedItem && true) || false}>
             {selectedItem?.label ||
               placeholder ||
               "Selecione um item..."}

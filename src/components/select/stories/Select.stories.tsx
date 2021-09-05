@@ -28,3 +28,16 @@ Select.args = {
     { label: "Siriguela", value: 5 },
   ],
 };
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  placeholder: "Selecione uma fruta...",
+  options: [
+    { label: "Maçã", value: 1 },
+    { label: "Banana", value: 2 },
+    { label: "Goiaba", value: 3 },
+    { label: "Abacaxi", value: 4 },
+    { label: "Siriguela", value: 5 },
+  ],
+  disabled: true,
+};
