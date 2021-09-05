@@ -46,7 +46,10 @@ const WrapperStyle: StyleFunction<SelectFieldProps> = ({
   },
 });
 
-export function SelectField(props: SelectFieldProps) {
+export const SelectField = React.forwardRef(function SelectField(
+  props: SelectFieldProps,
+  ref: React.ForwardedRef<HTMLButtonElement>
+) {
   const {
     invalidMsg,
     className,
@@ -73,10 +76,10 @@ export function SelectField(props: SelectFieldProps) {
     <div className={wrapperStyle}>
       <label htmlFor={uniqueId}>{label}</label>
       {description && <p>{description}</p>}
-      <Select id={uniqueId} {...rest} />
+      <Select ref={ref} id={uniqueId} {...rest} />
       {props.isInvalid && invalidMsg && (
         <span id={`${uniqueId}-error-msg`}>{invalidMsg}</span>
       )}
     </div>
   );
-}
+});
