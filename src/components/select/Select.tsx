@@ -73,8 +73,6 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
   transition: `border 0.2s, box-shadow 0.2s, background 0.2s, fill 0.2s ${theme.easings.inOutCubic}`,
 
   "&:hover, &[aria-expanded='true']": {
-    background: theme.colors.hoverDefault,
-
     "& > span:last-child:not([data-ishover])": {
       color: theme.colors.onDefault,
     },
