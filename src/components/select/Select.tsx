@@ -43,8 +43,8 @@ export interface SelectProps {
 }
 
 const sizes = {
-  sm: { height: pxStep(4) },
-  md: { height: pxStep(5) },
+  sm: { height: pxStep(4), fontSize: remStep(6, StepSize.REM125) },
+  md: { height: pxStep(5), fontSize: remStep(6, StepSize.REM125) },
   lg: { height: pxStep(6), fontSize: remStep(7, StepSize.REM125) },
 };
 
@@ -66,7 +66,6 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
   alignItems: "center",
   width: "auto",
   background: theme.colors.default,
-  fontSize: remStep(6, StepSize.REM125),
 
   paddingLeft: pxStep(3, StepSize.PX4),
   paddingRight: pxStep(3, StepSize.PX4),
@@ -100,11 +99,11 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
   "& > span:last-child": {
     color: theme.colors.defaultStroke,
     transition: `color 0.1s ${theme.easings.inOutCubic}`,
+    width: pxStep(9, StepSize.PX2),
 
     borderRadius: "50%",
 
-    marginLeft: pxStep(1),
-    marginRight: pxStep(1, StepSize.PX2),
+    marginLeft: pxStep(3, StepSize.PX4),
     display: "flex",
     fontSize: 16,
 
@@ -114,7 +113,7 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
 
   "& > div:last-child": {
     fill: theme.colors.defaultStroke,
-    marginLeft: pxStep(1),
+    marginLeft: pxStep(3, StepSize.PX4),
   },
 
   "&[aria-expanded='true']:not([data-isinvalid='true'])": {
