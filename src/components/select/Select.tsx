@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -16,10 +17,17 @@ import { LARGE, MEDIUM, SMALL } from "types/sizes";
 import cx from "classnames";
 import { Portal } from "components/portal";
 import { Spinner } from "components/spinner";
+import { select } from "glamor";
+import arrify from "arrify";
 
-export interface SelectOptionProps {
+export interface SelectOptionItem {
   value: string | number;
   label: string | React.ReactNode;
+}
+
+export interface SelectOptionGroup {
+  label: string;
+  options: SelectOptionItem[];
 }
 
 export interface SelectProps {
@@ -27,12 +35,12 @@ export interface SelectProps {
 
   size?: SMALL | MEDIUM | LARGE;
 
-  options: SelectOptionProps[];
+  options: (SelectOptionItem | SelectOptionGroup)[];
 
   placeholder?: string;
 
-  onChange?: (value: SelectOptionProps | null) => void;
-  onBlur?: (value: SelectOptionProps | null) => void;
+  onChange?: (value: SelectOptionItem | null) => void;
+  onBlur?: (value: SelectOptionItem | null) => void;
   value?: string | number;
   name?: string;
   id?: string;
@@ -184,6 +192,28 @@ const ListStyle: StyleFunction<StyleSelectProps> = ({
   "&:focus-visible": {
     outline: "none",
   },
+
+  "& > ul": {
+    padding: 0,
+
+    "&:not(:last-child)::after": {
+      content: " ",
+      display: "block",
+      background: theme.colors.surfaceStroke,
+      height: 1,
+      width: "100%",
+      margin: `${pxStep(1, StepSize.PX4)} 0`,
+    },
+
+    "& > li:first-child": {
+      fontSize: 10,
+      fontWeight: "bold",
+      padding: `${pxStep(2, StepSize.PX4)} ${pxStep(
+        3,
+        StepSize.PX4
+      )}`,
+    },
+  },
 });
 
 const ListStateStyle: StyleFunction<{ isOpen: boolean }> = ({
@@ -219,18 +249,57 @@ export const Select = React.memo(
     const listRef = useRef<HTMLDivElement>(null);
 
     const handleSelectedItemChange = useCallback(
-      (value: UseSelectStateChange<SelectOptionProps>) => {
+      (value: UseSelectStateChange<SelectOptionItem>) => {
         onChange && onChange(value.selectedItem || null);
       },
       [onChange]
     );
 
     const handleSelectedItemBlur = useCallback(
-      (value: UseSelectStateChange<SelectOptionProps>) => {
+      (value: UseSelectStateChange<SelectOptionItem>) => {
         onBlur && onBlur(value.selectedItem || null);
       },
       [onBlur]
     );
+
+    const controlledValue = useMemo(
+      function findSelectedItem() {
+        let selected: SelectOptionItem | undefined;
+
+        for (let index = 0; index < options.length; index++) {
+          const v = options[index];
+
+          if (
+            !!(v as SelectOptionItem).value &&
+            (v as SelectOptionItem).value === value
+          ) {
+            selected = v as SelectOptionItem;
+            break;
+          } else if ((v as SelectOptionGroup).options) {
+            selected = (v as SelectOptionGroup).options.find(
+              (item) => item.value === value
+            );
+            if (selected) break;
+          }
+        }
+
+        return selected;
+      },
+      [value]
+    );
+
+    const controlledOptions = useMemo(() => {
+      const newOptions: SelectOptionItem[] = [];
+      options.forEach((option) => {
+        if ((option as SelectOptionGroup).options) {
+          newOptions.push(...(option as SelectOptionGroup).options);
+        } else {
+          newOptions.push(option as SelectOptionItem);
+        }
+      });
+
+      return newOptions;
+    }, [options]);
 
     const {
       isOpen,
@@ -242,10 +311,10 @@ export const Select = React.memo(
       selectItem,
       inputValue,
     } = useSelect({
-      items: options,
+      items: controlledOptions,
       itemToString: (item) => (item ? String(item.label) : ""),
       onSelectedItemChange: handleSelectedItemChange,
-      selectedItem: options.find((v) => v.value === value),
+      selectedItem: controlledValue,
     });
 
     const wrapperStyle = useStyles([WrapperStyle], {
@@ -268,6 +337,8 @@ export const Select = React.memo(
       }
     }, [width, wrapperRef.current, selectedItem]);
 
+    let indexCounter = 0;
+
     return (
       <div className={wrapperStyle} ref={wrapperRef}>
         <button
@@ -282,7 +353,7 @@ export const Select = React.memo(
             onBlur: () =>
               !isOpen &&
               handleSelectedItemBlur({
-                selectedItem,
+                selectedItem: selectedItem as SelectOptionItem,
                 highlightedIndex,
                 inputValue,
                 isOpen,
@@ -329,20 +400,57 @@ export const Select = React.memo(
             {...getMenuProps({ ref: listRef })}
             className={cx(listStyle, listStateStyle)}
           >
-            {options.map((item, index) => (
-              <li
-                key={`${item.value}${index}`}
-                {...getItemProps({
-                  item,
-                  index,
-                  onClick: () => selectItem(item),
-                })}
-                data-hover={highlightedIndex === index}
-                data-selected={selectedItem?.value === item.value}
-              >
-                {item.label}
-              </li>
-            ))}
+            {options.map(
+              (item, index) =>
+                ((item as SelectOptionGroup).options && (
+                  <ul key={`group-${item.label}-${index}`}>
+                    <li>{item.label}</li>
+                    {(item as SelectOptionGroup).options.map(
+                      (groupedITem) => (
+                        <li
+                          key={`option_grouped${
+                            (groupedITem as SelectOptionItem).value
+                          }-${indexCounter}`}
+                          {...getItemProps({
+                            item: groupedITem,
+                            index: indexCounter,
+                            onClick: () => selectItem(groupedITem),
+                          })}
+                          data-hover={
+                            highlightedIndex === indexCounter++
+                          }
+                          data-selected={
+                            (selectedItem as SelectOptionItem)
+                              ?.value ===
+                            (groupedITem as SelectOptionItem).value
+                          }
+                        >
+                          {groupedITem.label}
+                        </li>
+                      )
+                    )}
+                  </ul>
+                )) || (
+                  <li
+                    key={`option${
+                      (item as SelectOptionItem).value
+                    }-${indexCounter}`}
+                    {...getItemProps({
+                      item: item as SelectOptionItem,
+                      index: indexCounter,
+                      onClick: () =>
+                        selectItem(item as SelectOptionItem),
+                    })}
+                    data-hover={highlightedIndex === indexCounter++}
+                    data-selected={
+                      (selectedItem as SelectOptionItem)?.value ===
+                      (item as SelectOptionItem).value
+                    }
+                  >
+                    {item.label}
+                  </li>
+                )
+            )}
           </ul>
         </Portal>
       </div>

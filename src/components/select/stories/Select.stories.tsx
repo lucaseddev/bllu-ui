@@ -31,39 +31,37 @@ Select.args = {
 
 export const Disabled = Template.bind({});
 Disabled.args = {
-  placeholder: "Selecione uma fruta...",
-  options: [
-    { label: "Maçã", value: 1 },
-    { label: "Banana", value: 2 },
-    { label: "Goiaba", value: 3 },
-    { label: "Abacaxi", value: 4 },
-    { label: "Siriguela", value: 5 },
-  ],
+  ...Select.args,
   disabled: true,
 };
 
 export const IsLoading = Template.bind({});
 IsLoading.args = {
-  placeholder: "Selecione uma fruta...",
-  options: [
-    { label: "Maçã", value: 1 },
-    { label: "Banana", value: 2 },
-    { label: "Goiaba", value: 3 },
-    { label: "Abacaxi", value: 4 },
-    { label: "Siriguela", value: 5 },
-  ],
+  ...Select.args,
   isLoading: true,
 };
 
 export const IsInvalid = Template.bind({});
 IsInvalid.args = {
-  placeholder: "Selecione uma fruta...",
-  options: [
-    { label: "Maçã", value: 1 },
-    { label: "Banana", value: 2 },
-    { label: "Goiaba", value: 3 },
-    { label: "Abacaxi", value: 4 },
-    { label: "Siriguela", value: 5 },
-  ],
+  ...Select.args,
   isInvalid: true,
+};
+
+export const SelectGroups = Template.bind({});
+SelectGroups.args = {
+  placeholder: "Select an option...",
+  options: [
+    {
+      label: "Fruits",
+      options: [
+        { label: "Bananas", value: "1" },
+        { label: "Apples", value: "2" },
+      ],
+    },
+    { label: "Rice", value: "3" },
+    {
+      label: "Snacks",
+      options: [{ label: "Cookies", value: "4" }],
+    },
+  ],
 };
