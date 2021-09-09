@@ -17,8 +17,6 @@ import { LARGE, MEDIUM, SMALL } from "types/sizes";
 import cx from "classnames";
 import { Portal } from "components/portal";
 import { Spinner } from "components/spinner";
-import { select } from "glamor";
-import arrify from "arrify";
 
 export interface SelectOptionItem {
   value: string | number;
