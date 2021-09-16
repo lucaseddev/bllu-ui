@@ -76,6 +76,12 @@ const SpinnerStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
   marginLeft: pxStep(3, StepSize.PX4),
 });
 
+const ListStateStyle: StyleFunction<{ isOpen: boolean }> = ({
+  isOpen,
+}) => ({
+  transform: isOpen ? "translateX(0px)" : "translateX(-1000%)",
+});
+
 export function ComboBox(props: ComboBoxProps) {
   const {
     options,
@@ -151,6 +157,7 @@ export function ComboBox(props: ComboBoxProps) {
   const {
     selectedItem,
     isOpen,
+    openMenu,
     getToggleButtonProps,
     getMenuProps,
     getInputProps,
@@ -165,6 +172,9 @@ export function ComboBox(props: ComboBoxProps) {
   const inputBoxStyle = useStyles([InputBoxStyle]);
   const suffixStyle = useStyles([SuffixStyle]);
   const spinnerStyle = useStyles([SpinnerStyle]);
+  const listStateStyle = useStyles([ListStateStyle], {
+    isOpen,
+  });
 
   return (
     <div {...getComboboxProps()}>
@@ -179,6 +189,7 @@ export function ComboBox(props: ComboBoxProps) {
           onMouseEnter: () =>
             selectedItem && !suppressClear && setIsHover(true),
           onMouseLeave: () => !suppressClear && setIsHover(false),
+          onClick: (event) => openMenu(),
         })}
         suffix={
           isHover ? (
@@ -209,7 +220,10 @@ export function ComboBox(props: ComboBoxProps) {
         }
       />
       <Portal>
-        <ul {...getMenuProps({ ref: listRef })}>
+        <ul
+          className={listStateStyle}
+          {...getMenuProps({ ref: listRef })}
+        >
           <li>teste</li>
         </ul>
       </Portal>
