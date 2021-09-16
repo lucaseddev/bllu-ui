@@ -24,3 +24,29 @@ ComboBox.args = {
     { label: "Siriguela", value: 5 },
   ],
 };
+
+export const ComboBoxGroups = Template.bind({});
+ComboBoxGroups.args = {
+  placeholder: "Select an option...",
+  options: [
+    {
+      label: "Fruits",
+      options: [
+        { label: "Bananas", value: "1" },
+        { label: "Apples", value: "2" },
+      ],
+    },
+    { label: "Rice", value: "3" },
+    {
+      label: "Snacks",
+      options: [{ label: "Cookies", value: "4" }],
+    },
+    {
+      label: "Ice Creams",
+      options: [
+        { label: "Chocolate", value: "5" },
+        { label: "Vanilla", value: "6" },
+      ],
+    },
+  ],
+};

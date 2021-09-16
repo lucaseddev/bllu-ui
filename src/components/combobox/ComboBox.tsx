@@ -8,13 +8,22 @@ import {
 } from "downshift";
 import { pxStep, remStep, StepSize } from "helpers/scale";
 import { StyleFunction, useStyles } from "hooks/useStyles";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   RiArrowDownSLine,
   RiArrowUpSLine,
   RiCloseCircleFill,
 } from "react-icons/ri";
 import { LARGE, MEDIUM, SMALL } from "types/sizes";
+import cx from "classnames";
+
+import { useVirtual } from "react-virtual";
 
 export interface ComboBoxOptionItem {
   value: string | number;
@@ -48,9 +57,16 @@ export interface ComboBoxProps {
   isInvalid?: boolean;
 }
 
-const InputBoxStyle: StyleFunction<
-  Omit<ComboBoxProps, "options">
-> = ({ theme, size }) => ({});
+const WrapperStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
+  width,
+}) => ({
+  position: "relative",
+  width: width || "fit-content",
+});
+
+// const InputBoxStyle: StyleFunction<
+//   Omit<ComboBoxProps, "options">
+// > = ({ theme, size }) => ({});
 
 const SuffixStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
   theme,
@@ -67,6 +83,71 @@ const SuffixStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
 
   alignItems: "center",
   justifyContent: "center",
+});
+
+const ListStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
+  theme,
+  width,
+}) => ({
+  maxHeight: "180px",
+  minWidth: width || "auto",
+  width: width || "auto",
+  overflowY: "auto",
+  overflowX: "hidden",
+  margin: 0,
+  borderTop: 0,
+  background: "white",
+  zIndex: 1000,
+  listStyle: "none",
+  padding: `${pxStep(1, StepSize.PX4)} 0`,
+  border: `1px solid ${theme.colors.defaultStroke}`,
+  borderRadius: pxStep(1, StepSize.PX4),
+  fontSize: remStep(6, StepSize.REM125),
+
+  position: "absolute",
+  display: "block",
+
+  marginTop: pxStep(3, StepSize.PX2),
+
+  boxShadow: "0px 5px 11px 0px rgba(0,0,0, 0.06)",
+
+  "& > li:not([data-isgroup='true']):not([data-isdivider='true']):not(:first-child)": {
+    padding: `${pxStep(3, StepSize.PX4)} ${pxStep(4, StepSize.PX4)}`,
+    userSelect: "none",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    wordWrap: "break-word",
+    overflow: "hidden",
+
+    "&[data-hover='true'][data-selected='false']": {
+      background: theme.colors.hoverDefault,
+    },
+
+    "&[data-hover='false'][data-selected='true'], &[data-hover='true'][data-selected='true']": {
+      background: theme.colors.underPrimary,
+    },
+  },
+
+  "&:focus-visible": {
+    outline: "none",
+  },
+
+  "& li[data-isgroup='true']": {
+    fontSize: 10,
+    fontWeight: "bold",
+    padding: `${pxStep(2, StepSize.PX4)} ${pxStep(3, StepSize.PX4)}`,
+  },
+
+  "& li[data-isdivider='true']:not(:last-child)": {
+    "&::after": {
+      content: " ",
+      display: "block",
+      background: theme.colors.surfaceStroke,
+      height: 1,
+      width: "100%",
+      margin: `${pxStep(1, StepSize.PX4)} 0`,
+    },
+  },
 });
 
 const SpinnerStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
@@ -139,20 +220,32 @@ export function ComboBox(props: ComboBoxProps) {
 
   const controlledOptions = useMemo(() => {
     const newOptions: ComboBoxOptionItem[] = [];
-    options.forEach((option) => {
+    options.forEach((option, index) => {
       if ((option as ComboBoxOptionGroup).options) {
-        newOptions.push(...(option as ComboBoxOptionGroup).options);
+        newOptions.push(
+          { label: option.label, value: "group-label" },
+          ...(option as ComboBoxOptionGroup).options,
+          { label: "", value: "group-divider" }
+        );
       } else {
         newOptions.push(option as ComboBoxOptionItem);
       }
     });
 
+    if (
+      newOptions.length &&
+      newOptions[newOptions.length - 1].value === "group-divider"
+    )
+      newOptions.pop();
+
     return newOptions;
   }, [options]);
 
+  const [dropdownWidth, setDropdownWidth] = useState<number>();
   const [inputItems, setInputItems] = useState(controlledOptions);
   const [isHover, setIsHover] = useState<boolean>(false);
   const listRef = useRef<HTMLElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const {
     selectedItem,
@@ -164,24 +257,63 @@ export function ComboBox(props: ComboBoxProps) {
     getComboboxProps,
     highlightedIndex,
     getItemProps,
+    selectItem,
   } = useCombobox({
     selectedItem: controlledValue,
     items: inputItems,
   });
 
-  const inputBoxStyle = useStyles([InputBoxStyle]);
+  const wrapperStyle = useStyles([WrapperStyle], {
+    width: width,
+  });
+  // const inputBoxStyle = useStyles([InputBoxStyle]);
   const suffixStyle = useStyles([SuffixStyle]);
   const spinnerStyle = useStyles([SpinnerStyle]);
+  const listStyle = useStyles([ListStyle], {
+    width: dropdownWidth,
+  });
   const listStateStyle = useStyles([ListStateStyle], {
     isOpen,
   });
 
+  useEffect(() => {
+    if (
+      wrapperRef.current &&
+      wrapperRef.current.offsetWidth !== dropdownWidth
+    ) {
+      setDropdownWidth(wrapperRef.current.offsetWidth);
+    }
+  }, [width, wrapperRef.current, selectedItem]);
+
+  const rowVirtualizer = useVirtual({
+    parentRef: listRef,
+    size: inputItems.length,
+    estimateSize: React.useCallback(
+      (index) => {
+        switch (inputItems[index].value) {
+          case "group-label":
+            return 27;
+          case "group-divider":
+            return 9;
+          default:
+            return 37;
+        }
+      },
+      [inputItems]
+    ),
+    overscan: 2,
+  });
+
   return (
-    <div {...getComboboxProps()}>
+    <div
+      className={wrapperStyle}
+      {...getComboboxProps({
+        ref: wrapperRef,
+      })}
+    >
       <InputText
         width={width}
         size={size}
-        className={inputBoxStyle}
         isInvalid={isInvalid}
         {...getInputProps({
           placeholder,
@@ -189,7 +321,7 @@ export function ComboBox(props: ComboBoxProps) {
           onMouseEnter: () =>
             selectedItem && !suppressClear && setIsHover(true),
           onMouseLeave: () => !suppressClear && setIsHover(false),
-          onClick: (event) => openMenu(),
+          onClick: () => openMenu(),
         })}
         suffix={
           isHover ? (
@@ -221,10 +353,80 @@ export function ComboBox(props: ComboBoxProps) {
       />
       <Portal>
         <ul
-          className={listStateStyle}
+          className={cx(listStyle, listStateStyle)}
           {...getMenuProps({ ref: listRef })}
         >
-          <li>teste</li>
+          <li
+            key="total-size"
+            style={{ height: rowVirtualizer.totalSize }}
+          />
+          {rowVirtualizer.virtualItems.map((virtualRow) => {
+            switch (inputItems[virtualRow.index].value) {
+              case "group-label":
+                return (
+                  <li
+                    key={`grouped_option${
+                      inputItems[virtualRow.index].value
+                    }-${virtualRow.index}`}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: virtualRow.size,
+                      transform: `translateY(${virtualRow.start}px)`,
+                    }}
+                    data-isgroup={true}
+                  >
+                    {inputItems[virtualRow.index].label}
+                  </li>
+                );
+              case "group-divider":
+                return (
+                  <li
+                    key={`group_divider-${virtualRow.index}`}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: virtualRow.size,
+                      transform: `translateY(${virtualRow.start}px)`,
+                    }}
+                    data-isdivider={true}
+                  />
+                );
+              default:
+                return (
+                  <li
+                    key={`group_option${
+                      inputItems[virtualRow.index].value
+                    }-${virtualRow.index}`}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: virtualRow.size,
+                      transform: `translateY(${virtualRow.start}px)`,
+                    }}
+                    {...getItemProps({
+                      item: inputItems[virtualRow.index],
+                      index: virtualRow.index,
+                      onClick: () =>
+                        selectItem(inputItems[virtualRow.index]),
+                    })}
+                    data-hover={highlightedIndex === virtualRow.index}
+                    data-selected={
+                      inputItems[virtualRow.index].value ===
+                      selectedItem?.value
+                    }
+                  >
+                    {inputItems[virtualRow.index].label}
+                  </li>
+                );
+            }
+          })}
         </ul>
       </Portal>
     </div>
