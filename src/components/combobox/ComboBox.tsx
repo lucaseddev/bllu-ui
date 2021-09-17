@@ -24,10 +24,11 @@ import { LARGE, MEDIUM, SMALL } from "types/sizes";
 import cx from "classnames";
 
 import { useVirtual } from "react-virtual";
+import * as fuzzaldrin from "fuzzaldrin-plus";
 
 export interface ComboBoxOptionItem {
   value: string | number;
-  label: string | React.ReactNode;
+  label: string;
 }
 
 export interface ComboBoxOptionGroup {
@@ -178,6 +179,12 @@ export function ComboBox(props: ComboBoxProps) {
     width,
   } = props;
 
+  const [inputValue, setInputValue] = useState<string>("");
+  const [dropdownWidth, setDropdownWidth] = useState<number>();
+  const [isHover, setIsHover] = useState<boolean>(false);
+  const listRef = useRef<HTMLElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
   const handleSelectedItemChange = useCallback(
     (value: UseComboboxStateChange<ComboBoxOptionItem>) => {
       onChange && onChange(value.selectedItem || null);
@@ -222,12 +229,31 @@ export function ComboBox(props: ComboBoxProps) {
     const newOptions: ComboBoxOptionItem[] = [];
     options.forEach((option, index) => {
       if ((option as ComboBoxOptionGroup).options) {
-        newOptions.push(
-          { label: option.label, value: "group-label" },
-          ...(option as ComboBoxOptionGroup).options,
-          { label: "", value: "group-divider" }
-        );
-      } else {
+        if (inputValue?.length) {
+          const filteredOptions = (option as ComboBoxOptionGroup).options.filter(
+            (item) => fuzzaldrin.match(item.label, inputValue).length
+          );
+
+          if (filteredOptions.length) {
+            newOptions.push(
+              { label: option.label, value: "group-label" },
+              ...filteredOptions,
+              { label: "", value: "group-divider" }
+            );
+          }
+        } else {
+          newOptions.push(
+            { label: option.label, value: "group-label" },
+            ...(option as ComboBoxOptionGroup).options,
+            { label: "", value: "group-divider" }
+          );
+        }
+      } else if (
+        fuzzaldrin.match(
+          (option as ComboBoxOptionItem).label,
+          inputValue
+        ).length
+      ) {
         newOptions.push(option as ComboBoxOptionItem);
       }
     });
@@ -239,13 +265,7 @@ export function ComboBox(props: ComboBoxProps) {
       newOptions.pop();
 
     return newOptions;
-  }, [options]);
-
-  const [dropdownWidth, setDropdownWidth] = useState<number>();
-  const [inputItems, setInputItems] = useState(controlledOptions);
-  const [isHover, setIsHover] = useState<boolean>(false);
-  const listRef = useRef<HTMLElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  }, [options, inputValue]);
 
   const {
     selectedItem,
@@ -260,7 +280,15 @@ export function ComboBox(props: ComboBoxProps) {
     selectItem,
   } = useCombobox({
     selectedItem: controlledValue,
-    items: inputItems,
+    items: controlledOptions,
+    onHighlightedIndexChange: ({ highlightedIndex }) =>
+      highlightedIndex &&
+      rowVirtualizer.scrollToIndex(highlightedIndex),
+
+    onInputValueChange: ({ inputValue: newValue }) => {
+      setInputValue(newValue || "");
+    },
+    inputValue: inputValue,
   });
 
   const wrapperStyle = useStyles([WrapperStyle], {
@@ -287,10 +315,10 @@ export function ComboBox(props: ComboBoxProps) {
 
   const rowVirtualizer = useVirtual({
     parentRef: listRef,
-    size: inputItems.length,
+    size: controlledOptions.length,
     estimateSize: React.useCallback(
       (index) => {
-        switch (inputItems[index].value) {
+        switch (controlledOptions[index].value) {
           case "group-label":
             return 27;
           case "group-divider":
@@ -299,7 +327,7 @@ export function ComboBox(props: ComboBoxProps) {
             return 37;
         }
       },
-      [inputItems]
+      [controlledOptions]
     ),
     overscan: 2,
   });
@@ -316,6 +344,7 @@ export function ComboBox(props: ComboBoxProps) {
         size={size}
         isInvalid={isInvalid}
         {...getInputProps({
+          type: "text",
           placeholder,
           disabled: isLoading || disabled,
           onMouseEnter: () =>
@@ -361,12 +390,12 @@ export function ComboBox(props: ComboBoxProps) {
             style={{ height: rowVirtualizer.totalSize }}
           />
           {rowVirtualizer.virtualItems.map((virtualRow) => {
-            switch (inputItems[virtualRow.index].value) {
+            switch (controlledOptions[virtualRow.index].value) {
               case "group-label":
                 return (
                   <li
                     key={`grouped_option${
-                      inputItems[virtualRow.index].value
+                      controlledOptions[virtualRow.index].value
                     }-${virtualRow.index}`}
                     style={{
                       position: "absolute",
@@ -378,7 +407,7 @@ export function ComboBox(props: ComboBoxProps) {
                     }}
                     data-isgroup={true}
                   >
-                    {inputItems[virtualRow.index].label}
+                    {controlledOptions[virtualRow.index].label}
                   </li>
                 );
               case "group-divider":
@@ -400,7 +429,7 @@ export function ComboBox(props: ComboBoxProps) {
                 return (
                   <li
                     key={`group_option${
-                      inputItems[virtualRow.index].value
+                      controlledOptions[virtualRow.index].value
                     }-${virtualRow.index}`}
                     style={{
                       position: "absolute",
@@ -411,18 +440,20 @@ export function ComboBox(props: ComboBoxProps) {
                       transform: `translateY(${virtualRow.start}px)`,
                     }}
                     {...getItemProps({
-                      item: inputItems[virtualRow.index],
+                      item: controlledOptions[virtualRow.index],
                       index: virtualRow.index,
                       onClick: () =>
-                        selectItem(inputItems[virtualRow.index]),
+                        selectItem(
+                          controlledOptions[virtualRow.index]
+                        ),
                     })}
                     data-hover={highlightedIndex === virtualRow.index}
                     data-selected={
-                      inputItems[virtualRow.index].value ===
+                      controlledOptions[virtualRow.index].value ===
                       selectedItem?.value
                     }
                   >
-                    {inputItems[virtualRow.index].label}
+                    {controlledOptions[virtualRow.index].label}
                   </li>
                 );
             }
