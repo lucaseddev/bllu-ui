@@ -370,7 +370,7 @@ export function ComboBox(props: ComboBoxProps) {
                     }-${virtualRow.index}`}
                     style={{
                       position: "absolute",
-                      top: 0,
+                      top: 4,
                       left: 0,
                       width: "100%",
                       height: virtualRow.size,
@@ -387,7 +387,7 @@ export function ComboBox(props: ComboBoxProps) {
                     key={`group_divider-${virtualRow.index}`}
                     style={{
                       position: "absolute",
-                      top: 0,
+                      top: 4,
                       left: 0,
                       width: "100%",
                       height: virtualRow.size,
@@ -404,7 +404,7 @@ export function ComboBox(props: ComboBoxProps) {
                     }-${virtualRow.index}`}
                     style={{
                       position: "absolute",
-                      top: 0,
+                      top: 4,
                       left: 0,
                       width: "100%",
                       height: virtualRow.size,
