@@ -2,6 +2,7 @@ import { Spinner } from "components/spinner";
 import { css } from "glamor";
 import { pxStep, remStep, StepSize } from "helpers/scale";
 import {
+  styled,
   StyleFunction,
   StyleObject,
   useStyles,
@@ -10,6 +11,7 @@ import { SMALL, MEDIUM, LARGE } from "types/sizes";
 import React from "react";
 import { IconType } from "react-icons";
 import Icon from "components/icon/Icon";
+import classNames from "classnames";
 
 export const PRIMARY = "primary";
 export const SECONDARY = "secondary";
@@ -46,7 +48,7 @@ export interface ButtonProps {
   className?: string | StyleObject | StyleFunction;
 }
 
-const buttonBaseStyle: StyleFunction = ({ theme }) => ({
+const buttonBaseStyle = styled<ButtonProps>(({ theme }) => ({
   paddingLeft: pxStep(2),
   paddingRight: pxStep(2),
   borderRadius: pxStep(1, StepSize.PX4),
@@ -70,30 +72,28 @@ const buttonBaseStyle: StyleFunction = ({ theme }) => ({
   },
   display: "flex",
   alignItems: "center",
-});
+}));
 
-const buttonSize: { [size: string]: StyleFunction } = {
-  sm: () => ({
+const buttonSize = {
+  sm: styled({
     height: pxStep(4),
     minWidth: pxStep(4),
     fontSize: remStep(6, StepSize.REM125),
   }),
-  md: () => ({
+  md: styled({
     height: pxStep(5),
     minWidth: pxStep(5),
     fontSize: remStep(6, StepSize.REM125),
   }),
-  lg: () => ({
+  lg: styled({
     height: pxStep(6),
     minWidth: pxStep(6),
     fontSize: remStep(7, StepSize.REM125),
   }),
 };
 
-const buttonAppearance: {
-  [appearance: string]: StyleFunction<ButtonProps>;
-} = {
-  primary: ({ theme, danger }) => {
+const buttonAppearance = {
+  primary: styled<ButtonProps>(({ theme, danger }) => {
     const primaryColor = danger
       ? theme.colors.danger
       : theme.colors.primary;
@@ -119,8 +119,8 @@ const buttonAppearance: {
         borderColor: activePrimary,
       },
     };
-  },
-  secondary: ({ theme, danger }) => {
+  }),
+  secondary: styled<ButtonProps>(({ theme, danger }) => {
     const secondaryColor = danger
       ? theme.colors.danger
       : theme.colors.onDefault;
@@ -144,15 +144,15 @@ const buttonAppearance: {
         background: activeSecondary,
       },
     };
-  },
-  link: ({ theme }) => ({
+  }),
+  link: styled<ButtonProps>(({ theme }) => ({
     color: theme.colors.primary,
     background: "transparent",
     border: "none",
     ":hover": {
       color: theme.colors.secondary,
     },
-  }),
+  })),
 };
 
 export const Button = React.memo(
@@ -173,14 +173,16 @@ export const Button = React.memo(
       className = "",
       ...rest
     } = props;
-    const themedStyle = useStyles(
-      [
-        buttonBaseStyle,
-        buttonAppearance[appearance || "primary"],
-        buttonSize[size || "md"],
-        className,
-      ],
-      { appearance, size, danger }
+
+    const themedStyle = classNames(
+      buttonBaseStyle(),
+      buttonAppearance[appearance || "primary"]({
+        appearance,
+        danger,
+        children: null,
+      }),
+      buttonSize[size || "md"],
+      className
     );
 
     let iconSize = 16;
