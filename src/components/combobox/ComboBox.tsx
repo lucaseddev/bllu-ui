@@ -166,6 +166,13 @@ const ListStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
       margin: `${pxStep(1, StepSize.PX4)} 0`,
     },
   },
+
+  "& > li[data-nooption]": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: theme.colors.defaultStroke,
+  },
 });
 
 const SpinnerStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
@@ -441,75 +448,78 @@ export const ComboBox = React.memo(function ComboBox(
             key="total-size"
             style={{ height: rowVirtualizer.totalSize }}
           />
-          {rowVirtualizer.virtualItems.map((virtualRow) => {
-            switch (controlledOptions[virtualRow.index].value) {
-              case "group-label":
-                return (
-                  <li
-                    key={`grouped_option${
-                      controlledOptions[virtualRow.index].value
-                    }-${virtualRow.index}`}
-                    style={{
-                      position: "absolute",
-                      top: 4,
-                      left: 0,
-                      width: "100%",
-                      height: virtualRow.size,
-                      transform: `translateY(${virtualRow.start}px)`,
-                    }}
-                    data-isgroup={true}
-                  >
-                    {controlledOptions[virtualRow.index].label}
-                  </li>
-                );
-              case "group-divider":
-                return (
-                  <li
-                    key={`group_divider-${virtualRow.index}`}
-                    style={{
-                      position: "absolute",
-                      top: 4,
-                      left: 0,
-                      width: "100%",
-                      height: virtualRow.size,
-                      transform: `translateY(${virtualRow.start}px)`,
-                    }}
-                    data-isdivider={true}
-                  />
-                );
-              default:
-                return (
-                  <li
-                    key={`group_option${
-                      controlledOptions[virtualRow.index].value
-                    }-${virtualRow.index}`}
-                    style={{
-                      position: "absolute",
-                      top: 4,
-                      left: 0,
-                      width: "100%",
-                      height: virtualRow.size,
-                      transform: `translateY(${virtualRow.start}px)`,
-                    }}
-                    {...getItemProps({
-                      item: controlledOptions[virtualRow.index],
-                      index: virtualRow.index,
-                      onClick: () =>
-                        selectItem(
-                          controlledOptions[virtualRow.index]
-                        ),
-                    })}
-                    data-hover={highlightedIndex === virtualRow.index}
-                    data-selected={
-                      controlledOptions[virtualRow.index].value ===
-                      selectedItem?.value
-                    }
-                  >
-                    {controlledOptions[virtualRow.index].label}
-                  </li>
-                );
-            }
-          })}
+          {(rowVirtualizer.virtualItems.length &&
+            rowVirtualizer.virtualItems.map((virtualRow) => {
+              switch (controlledOptions[virtualRow.index].value) {
+                case "group-label":
+                  return (
+                    <li
+                      key={`grouped_option${
+                        controlledOptions[virtualRow.index].value
+                      }-${virtualRow.index}`}
+                      style={{
+                        position: "absolute",
+                        top: 4,
+                        left: 0,
+                        width: "100%",
+                        height: virtualRow.size,
+                        transform: `translateY(${virtualRow.start}px)`,
+                      }}
+                      data-isgroup={true}
+                    >
+                      {controlledOptions[virtualRow.index].label}
+                    </li>
+                  );
+                case "group-divider":
+                  return (
+                    <li
+                      key={`group_divider-${virtualRow.index}`}
+                      style={{
+                        position: "absolute",
+                        top: 4,
+                        left: 0,
+                        width: "100%",
+                        height: virtualRow.size,
+                        transform: `translateY(${virtualRow.start}px)`,
+                      }}
+                      data-isdivider={true}
+                    />
+                  );
+                default:
+                  return (
+                    <li
+                      key={`group_option${
+                        controlledOptions[virtualRow.index].value
+                      }-${virtualRow.index}`}
+                      style={{
+                        position: "absolute",
+                        top: 4,
+                        left: 0,
+                        width: "100%",
+                        height: virtualRow.size,
+                        transform: `translateY(${virtualRow.start}px)`,
+                      }}
+                      {...getItemProps({
+                        item: controlledOptions[virtualRow.index],
+                        index: virtualRow.index,
+                        onClick: () =>
+                          selectItem(
+                            controlledOptions[virtualRow.index]
+                          ),
+                      })}
+                      data-hover={
+                        highlightedIndex === virtualRow.index
+                      }
+                      data-selected={
+                        controlledOptions[virtualRow.index].value ===
+                        selectedItem?.value
+                      }
+                    >
+                      {controlledOptions[virtualRow.index].label}
+                    </li>
+                  );
+              }
+            })) || <li data-nooption>No options</li>}
         </ul>
       </Portal>
     </div>
