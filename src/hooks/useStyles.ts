@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Theme } from "types/theme";
 import { useTheme } from "./useTheme";
 
@@ -77,4 +83,36 @@ export function useStyles<T = {}>(
 
     return styleRef.current;
   }, [deps]);
+}
+
+export function styled<T = {}>(
+  style: StyleObject | StyleFunction<T>
+) {
+  if (isFunction(style)) {
+    return (props: T) => {
+      const { theme } = useTheme();
+      const deps =
+        (props &&
+          Object.keys(props).map((key: string) => props[key])) ||
+        [];
+
+      return useMemo(() => {
+        console.log("Computing style");
+
+        return css(
+          (style as StyleFunction<T>)({
+            ...(props || ({} as T)),
+            theme,
+          })
+        );
+      }, [theme, deps]);
+    };
+  }
+
+  if (!isObject(style)) {
+    console.warn("Style type not supported.");
+    throw new Error("Style type not supported.");
+  }
+
+  return css(style as StyleObject);
 }
