@@ -1,10 +1,16 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Theme } from "types/theme";
 import { useTheme } from "./useTheme";
 
 import cx from "classnames";
 import { isFunction, isObject } from "helpers/validations";
-import { css, Rule } from "glamor";
+import { css, Rule, StyleAttribute } from "glamor";
 import isEqual from "react-fast-compare";
 
 // type Modify<T, R> = Omit<T, keyof R> & R;
@@ -77,4 +83,45 @@ export function useStyles<T = {}>(
 
     return styleRef.current;
   }, [deps]);
+}
+
+export function styled<T = {}>(
+  style: StyleFunction<T>
+): (props?: T) => StyleAttribute;
+export function styled(style: StyleObject): StyleAttribute;
+export function styled<T = {}>(style: any) {
+  if (isFunction(style)) {
+    return (props?: T) => {
+      const depsRef = useRef<any[]>();
+      const styleRef = useRef<any>();
+      const { theme } = useTheme();
+      const deps =
+        (props &&
+          Object.keys(props).map((key: string) => props[key])) ||
+        [];
+
+      return useMemo(() => {
+        if (!isEqual(depsRef.current, deps)) {
+          console.log("Computing style");
+
+          depsRef.current = deps;
+          styleRef.current = css(
+            (style as StyleFunction<T>)({
+              ...(props || ({} as T)),
+              theme,
+            })
+          );
+        }
+
+        return styleRef.current;
+      }, [deps]);
+    };
+  }
+
+  if (!isObject(style)) {
+    console.warn("Style type not supported.");
+    throw new Error("Style type not supported.");
+  }
+
+  return css(style as StyleObject);
 }
