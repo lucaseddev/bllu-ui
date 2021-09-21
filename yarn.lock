@@ -3734,6 +3734,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.debounce@npm:^4.0.6":
+  version: 4.0.6
+  resolution: "@types/lodash.debounce@npm:4.0.6"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 54b181c65009d2523ad13a608e1db22950467573bf6e10adaccdf46b5c2c68e7d109ff352e7e95c0035a6dd30eafd06f59356c893373098c4fb60db368158595
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:*":
+  version: 4.14.173
+  resolution: "@types/lodash@npm:4.14.173"
+  checksum: 9e97ef5816299e5470db1cb32a93e981af60f74f18a35d045ed4caf224a065df96bfae6e444ec96aa392fc01258592b965d840ae042eef77ef719a578c7daef8
+  languageName: node
+  linkType: hard
+
 "@types/markdown-to-jsx@npm:^6.11.3":
   version: 6.11.3
   resolution: "@types/markdown-to-jsx@npm:6.11.3"
@@ -5381,6 +5397,7 @@ __metadata:
     "@testing-library/react": ^12.0.0
     "@types/fuzzaldrin-plus": ^0.6.2
     "@types/jest": ^26.0.24
+    "@types/lodash.debounce": ^4.0.6
     "@types/react": ^17.0.15
     "@types/react-dom": ^17.0.9
     "@types/react-is": ^17.0.2
@@ -5393,6 +5410,7 @@ __metadata:
     glamor: ^2.20.40
     identity-obj-proxy: ^3.0.0
     jest: ^27.0.6
+    lodash.debounce: ^4.0.8
     node-sass: ^6.0.1
     postcss: ^8.3.6
     react: ^17.0.2

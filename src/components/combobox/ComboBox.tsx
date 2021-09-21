@@ -4,11 +4,12 @@ import { Spinner } from "components/spinner";
 import {
   useCombobox,
   UseComboboxStateChange,
-  UseSelectStateChange,
+  UseComboboxStateChangeTypes,
 } from "downshift";
 import { pxStep, remStep, StepSize } from "helpers/scale";
 import { StyleFunction, useStyles } from "hooks/useStyles";
 import React, {
+  ForwardedRef,
   useCallback,
   useEffect,
   useMemo,
@@ -24,6 +25,7 @@ import { LARGE, MEDIUM, SMALL } from "types/sizes";
 import cx from "classnames";
 
 import { useVirtual } from "react-virtual";
+import debounce from "lodash.debounce";
 import * as fuzzaldrin from "fuzzaldrin-plus";
 
 export interface ComboBoxOptionItem {
@@ -56,13 +58,22 @@ export interface ComboBoxProps {
   disabled?: boolean;
   isLoading?: boolean;
   isInvalid?: boolean;
+
+  inputRef?: React.Ref<HTMLInputElement>;
 }
 
 const WrapperStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
   width,
+  theme,
 }) => ({
   position: "relative",
   width: width || "fit-content",
+
+  "&:hover:not([data-disabled='true']), &[aria-expanded='true']": {
+    "& > div > span > span:first-child:not([data-ishover])": {
+      color: theme.colors.onDefault,
+    },
+  },
 });
 
 // const InputBoxStyle: StyleFunction<
@@ -84,6 +95,12 @@ const SuffixStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
 
   alignItems: "center",
   justifyContent: "center",
+
+  "&[data-ishover]": {
+    "&:hover": {
+      color: theme.colors.onDefault,
+    },
+  },
 });
 
 const ListStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
@@ -164,7 +181,9 @@ const ListStateStyle: StyleFunction<{ isOpen: boolean }> = ({
   transform: isOpen ? "translateX(0px)" : "translateX(-1000%)",
 });
 
-export function ComboBox(props: ComboBoxProps) {
+export const ComboBox = React.memo(function ComboBox(
+  props: ComboBoxProps
+) {
   const {
     options,
     value,
@@ -177,6 +196,7 @@ export function ComboBox(props: ComboBoxProps) {
     suppressClear,
     size,
     width,
+    inputRef,
   } = props;
 
   const [inputValue, setInputValue] = useState<string>("");
@@ -249,6 +269,7 @@ export function ComboBox(props: ComboBoxProps) {
           );
         }
       } else if (
+        !inputValue.length ||
         fuzzaldrin.match(
           (option as ComboBoxOptionItem).label,
           inputValue
@@ -267,6 +288,13 @@ export function ComboBox(props: ComboBoxProps) {
     return newOptions;
   }, [options, inputValue]);
 
+  const debounceUpdateInputValue = useCallback(
+    ({ inputValue: newValue }) => {
+      setInputValue(newValue || "");
+    },
+    []
+  );
+
   const {
     selectedItem,
     isOpen,
@@ -278,17 +306,27 @@ export function ComboBox(props: ComboBoxProps) {
     highlightedIndex,
     getItemProps,
     selectItem,
+    setInputValue: setComboBoxInputValue,
   } = useCombobox({
     selectedItem: controlledValue,
+    onSelectedItemChange: handleSelectedItemChange,
     items: controlledOptions,
     onHighlightedIndexChange: ({ highlightedIndex }) =>
       highlightedIndex &&
+      highlightedIndex !== -1 &&
       rowVirtualizer.scrollToIndex(highlightedIndex),
 
-    onInputValueChange: ({ inputValue: newValue }) => {
-      setInputValue(newValue || "");
+    itemToString: (item) => (item ? String(item.label) : ""),
+    onInputValueChange: debounce(debounceUpdateInputValue, 100),
+    onIsOpenChange: ({ selectedItem, isOpen, type }) => {
+      if (
+        type === useCombobox.stateChangeTypes.InputBlur &&
+        !isOpen &&
+        inputValue !== selectedItem?.label
+      ) {
+        setComboBoxInputValue(selectedItem?.label || "");
+      }
     },
-    inputValue: inputValue,
   });
 
   const wrapperStyle = useStyles([WrapperStyle], {
@@ -337,7 +375,11 @@ export function ComboBox(props: ComboBoxProps) {
       className={wrapperStyle}
       {...getComboboxProps({
         ref: wrapperRef,
+        onMouseEnter: () =>
+          selectedItem && !suppressClear && setIsHover(true),
+        onMouseLeave: () => !suppressClear && setIsHover(false),
       })}
+      data-disabled={isLoading || disabled}
     >
       <InputText
         width={width}
@@ -347,10 +389,17 @@ export function ComboBox(props: ComboBoxProps) {
           type: "text",
           placeholder,
           disabled: isLoading || disabled,
-          onMouseEnter: () =>
-            selectedItem && !suppressClear && setIsHover(true),
-          onMouseLeave: () => !suppressClear && setIsHover(false),
+          ref: inputRef,
           onClick: () => openMenu(),
+          onBlur: () =>
+            !isOpen &&
+            handleSelectedItemBlur({
+              selectedItem: selectedItem as ComboBoxOptionItem,
+              highlightedIndex,
+              inputValue,
+              isOpen,
+              type: useCombobox.stateChangeTypes.InputBlur,
+            }),
         })}
         suffix={
           isHover ? (
@@ -373,7 +422,10 @@ export function ComboBox(props: ComboBoxProps) {
             </span>
           ) : (
             (isLoading && <Spinner className={spinnerStyle} />) || (
-              <span className={suffixStyle}>
+              <span
+                className={suffixStyle}
+                {...getToggleButtonProps()}
+              >
                 {isOpen ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
               </span>
             )
@@ -462,4 +514,4 @@ export function ComboBox(props: ComboBoxProps) {
       </Portal>
     </div>
   );
-}
+});
