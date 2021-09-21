@@ -221,7 +221,10 @@ export const InputText = React.forwardRef(function InputText(
     ...rest
   } = props;
 
-  const inputStyle = useStyles([InputStyle], { width, size });
+  const inputStyle = useStyles([InputStyle, className || ""], {
+    width,
+    size,
+  });
 
   return (
     <InputAffix
