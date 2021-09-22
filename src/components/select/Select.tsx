@@ -62,7 +62,8 @@ const WrapperStyle: StyleFunction<StyleSelectProps> = ({
   width,
 }) => ({
   position: "relative",
-  width: width || "fit-content",
+  width: width || "auto",
+  display: "inline-block",
 });
 
 const SelectStyle: StyleFunction<StyleSelectProps> = ({
@@ -70,9 +71,10 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
   size,
 }) => ({
   ...sizes[size || MEDIUM],
-  display: "flex",
+  display: "inline-flex",
   alignItems: "center",
-  width: "auto",
+  justifyContent: "space-between",
+  width: "100%",
   background: theme.colors.default,
 
   paddingLeft: pxStep(3, StepSize.PX4),
@@ -97,8 +99,6 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
   },
 
   "& > span:first-child": {
-    flexGrow: 1,
-
     "&[data-isselected='false']": {
       opacity: 0.5,
     },

@@ -14,9 +14,12 @@ export interface ComboBoxFieldProps extends ComboBoxProps {
   invalidMsg?: string;
 }
 
-const wrapperStyle = styled(({ theme }) => ({
+const wrapperStyle = styled<
+  Omit<ComboBoxFieldProps, "label" | "name" | "options">
+>(({ theme, width }) => ({
   display: "flex",
   flexDirection: "column",
+  width: width || "auto",
 
   "& > label": {
     marginBottom: pxStep(1, StepSize.PX4),
@@ -39,7 +42,15 @@ const wrapperStyle = styled(({ theme }) => ({
 }));
 
 export function ComboBoxField(props: ComboBoxFieldProps) {
-  const { id, name, label, description, invalidMsg, ...rest } = props;
+  const {
+    id,
+    name,
+    label,
+    description,
+    invalidMsg,
+    width,
+    ...rest
+  } = props;
 
   if (!props.name) {
     console.warn(
@@ -53,12 +64,13 @@ export function ComboBoxField(props: ComboBoxFieldProps) {
   const uniqueId = id || useUIDSeed()(props.name);
 
   return (
-    <div {...wrapperStyle()}>
+    <div {...wrapperStyle({ width })}>
       <label htmlFor={uniqueId}>{label}</label>
       {description && <p>{description}</p>}
       <ComboBox
         {...rest}
         id={uniqueId}
+        width="100%"
         aria-errormessage={`${props.name}-error-msg`}
       />
       {props.isInvalid && invalidMsg && (

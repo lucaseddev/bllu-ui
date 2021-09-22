@@ -67,7 +67,8 @@ const WrapperStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
   theme,
 }) => ({
   position: "relative",
-  width: width || "fit-content",
+  width: width || "auto",
+  display: "inline-block",
 
   "&:hover:not([data-disabled='true']), &[aria-expanded='true']": {
     "& > div > span > span:first-child:not([data-ishover])": {
@@ -201,7 +202,7 @@ export const ComboBox = React.memo(function ComboBox(
     isInvalid,
     disabled,
     suppressClear,
-    size,
+    size = "md",
     width,
     inputRef,
     ...rest

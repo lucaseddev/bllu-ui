@@ -10,11 +10,12 @@ export interface InputTextFieldProps extends InputTextProps {
   invalidMsg?: string;
 }
 
-const WrapperStyle: StyleFunction<InputTextFieldProps> = ({
-  theme,
-}) => ({
+const WrapperStyle: StyleFunction<
+  Omit<InputTextFieldProps, "label">
+> = ({ width, theme }) => ({
   display: "flex",
   flexDirection: "column",
+  width: width || "auto",
 
   "& > label": {
     marginBottom: pxStep(1, StepSize.PX4),
@@ -45,10 +46,13 @@ export const InputTextField = React.forwardRef(function (
     description,
     invalidMsg,
     className,
+    width,
     ...rest
   } = props;
 
-  const wrapperStyle = useStyles([WrapperStyle, className || ""]);
+  const wrapperStyle = useStyles([WrapperStyle, className || ""], {
+    width,
+  });
 
   return (
     <div className={wrapperStyle}>
@@ -58,6 +62,7 @@ export const InputTextField = React.forwardRef(function (
         ref={ref}
         id={props.name}
         {...rest}
+        width="100%"
         aria-errormessage={`${props.name}-error-msg`}
       />
       {props.isInvalid && invalidMsg && (

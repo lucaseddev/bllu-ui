@@ -70,7 +70,7 @@ const buttonBaseStyle = styled<ButtonProps>(({ theme }) => ({
       borderColor: theme.colors.defaultStroke,
     },
   },
-  display: "flex",
+  display: "inline-flex",
   alignItems: "center",
 }));
 

@@ -70,14 +70,14 @@ export const InputStyle: StyleFunction<InputTextProps> = ({
     ...sizes[size || MEDIUM],
     border: `1px solid ${theme.colors.defaultStroke}`,
     borderRadius: pxStep(1, StepSize.PX4),
-    width: width || "fit-content",
+    width: width || "auto",
 
     paddingLeft: pxStep(3, StepSize.PX4),
     paddingRight: pxStep(3, StepSize.PX4),
 
     transition: `border 0.2s, box-shadow 0.2s, background 0.2s, fill 0.2s ${theme.easings.inOutCubic}`,
 
-    display: "flex",
+    display: "inline-flex",
     alignItems: "center",
 
     "& > input": {

@@ -17,14 +17,20 @@ export interface SelectFieldProps extends SelectProps {
 
   className?:
     | StyleObject
-    | StyleFunction<Omit<SelectFieldProps, "className" | "onChange">>;
+    | StyleFunction<
+        Omit<
+          SelectFieldProps,
+          "className" | "onChange" | "label" | "name" | "options"
+        >
+      >;
 }
 
-const WrapperStyle: StyleFunction<SelectFieldProps> = ({
-  theme,
-}) => ({
+const WrapperStyle: StyleFunction<
+  Omit<SelectFieldProps, "label" | "name" | "options">
+> = ({ theme, width }) => ({
   display: "flex",
   flexDirection: "column",
+  width: width || "auto",
 
   "& > label": {
     marginBottom: pxStep(1, StepSize.PX4),
@@ -56,6 +62,7 @@ export const SelectField = React.forwardRef(function SelectField(
     label,
     description,
     id,
+    width,
     ...rest
   } = props;
 
@@ -70,13 +77,15 @@ export const SelectField = React.forwardRef(function SelectField(
 
   const uniqueId = id || useUIDSeed()(props.name);
 
-  const wrapperStyle = useStyles([WrapperStyle, className || ""]);
+  const wrapperStyle = useStyles([WrapperStyle, className || ""], {
+    width,
+  });
 
   return (
     <div className={wrapperStyle}>
       <label htmlFor={uniqueId}>{label}</label>
       {description && <p>{description}</p>}
-      <Select ref={ref} id={uniqueId} {...rest} />
+      <Select ref={ref} id={uniqueId} width="100%" {...rest} />
       {props.isInvalid && invalidMsg && (
         <span id={`${uniqueId}-error-msg`}>{invalidMsg}</span>
       )}
