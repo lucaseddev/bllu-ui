@@ -1,4 +1,4 @@
-import { InputText } from "components/inputs";
+import { InputText, InputTextProps } from "components/inputs";
 import { Portal } from "components/portal";
 import { Spinner } from "components/spinner";
 import {
@@ -204,6 +204,7 @@ export const ComboBox = React.memo(function ComboBox(
     size,
     width,
     inputRef,
+    ...rest
   } = props;
 
   const [inputValue, setInputValue] = useState<string>("");
@@ -356,7 +357,7 @@ export const ComboBox = React.memo(function ComboBox(
     ) {
       setDropdownWidth(wrapperRef.current.offsetWidth);
     }
-  }, [width, wrapperRef.current, selectedItem]);
+  }, [width, wrapperRef.current, selectedItem, isInvalid]);
 
   const rowVirtualizer = useVirtual({
     parentRef: listRef,
@@ -393,6 +394,7 @@ export const ComboBox = React.memo(function ComboBox(
         size={size}
         isInvalid={isInvalid}
         {...getInputProps({
+          ...rest,
           type: "text",
           placeholder,
           disabled: isLoading || disabled,
