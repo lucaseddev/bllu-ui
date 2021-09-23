@@ -2,6 +2,7 @@ import React from "react";
 import { Meta, Story } from "@storybook/react";
 
 import { Flex, FlexProps } from "..";
+import { Box } from "../../box";
 
 export default {
   title: "Components/FlexLayout",
@@ -9,9 +10,15 @@ export default {
 } as Meta;
 
 export const FlexContainer: Story<FlexProps> = (args) => (
-  <Flex container justifyContent="space-between" spacing={3}>
-    <Flex item>This is a flex item</Flex>
-    <Flex item>This is a second flex item</Flex>
-    <Flex item>This is a second flex item</Flex>
+  <Flex container spacing={1}>
+    <Flex item>
+      <Box>This is a flex item</Box>
+    </Flex>
+    <Flex item>
+      <Box>This is a second flex item</Box>
+    </Flex>
+    <Flex item>
+      <Box>This is a third flex item</Box>
+    </Flex>
   </Flex>
 );
