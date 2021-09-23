@@ -8,7 +8,7 @@ import {
   SECONDARY,
 } from "../Button";
 import { IconButton, IconButtonProps } from "../IconButton";
-import { MEDIUM } from "../../../types/sizes";
+import { MD } from "../../../types/sizes";
 import { ThemeProvider } from "../../../contexts";
 import { themeLight } from "../../../theme";
 import { BiBell, BiSearch } from "react-icons/bi";
@@ -24,14 +24,14 @@ export const Primary = Template.bind({});
 Primary.args = {
   children: "Primary",
   appearance: PRIMARY,
-  size: MEDIUM,
+  size: MD,
 };
 
 export const PrimaryDanger = Template.bind({});
 PrimaryDanger.args = {
   children: "Primary Danger",
   appearance: PRIMARY,
-  size: MEDIUM,
+  size: MD,
   danger: true,
 };
 
@@ -39,14 +39,14 @@ export const Secondary = Template.bind({});
 Secondary.args = {
   children: "Secondary",
   appearance: SECONDARY,
-  size: MEDIUM,
+  size: MD,
 };
 
 export const SecondaryDanger = Template.bind({});
 SecondaryDanger.args = {
   children: "Secondary Danger",
   appearance: SECONDARY,
-  size: MEDIUM,
+  size: MD,
   danger: true,
 };
 
@@ -54,14 +54,14 @@ export const Link = Template.bind({});
 Link.args = {
   children: "Link",
   appearance: LINK,
-  size: MEDIUM,
+  size: MD,
 };
 
 export const WithLeftIcon = Template.bind({});
 WithLeftIcon.args = {
   children: "Left Icon",
   appearance: PRIMARY,
-  size: MEDIUM,
+  size: MD,
   beforeIcon: BiSearch,
 };
 
@@ -69,7 +69,7 @@ export const WithRightIcon = Template.bind({});
 WithRightIcon.args = {
   children: "Right Icon",
   appearance: PRIMARY,
-  size: MEDIUM,
+  size: MD,
   afterIcon: BiSearch,
 };
 

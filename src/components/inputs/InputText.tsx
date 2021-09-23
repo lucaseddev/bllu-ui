@@ -5,7 +5,7 @@ import {
   useStyles,
 } from "hooks/useStyles";
 import React from "react";
-import { LARGE, MEDIUM, SMALL } from "types/sizes";
+import { LG, MD, SM } from "types/sizes";
 import { Spinner } from "components/spinner";
 
 export interface InputTextProps
@@ -14,7 +14,7 @@ export interface InputTextProps
     "size" | "prefix" | "type" | "className"
   > {
   width?: string | number;
-  size?: SMALL | MEDIUM | LARGE;
+  size?: SM | MD | LG;
 
   className?:
     | StyleObject
@@ -67,7 +67,7 @@ export const InputStyle: StyleFunction<InputTextProps> = ({
   width,
 }) => {
   return {
-    ...sizes[size || MEDIUM],
+    ...sizes[size || MD],
     border: `1px solid ${theme.colors.defaultStroke}`,
     borderRadius: pxStep(1, StepSize.PX4),
     width: width || "auto",
@@ -210,7 +210,7 @@ export const InputText = React.forwardRef(function InputText(
 ) {
   const {
     className,
-    size = MEDIUM,
+    size = MD,
     width,
     isInvalid = false,
     isLoading = false,

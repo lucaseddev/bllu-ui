@@ -1,15 +1,33 @@
-export const EXTRA_SMALL = "xs";
-export const SMALL = "sm";
-export const MEDIUM = "md";
-export const LARGE = "lg";
-export const EXTRA_LARGE = "xl";
-export const EXTRA_LARGE2 = "2xl";
-export const EXTRA_LARGE3 = "4xl";
+export const XS = "xs";
+export const SM = "sm";
+export const MD = "md";
+export const LG = "lg";
+export const XL = "xl";
+export const XL2 = "2xl";
+export const XL3 = "4xl";
 
-export type EXTRA_SMALL = typeof EXTRA_SMALL;
-export type SMALL = typeof SMALL;
-export type MEDIUM = typeof MEDIUM;
-export type LARGE = typeof LARGE;
-export type EXTRA_LARGE = typeof EXTRA_LARGE;
-export type EXTRA_LARGE2 = typeof EXTRA_LARGE2;
-export type EXTRA_LARGE3 = typeof EXTRA_LARGE3;
+export type XS = typeof XS;
+export type SM = typeof SM;
+export type MD = typeof MD;
+export type LG = typeof LG;
+export type XL = typeof XL;
+export type XL2 = typeof XL2;
+export type XL3 = typeof XL3;
+
+export const res = {
+  [SM]: "640px",
+  [MD]: "768px",
+  [LG]: "1024px",
+  [XL]: "1280px",
+  [XL2]: "1536px",
+  [XL3]: "1920px",
+};
+
+export const resCSS = {
+  [SM]: `@media (min-width: ${res[SM]})`,
+  [MD]: `@media (min-width: ${res[MD]})`,
+  [LG]: `@media (min-width: ${res[LG]})`,
+  [XL]: `@media (min-width: ${res[XL]})`,
+  [XL2]: `@media (min-width: ${res[XL2]})`,
+  [XL3]: `@media (min-width: ${res[XL3]})`,
+};

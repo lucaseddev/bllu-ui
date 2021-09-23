@@ -21,7 +21,7 @@ import {
   RiArrowUpSLine,
   RiCloseCircleFill,
 } from "react-icons/ri";
-import { LARGE, MEDIUM, SMALL } from "types/sizes";
+import { LG, MD, SM } from "types/sizes";
 import cx from "classnames";
 
 import { useVirtual } from "react-virtual";
@@ -41,7 +41,7 @@ export interface ComboBoxOptionGroup {
 export interface ComboBoxProps {
   width?: string | number;
 
-  size?: SMALL | MEDIUM | LARGE;
+  size?: SM | MD | LG;
 
   options: (ComboBoxOptionGroup | ComboBoxOptionItem)[];
 

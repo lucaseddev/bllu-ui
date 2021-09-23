@@ -13,7 +13,7 @@ import {
   RiCloseCircleFill,
 } from "react-icons/ri";
 import { pxStep, remStep, StepSize } from "helpers/scale";
-import { LARGE, MEDIUM, SMALL } from "types/sizes";
+import { LG, MD, SM } from "types/sizes";
 import cx from "classnames";
 import { Portal } from "components/portal";
 import { Spinner } from "components/spinner";
@@ -31,7 +31,7 @@ export interface SelectOptionGroup {
 export interface SelectProps {
   width?: string | number;
 
-  size?: SMALL | MEDIUM | LARGE;
+  size?: SM | MD | LG;
 
   options: (SelectOptionItem | SelectOptionGroup)[];
 
@@ -70,7 +70,7 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
   theme,
   size,
 }) => ({
-  ...sizes[size || MEDIUM],
+  ...sizes[size || MD],
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "space-between",

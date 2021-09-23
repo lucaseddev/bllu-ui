@@ -7,7 +7,7 @@ import {
   StyleObject,
   useStyles,
 } from "hooks/useStyles";
-import { SMALL, MEDIUM, LARGE } from "types/sizes";
+import { SM, MD, LG } from "types/sizes";
 import React from "react";
 import { IconType } from "react-icons";
 import Icon from "components/icon/Icon";
@@ -22,7 +22,7 @@ export type SECONDARY = typeof SECONDARY;
 export type LINK = typeof LINK;
 
 export type ButtonAppearance = PRIMARY | SECONDARY | LINK;
-export type ButtonSize = SMALL | MEDIUM | LARGE;
+export type ButtonSize = SM | MD | LG;
 
 export interface ButtonProps {
   children: any;
