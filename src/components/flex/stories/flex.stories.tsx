@@ -10,15 +10,34 @@ export default {
 } as Meta;
 
 export const FlexContainer: Story<FlexProps> = (args) => (
-  <Flex container spacing={1}>
-    <Flex item>
-      <Box>This is a flex item</Box>
+  <Flex container>
+    <Flex item xs={4}>
+      <Box p={3}>This is a flex item</Box>
     </Flex>
-    <Flex item>
-      <Box>This is a second flex item</Box>
+    <Flex item xs={4}>
+      <Box p={3}>This is a second flex item</Box>
     </Flex>
-    <Flex item>
-      <Box>This is a third flex item</Box>
+    <Flex item xs={4}>
+      <Box p={3}>This is a third flex item</Box>
+    </Flex>
+    <Flex item xs={4}>
+      <Box p={3}>This is a fourth flex item</Box>
+    </Flex>
+
+    <Flex container item>
+      <Flex item>
+        <Flex container direction={"column"} alignItems={"stretch"}>
+          <Flex item>
+            <Box>Nested flex item 1</Box>
+          </Flex>
+          <Flex item>
+            <Box>Nested flex item 2</Box>
+          </Flex>
+        </Flex>
+      </Flex>
+      <Flex item>
+        <Box>Nested flex item 2</Box>
+      </Flex>
     </Flex>
   </Flex>
 );

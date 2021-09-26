@@ -56,12 +56,17 @@ const container = {
   1: styled({
     display: "flex",
     flexWrap: "wrap",
+    flexGrow: 1,
   }),
 };
 
 const dir = {
-  column: styled({ flexDirection: "column" }),
-  "column-reverse": styled({ flexDirection: "column-reverse" }),
+  column: styled({
+    flexDirection: "column",
+  }),
+  "column-reverse": styled({
+    flexDirection: "column-reverse",
+  }),
   row: styled({ flexDirection: "row" }),
   "row-reverse": styled({ flexDirection: "row-reverse" }),
 };
@@ -117,8 +122,12 @@ function generateSpacing(stepCount: number, stepSize: number) {
   for (let index = 0; index <= stepCount; index++) {
     spaces.push(
       styled({
+        marginLeft: "-" + pxStep(index, stepSize),
+        marginTop: "-" + pxStep(index, stepSize),
+        width: `calc(100% + ${pxStep(index, stepSize)})`,
         [`& > .${item[1]}`]: {
-          padding: pxStep(index, stepSize),
+          paddingLeft: pxStep(index, stepSize),
+          paddingTop: pxStep(index, stepSize),
         },
       })
     );
@@ -152,7 +161,7 @@ export function Flex(props: FlexProps) {
     xl2 = 0,
     xl3 = 0,
 
-    spacing = 0,
+    spacing = 1,
 
     direction = "row",
     justifyContent = "flex-start",
