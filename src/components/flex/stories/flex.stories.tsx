@@ -1,43 +1,47 @@
 import React from "react";
 import { Meta, Story } from "@storybook/react";
 
-import { Flex, FlexProps } from "..";
+import { Flex as FlexLayout, FlexProps } from "..";
 import { Box } from "../../box";
 
 export default {
   title: "Components/FlexLayout",
-  component: Flex,
+  component: FlexLayout.Container,
 } as Meta;
 
-export const FlexContainer: Story<FlexProps> = (args) => (
-  <Flex container>
-    <Flex item xs={4}>
-      <Box p={3}>This is a flex item</Box>
-    </Flex>
-    <Flex item xs={4}>
-      <Box p={3}>This is a second flex item</Box>
-    </Flex>
-    <Flex item xs={4}>
-      <Box p={3}>This is a third flex item</Box>
-    </Flex>
-    <Flex item xs={4}>
-      <Box p={3}>This is a fourth flex item</Box>
-    </Flex>
+const { Item, Container } = FlexLayout;
 
-    <Flex container item>
-      <Flex item>
-        <Flex container direction={"column"} alignItems={"stretch"}>
-          <Flex item>
-            <Box>Nested flex item 1</Box>
-          </Flex>
-          <Flex item>
-            <Box>Nested flex item 2</Box>
-          </Flex>
-        </Flex>
-      </Flex>
-      <Flex item>
-        <Box>Nested flex item 2</Box>
-      </Flex>
-    </Flex>
-  </Flex>
+export const Flex: Story<FlexProps> = (args) => (
+  <Container>
+    <Item xs={4}>
+      <Box p={3}>This is a flex item</Box>
+    </Item>
+    <Item xs={4}>
+      <Box p={3}>This is a second flex item</Box>
+    </Item>
+    <Item xs={4}>
+      <Box p={3}>This is a third flex item</Box>
+    </Item>
+    <Item xs={4}>
+      <Box p={3}>This is a fourth flex item</Box>
+    </Item>
+
+    <Item>
+      <Container>
+        <Item>
+          <Container direction="column" alignItems="stretch">
+            <Item>
+              <Box>Nested flex item 1</Box>
+            </Item>
+            <Item>
+              <Box>Nested flex item 2</Box>
+            </Item>
+          </Container>
+        </Item>
+        <Item>
+          <Box>Nested flex item 1</Box>
+        </Item>
+      </Container>
+    </Item>
+  </Container>
 );

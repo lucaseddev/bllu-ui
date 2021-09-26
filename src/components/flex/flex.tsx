@@ -12,9 +12,6 @@ type SPACING = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
 export interface FlexProps {
   children?: React.ReactNode;
-
-  container?: boolean;
-  item?: boolean;
   direction?: "row" | "row-reverse" | "column" | "column-reverse";
   justifyContent?:
     | "center"
@@ -41,24 +38,25 @@ export interface FlexProps {
   spacing?: SPACING;
 }
 
-const item = {
-  0: "",
-  1: styled({
-    flexGrow: 1,
-    flexBasis: 0,
-    maxWidth: "100%",
-    margin: 0,
-  }),
-};
+export interface FlexItem
+  extends Omit<
+    FlexProps,
+    "direction" | "justifyContent" | "alignItems" | "spacing"
+  > {}
+export interface FlexContainer extends FlexProps {}
 
-const container = {
-  0: "",
-  1: styled({
-    display: "flex",
-    flexWrap: "wrap",
-    flexGrow: 1,
-  }),
-};
+const item = styled({
+  flexGrow: 1,
+  flexBasis: 0,
+  maxWidth: "100%",
+  margin: 0,
+});
+
+const container = styled({
+  display: "flex",
+  flexWrap: "wrap",
+  flexGrow: 1,
+});
 
 const dir = {
   column: styled({
@@ -125,7 +123,7 @@ function generateSpacing(stepCount: number, stepSize: number) {
         marginLeft: "-" + pxStep(index, stepSize),
         marginTop: "-" + pxStep(index, stepSize),
         width: `calc(100% + ${pxStep(index, stepSize)})`,
-        [`& > .${item[1]}`]: {
+        [`& > .${item}`]: {
           paddingLeft: pxStep(index, stepSize),
           paddingTop: pxStep(index, stepSize),
         },
@@ -148,61 +146,90 @@ const size = {
   xl3: generateResponsiveGridSize(XL3, SIZESCOUNT),
 };
 
-export function Flex(props: FlexProps) {
-  const {
-    children,
-    item: isItem,
-    container: isContainer,
-    xs = 0,
-    sm = 0,
-    md = 0,
-    lg = 0,
-    xl = 0,
-    xl2 = 0,
-    xl3 = 0,
+export namespace Flex {
+  export const Item = React.memo(function Item(props: FlexItem) {
+    const {
+      children,
+      xs = 0,
+      sm = 0,
+      md = 0,
+      lg = 0,
+      xl = 0,
+      xl2 = 0,
+      xl3 = 0,
+    } = props;
 
-    spacing = 1,
+    const classNames = useMemo(
+      () =>
+        cx({
+          [item as any]: true,
+          [size["xs"][xs] as string]: !!xs,
+          [size["sm"][sm] as string]: !!sm,
+          [size["md"][md] as string]: !!md,
+          [size["lg"][lg] as string]: !!lg,
+          [size["xl"][xl] as string]: !!xl,
+          [size["xl2"][xl2] as string]: !!xl2,
+          [size["xl3"][xl3] as string]: !!xl3,
+        }),
+      [xs, sm, md, lg, xl, xl2, xl3]
+    );
 
-    direction = "row",
-    justifyContent = "flex-start",
-    alignItems = "flex-start",
-  } = props;
+    return <div className={classNames}>{children}</div>;
+  });
 
-  const classNames = useMemo(
-    () =>
-      cx({
-        [item[+!!isItem]]: isItem,
-        [container[+!!isContainer]]: isContainer,
-        [size["xs"][xs] as string]: !!xs,
-        [size["sm"][sm] as string]: !!sm,
-        [size["md"][md] as string]: !!md,
-        [size["lg"][lg] as string]: !!lg,
-        [size["xl"][xl] as string]: !!xl,
-        [size["xl2"][xl2] as string]: !!xl2,
-        [size["xl3"][xl3] as string]: !!xl3,
-        [dir[direction] as any]: true,
-        [justify[justifyContent] as any]: true,
-        [align[alignItems] as any]: true,
-        [spaces[spacing] as any]: isContainer && true,
-      }),
-    [
-      xs,
-      sm,
-      md,
-      lg,
-      xl,
-      xl2,
-      xl3,
-      isItem,
-      isContainer,
-      direction,
-      justifyContent,
-      alignItems,
-      spacing,
-    ]
-  );
+  export const Container = React.memo(function Container(
+    props: FlexContainer
+  ) {
+    const {
+      children,
+      xs = 0,
+      sm = 0,
+      md = 0,
+      lg = 0,
+      xl = 0,
+      xl2 = 0,
+      xl3 = 0,
 
-  console.log(classNames);
+      spacing = 1,
 
-  return <div className={classNames}>{children}</div>;
+      direction = "row",
+      justifyContent = "flex-start",
+      alignItems = "flex-start",
+    } = props;
+
+    const classNames = useMemo(
+      () =>
+        cx({
+          [container as any]: true,
+          [size["xs"][xs] as string]: !!xs,
+          [size["sm"][sm] as string]: !!sm,
+          [size["md"][md] as string]: !!md,
+          [size["lg"][lg] as string]: !!lg,
+          [size["xl"][xl] as string]: !!xl,
+          [size["xl2"][xl2] as string]: !!xl2,
+          [size["xl3"][xl3] as string]: !!xl3,
+          [dir[direction] as any]: true,
+          [justify[justifyContent] as any]: true,
+          [align[alignItems] as any]: true,
+          [spaces[spacing] as any]: true,
+        }),
+      [
+        xs,
+        sm,
+        md,
+        lg,
+        xl,
+        xl2,
+        xl3,
+        direction,
+        justifyContent,
+        alignItems,
+        spacing,
+      ]
+    );
+
+    console.log(classNames);
+
+    return <div className={classNames}>{children}</div>;
+  });
 }
