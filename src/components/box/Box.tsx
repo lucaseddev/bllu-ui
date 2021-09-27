@@ -148,7 +148,7 @@ const cardThemedStyle = styled<Omit<BoxProps, "children">>(
   })
 );
 
-export function Box(props: BoxProps) {
+export const Box = React.memo(function Box(props: BoxProps) {
   const {
     as = "div",
     children,
@@ -206,4 +206,4 @@ export function Box(props: BoxProps) {
     },
     children
   );
-}
+});
