@@ -3,19 +3,24 @@ import React from "react";
 
 export interface ContentProps {
   children: React.ReactNode;
+
+  bg?: string;
 }
 
 interface ContentInternalProps
   extends Omit<ContentProps, "children"> {}
 
-const ContentStyle = styled<ContentInternalProps>(({ theme }) => ({
-  flex: 1,
+const ContentStyle = styled<ContentInternalProps>(
+  ({ theme, bg }) => ({
+    flex: 1,
+    position: "relative",
 
-  backgroundColor: theme.colors.surface,
-}));
+    backgroundColor: bg || theme.colors.surface,
+  })
+);
 
 export function Content(props: ContentProps) {
-  const { children } = props;
+  const { children, bg } = props;
 
-  return <div className={`${ContentStyle()}`}>{children}</div>;
+  return <div className={`${ContentStyle({ bg })}`}>{children}</div>;
 }

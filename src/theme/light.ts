@@ -33,5 +33,7 @@ export const themeLight: ThemeColors = {
     surface: "#FAFAFA",
     onSurface: "#3C3C3C",
     surfaceStroke: "#EAEAEA",
+
+    overlayColor: "rgba(26, 49, 102, 0.22)",
   },
 };

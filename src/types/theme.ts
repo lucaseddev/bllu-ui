@@ -33,6 +33,8 @@ export interface ThemeColors {
     onSuccess: string;
     success: string;
     underSuccess: string;
+
+    overlayColor: string;
   };
 }
 

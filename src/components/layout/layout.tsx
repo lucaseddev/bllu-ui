@@ -1,3 +1,5 @@
+import { SidebarProvider } from "contexts/SidebarProvider";
+import { useSidebar } from "hooks/useSidebar";
 import { styled } from "hooks/useStyles";
 import React from "react";
 
@@ -9,6 +11,8 @@ export const LayoutStyle = styled({
   minHeight: "100vh",
   height: "100vh",
   overflow: "hidden",
+
+  position: "relative",
 });
 
 export const ChildLayout = styled({
@@ -23,12 +27,25 @@ export const ChildLayout = styled({
 
 export interface LayoutProps {
   children: React.ReactNode;
+
+  root?: boolean;
+
+  defaultSidebarOpen?: boolean;
 }
 
-export function Layout(props: LayoutProps) {
-  const { children } = props;
+export const Layout = React.memo(function Layout(props: LayoutProps) {
+  const { root, children, defaultSidebarOpen } = props;
 
-  return (
+  const element = (
     <div className={`${LayoutStyle} ${ChildLayout}`}>{children}</div>
   );
-}
+
+  return (
+    (root && (
+      <SidebarProvider isOpen={defaultSidebarOpen}>
+        {element}
+      </SidebarProvider>
+    )) ||
+    element
+  );
+});

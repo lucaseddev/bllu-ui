@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Meta, Story } from "@storybook/react";
+import { SidebarContext } from "../../../contexts/SidebarProvider";
 
 import {
   Content,
@@ -22,19 +23,22 @@ export default {
 } as Meta;
 
 export const Structure: Story<LayoutProps> = (args) => {
-  const [open, setOpen] = useState(true);
-
   return (
-    <Layout>
-      <Sidebar open={open}>This is a sidebar</Sidebar>
+    <Layout root defaultSidebarOpen={false}>
+      <Sidebar>This is a sidebar</Sidebar>
 
       <Layout>
         <Header>
-          <IconButton
-            icon={BiMenu}
-            size="sm"
-            onClick={() => setOpen(!open)}
-          />
+          <SidebarContext.Consumer>
+            {({ isOpen, trigger }) => (
+              <IconButton
+                icon={BiMenu}
+                size="sm"
+                appearance="link"
+                onClick={() => trigger(!isOpen)}
+              />
+            )}
+          </SidebarContext.Consumer>
           This is the header
         </Header>
         <Layout>
