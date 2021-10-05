@@ -116,7 +116,7 @@ export function Popover(props: PopoverProps) {
   const { styles, attributes } = usePopper(childRef, popperRef, {
     modifiers: [
       { name: "arrow", options: { element: arrowRef } },
-      { name: "offset", options: { offset: [0, 8] } },
+      { name: "offset", options: { offset: [0, 16] } },
     ],
     placement: placement,
   });

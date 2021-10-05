@@ -27,8 +27,8 @@ const Template: Story<PopoverProps> = (args) => (
 
 export const PopoverClick = Template.bind({});
 PopoverClick.args = {
-  children: <div>Teste</div>,
-  placement: "top-start",
+  children: <IconButton icon={BiDotsVertical} />,
+  placement: "top",
   content: (
     <Box py={1} px={3}>
       Teste
