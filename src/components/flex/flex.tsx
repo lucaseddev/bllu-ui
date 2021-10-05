@@ -27,36 +27,38 @@ export interface FlexProps {
     | "stretch"
     | "baseline";
 
-  xs?: SIZES;
-  sm?: SIZES;
-  md?: SIZES;
-  lg?: SIZES;
-  xl?: SIZES;
-  xl2?: SIZES;
-  xl3?: SIZES;
+  xs?: SIZES | boolean;
+  sm?: SIZES | boolean;
+  md?: SIZES | boolean;
+  lg?: SIZES | boolean;
+  xl?: SIZES | boolean;
+  xl2?: SIZES | boolean;
+  xl3?: SIZES | boolean;
 
   spacing?: SPACING;
 }
 
-export interface FlexItem
+export interface FlexItemProps
   extends Omit<
     FlexProps,
     "direction" | "justifyContent" | "alignItems" | "spacing"
   > {}
-export interface FlexContainer extends FlexProps {}
+export interface FlexContainerProps extends FlexProps {
+  h?: string | number;
+}
 
 const item = styled({
-  flexGrow: 1,
   flexBasis: 0,
   maxWidth: "100%",
   margin: 0,
 });
 
-const container = styled({
+const container = styled<FlexContainerProps>(({ h = "auto" }) => ({
   display: "flex",
   flexWrap: "wrap",
   flexGrow: 1,
-});
+  height: h,
+}));
 
 const dir = {
   column: styled({
@@ -90,24 +92,36 @@ function generateResponsiveGridSize(
   breakpoint: string,
   stepCount: number
 ) {
-  let style: (StyleObject | string)[] = [];
+  let style: { [key: number | string]: StyleObject | string } = {};
 
-  style.push("");
+  style[new Boolean(true).toString()] = {
+    flexGrow: 1,
+  };
+
+  if (breakpoint !== XS)
+    style[new Boolean(true).toString()] = styled({
+      [resCSS[breakpoint]]: style[new Boolean(true).toString()],
+    });
+  else
+    style[new Boolean(true).toString()] = styled(
+      style[new Boolean(true).toString()] as StyleObject
+    );
 
   for (let index = 1; index <= stepCount; index++) {
-    style.push({});
-    style[index] = {
+    style[index.toString()] = {
       flexGrow: 0,
       flexBasis: `${100 * (index / stepCount)}%`,
       maxWidth: `${100 * (index / stepCount)}%`,
     };
 
     if (breakpoint !== XS) {
-      style[index] = styled({
-        [resCSS[breakpoint]]: style[index],
+      style[index.toString()] = styled({
+        [resCSS[breakpoint]]: style[index.toString()],
       });
     } else {
-      style[index] = styled(style[index] as StyleObject);
+      style[index.toString()] = styled(
+        style[index.toString()] as StyleObject
+      );
     }
   }
 
@@ -147,7 +161,7 @@ const size = {
 };
 
 export namespace Flex {
-  export const Item = React.memo(function Item(props: FlexItem) {
+  export const Item = React.memo(function Item(props: FlexItemProps) {
     const {
       children,
       xs = 0,
@@ -163,13 +177,13 @@ export namespace Flex {
       () =>
         cx({
           [item as any]: true,
-          [size["xs"][xs] as string]: !!xs,
-          [size["sm"][sm] as string]: !!sm,
-          [size["md"][md] as string]: !!md,
-          [size["lg"][lg] as string]: !!lg,
-          [size["xl"][xl] as string]: !!xl,
-          [size["xl2"][xl2] as string]: !!xl2,
-          [size["xl3"][xl3] as string]: !!xl3,
+          [size["xs"][xs.toString()] as string]: !!xs,
+          [size["sm"][sm.toString()] as string]: !!sm,
+          [size["md"][md.toString()] as string]: !!md,
+          [size["lg"][lg.toString()] as string]: !!lg,
+          [size["xl"][xl.toString()] as string]: !!xl,
+          [size["xl2"][xl2.toString()] as string]: !!xl2,
+          [size["xl3"][xl3.toString()] as string]: !!xl3,
         }),
       [xs, sm, md, lg, xl, xl2, xl3]
     );
@@ -178,7 +192,7 @@ export namespace Flex {
   });
 
   export const Container = React.memo(function Container(
-    props: FlexContainer
+    props: FlexContainerProps
   ) {
     const {
       children,
@@ -195,19 +209,21 @@ export namespace Flex {
       direction = "row",
       justifyContent = "flex-start",
       alignItems = "flex-start",
+
+      h,
     } = props;
 
     const classNames = useMemo(
       () =>
         cx({
-          [container as any]: true,
-          [size["xs"][xs] as string]: !!xs,
-          [size["sm"][sm] as string]: !!sm,
-          [size["md"][md] as string]: !!md,
-          [size["lg"][lg] as string]: !!lg,
-          [size["xl"][xl] as string]: !!xl,
-          [size["xl2"][xl2] as string]: !!xl2,
-          [size["xl3"][xl3] as string]: !!xl3,
+          [container({ h }) as any]: true,
+          [size["xs"][xs.toString()] as string]: !!xs,
+          [size["sm"][sm.toString()] as string]: !!sm,
+          [size["md"][md.toString()] as string]: !!md,
+          [size["lg"][lg.toString()] as string]: !!lg,
+          [size["xl"][xl.toString()] as string]: !!xl,
+          [size["xl2"][xl2.toString()] as string]: !!xl2,
+          [size["xl3"][xl3.toString()] as string]: !!xl3,
           [dir[direction] as any]: true,
           [justify[justifyContent] as any]: true,
           [align[alignItems] as any]: true,
