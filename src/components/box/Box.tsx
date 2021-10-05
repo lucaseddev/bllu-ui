@@ -53,6 +53,9 @@ export interface BoxProps {
   mb?: number;
 
   bg?: string;
+
+  w?: number | string;
+  h?: number | string;
 }
 
 function generateRounded(roundedCount: number, stepSize: number) {
@@ -80,8 +83,14 @@ function generateAxis(
       .fill(0)
       .map((_, i) => ({
         [`&.${type[0]}${axis}-${i}`]: {
-          [`${type}Left`]: pxStep(i, stepSize),
-          [`${type}Right`]: pxStep(i, stepSize),
+          [`${type}${axis === "x" ? "Left" : "Top"}`]: pxStep(
+            i,
+            stepSize
+          ),
+          [`${type}${axis === "x" ? "Right" : "Bottom"}`]: pxStep(
+            i,
+            stepSize
+          ),
         },
       }))
   );
@@ -142,68 +151,80 @@ const cardThemedStyle = styled<Omit<BoxProps, "children">>(
     theme,
     borderColor = theme.colors.defaultStroke,
     bg = theme.colors.default,
+    h = "auto",
+    w = "auto",
   }) => ({
     borderColor: borderColor,
     background: bg,
+    height: h,
+    width: w,
   })
 );
 
-export const Box = React.memo(function Box(props: BoxProps) {
-  const {
-    as = "div",
-    children,
-    rounded = 1,
-    elevation,
-    border = 1,
-    borderColor,
-    borderStyle = "solid",
-    bg,
-    p,
-    px,
-    py,
-    pl,
-    pr,
-    pb,
-    pt,
-    m,
-    mx,
-    my,
-    ml,
-    mr,
-    mb,
-    mt,
-  } = props;
+export const Box = React.memo(
+  React.forwardRef(function Box(props: BoxProps, ref) {
+    const {
+      as = "div",
+      children,
+      rounded = 1,
+      elevation,
+      border = 0,
+      borderColor,
+      borderStyle = "solid",
+      bg,
+      p,
+      px,
+      py,
+      pl,
+      pr,
+      pb,
+      pt,
+      m,
+      mx,
+      my,
+      ml,
+      mr,
+      mb,
+      mt,
+      w,
+      h,
+    } = props;
 
-  const classNames = useMemo(
-    () =>
-      cx({
-        [boxStyle.toString()]: true,
-        [`rounded-${rounded}`]: true,
-        [`border-${border}`]: true,
-        [`border-${borderStyle}`]: true,
-        [`p-${p}`]: !!p ?? true,
-        [`px-${px}`]: !!px ?? true,
-        [`py-${py}`]: !!py ?? true,
-        [`pl-${pl}`]: !!pl ?? true,
-        [`pr-${pr}`]: !!pr ?? true,
-        [`pb-${pb}`]: !!pb ?? true,
-        [`pt-${pt}`]: !!pt ?? true,
-        [`m-${m}`]: !!m ?? true,
-        [`mx-${mx}`]: !!mx ?? true,
-        [`my-${my}`]: !!my ?? true,
-        [`ml-${ml}`]: !!ml ?? true,
-        [`mr-${mr}`]: !!mr ?? true,
-        [`mb-${mb}`]: !!mb ?? true,
-        [`mt-${mt}`]: !!mt ?? true,
-      }),
-    [rounded, elevation]
-  );
+    const classNames = useMemo(
+      () =>
+        cx({
+          [boxStyle.toString()]: true,
+          [`rounded-${rounded}`]: true,
+          [`border-${border}`]: true,
+          [`border-${borderStyle}`]: true,
+          [`p-${p}`]: !!p ?? true,
+          [`px-${px}`]: !!px ?? true,
+          [`py-${py}`]: !!py ?? true,
+          [`pl-${pl}`]: !!pl ?? true,
+          [`pr-${pr}`]: !!pr ?? true,
+          [`pb-${pb}`]: !!pb ?? true,
+          [`pt-${pt}`]: !!pt ?? true,
+          [`m-${m}`]: !!m ?? true,
+          [`mx-${mx}`]: !!mx ?? true,
+          [`my-${my}`]: !!my ?? true,
+          [`ml-${ml}`]: !!ml ?? true,
+          [`mr-${mr}`]: !!mr ?? true,
+          [`mb-${mb}`]: !!mb ?? true,
+          [`mt-${mt}`]: !!mt ?? true,
+        }),
+      [rounded, elevation]
+    );
 
-  return React.createElement(
-    as,
-    {
-      className: cx(cardThemedStyle({ borderColor, bg }), classNames),
-    },
-    children
-  );
-});
+    return React.createElement(
+      as,
+      {
+        className: cx(
+          cardThemedStyle({ borderColor, bg, w, h }),
+          classNames
+        ),
+        ref,
+      },
+      children
+    );
+  })
+);
