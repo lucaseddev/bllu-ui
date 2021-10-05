@@ -216,7 +216,6 @@ export namespace Flex {
     const classNames = useMemo(
       () =>
         cx({
-          [container({ h }) as any]: true,
           [size["xs"][xs.toString()] as string]: !!xs,
           [size["sm"][sm.toString()] as string]: !!sm,
           [size["md"][md.toString()] as string]: !!md,
@@ -246,6 +245,10 @@ export namespace Flex {
 
     console.log(classNames);
 
-    return <div className={classNames}>{children}</div>;
+    return (
+      <div className={`${container({ h })} ${classNames}`}>
+        {children}
+      </div>
+    );
   });
 }
