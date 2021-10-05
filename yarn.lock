@@ -2354,6 +2354,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@popperjs/core@npm:^2.10.2":
+  version: 2.10.2
+  resolution: "@popperjs/core@npm:2.10.2"
+  checksum: 43c189e3eb6d032433512d94761b54fc7cae15957ca5528008813f887a67b5760b949f30a5141b476be2ba5a6c677c91def150f603d2d3e30b5e97a5ae51474e
+  languageName: node
+  linkType: hard
+
 "@popperjs/core@npm:^2.5.4, @popperjs/core@npm:^2.6.0":
   version: 2.9.3
   resolution: "@popperjs/core@npm:2.9.3"
@@ -5385,6 +5392,7 @@ __metadata:
   dependencies:
     "@babel/core": ^7.14.8
     "@mdx-js/react": ^1.6.22
+    "@popperjs/core": ^2.10.2
     "@rollup/plugin-commonjs": ^20.0.0
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-node-resolve": ^13.0.4
@@ -5419,6 +5427,7 @@ __metadata:
     react-hook-form: ^7.12.2
     react-icons: ^4.2.0
     react-is: ^17.0.2
+    react-popper: ^2.2.5
     react-table: ^7.7.0
     react-uid: ^2.3.1
     react-virtual: ^2.8.1
@@ -14189,7 +14198,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-popper@npm:^2.2.4":
+"react-popper@npm:^2.2.4, react-popper@npm:^2.2.5":
   version: 2.2.5
   resolution: "react-popper@npm:2.2.5"
   dependencies:
