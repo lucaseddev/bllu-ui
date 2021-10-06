@@ -1,12 +1,14 @@
 import { VirtualElement } from "@popperjs/core";
 import { Position } from "../../constants";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { styled } from "hooks";
 import { pxStep, StepSize } from "helpers/scale";
 import { Portal } from "components/portal";
 
 import { isElement } from "react-is";
+import { Overlay } from "components/overlay";
+import isFunction from "is-function";
 
 export interface PopoverProps {
   children: React.ReactElement;
@@ -15,10 +17,15 @@ export interface PopoverProps {
 
   placement?: Position;
 
-  content: React.ReactNode;
+  content: React.ReactNode | ((close: Function) => React.ReactNode);
 }
 
-const PopoverStyle = styled(({ theme }) => ({
+interface PopoverStyleProps {
+  show: boolean;
+}
+
+const PopoverStyle = styled<PopoverStyleProps>(({ theme, show }) => ({
+  display: show ? "block" : "none",
   backgroundColor: theme.colors.default,
   border: `1px solid ${theme.colors.surfaceStroke}`,
   borderRadius: pxStep(1, StepSize.PX4),
@@ -32,8 +39,8 @@ const PopoverStyle = styled(({ theme }) => ({
   "& > div[data-arrow]": {
     "&, & > span": {
       position: "absolute",
-      width: pxStep(2, StepSize.PX4),
-      height: pxStep(2, StepSize.PX4),
+      width: pxStep(4, StepSize.PX4),
+      height: pxStep(4, StepSize.PX4),
     },
 
     "& > span": {
@@ -44,7 +51,7 @@ const PopoverStyle = styled(({ theme }) => ({
   },
 
   "&[data-popper-placement^='top'] > div[data-arrow]": {
-    bottom: `-${pxStep(2, StepSize.PX4)}`,
+    bottom: `-${pxStep(4, StepSize.PX4)}`,
     "& > span": {
       borderTop: `${pxStep(2, StepSize.PX4)} solid ${
         theme.colors.default
@@ -55,7 +62,7 @@ const PopoverStyle = styled(({ theme }) => ({
   },
 
   "&[data-popper-placement^='bottom'] > div[data-arrow]": {
-    top: `-${pxStep(2, StepSize.PX4)}`,
+    top: `-${pxStep(4, StepSize.PX4)}`,
     "& > span": {
       borderBottom: `${pxStep(2, StepSize.PX4)} solid ${
         theme.colors.default
@@ -66,7 +73,7 @@ const PopoverStyle = styled(({ theme }) => ({
   },
 
   "&[data-popper-placement^='left'] > div[data-arrow]": {
-    right: `-${pxStep(2, StepSize.PX4)}`,
+    right: `-${pxStep(4, StepSize.PX4)}`,
     "& > span": {
       borderLeft: `${pxStep(2, StepSize.PX4)} solid ${
         theme.colors.default
@@ -77,7 +84,7 @@ const PopoverStyle = styled(({ theme }) => ({
   },
 
   "&[data-popper-placement^='right'] > div[data-arrow]": {
-    left: `-${pxStep(2, StepSize.PX4)}`,
+    left: `-${pxStep(4, StepSize.PX4)}`,
     "& > span": {
       borderRight: `${pxStep(2, StepSize.PX4)} solid ${
         theme.colors.default
@@ -88,9 +95,11 @@ const PopoverStyle = styled(({ theme }) => ({
   },
 }));
 
-export function Popover(props: PopoverProps) {
+export const Popover = React.memo(function Popover(
+  props: PopoverProps
+) {
   const {
-    trigger,
+    trigger = "click",
     children,
     placement = Position.BOTTOM,
     content,
@@ -108,33 +117,90 @@ export function Popover(props: PopoverProps) {
   const [arrowRef, setArrowRef] = useState<HTMLDivElement | null>(
     null
   );
-  const [childRef, setChildRef] = useState(null);
+  const [childRef, setChildRef] = useState<HTMLElement | null>(null);
   const [popperRef, setPopperRef] = useState<HTMLDivElement | null>(
     null
   );
+  const [show, setShow] = useState(false);
 
-  const { styles, attributes } = usePopper(childRef, popperRef, {
-    modifiers: [
-      { name: "arrow", options: { element: arrowRef } },
-      { name: "offset", options: { offset: [0, 16] } },
-    ],
-    placement: placement,
-  });
+  const { styles, attributes, update } = usePopper(
+    childRef,
+    popperRef,
+    {
+      modifiers: [
+        { name: "arrow", options: { element: arrowRef } },
+        { name: "offset", options: { offset: [0, 16] } },
+      ],
+      placement: placement,
+    }
+  );
 
-  const popperStyle = PopoverStyle();
+  const handleTrigger = (value: boolean) => {
+    setShow(value);
+    if (update) update();
+  };
+
+  const isLeft = placement.includes("left");
+  const isRight = placement.includes("right");
+  const isTop = placement.includes("top");
+  const isBottom = placement.includes("bottom");
+
+  const isHorizontal = isLeft || isRight;
+  const isVertical = isTop || isBottom;
 
   return (
     <React.Fragment>
-      {React.cloneElement(children, { ref: setChildRef })}
+      {React.cloneElement(children, {
+        ref: setChildRef,
+        onClick: () => {
+          if (trigger === "click") {
+            handleTrigger(true);
+          }
+        },
+
+        onMouseEnter: () =>
+          trigger === "hover" && handleTrigger(true),
+        onMouseLeave: () => trigger === "hover" && setShow(false),
+      })}
 
       <Portal>
+        <Overlay
+          onClick={(e) => {
+            e.stopPropagation();
+            setShow(false);
+          }}
+          show={trigger === "click" && show && true}
+        />
         <div
-          className={`${popperStyle}`}
+          className={`${PopoverStyle({ show })}`}
           ref={setPopperRef}
           style={styles.popper}
           {...attributes.popper}
+          onMouseEnter={() => trigger === "hover" && setShow(true)}
+          onMouseLeave={() => {
+            trigger === "hover" && setShow(false);
+          }}
         >
-          {content}
+          {trigger === "hover" && (
+            <div
+              onMouseEnter={() => setShow(true)}
+              style={{
+                position: "absolute",
+                width: `calc(100% + ${(isHorizontal && 16) || 0}px)`,
+                height: `calc(100% + ${(isVertical && 16) || 0}px)`,
+                top: (isTop && "4px") || "auto",
+                left: (isLeft && "4px") || "auto",
+                right: (isRight && "4px") || "auto",
+                bottom: (isBottom && "4px") || "auto",
+                zIndex: -1,
+              }}
+            />
+          )}
+          {(isFunction(content) &&
+            (content as (close: Function) => React.ReactNode)(() =>
+              setShow(false)
+            )) ||
+            content}
           <div ref={setArrowRef} style={styles.arrow} data-arrow>
             <span />
           </div>
@@ -142,4 +208,4 @@ export function Popover(props: PopoverProps) {
       </Portal>
     </React.Fragment>
   );
-}
+});

@@ -6,6 +6,7 @@ import { Flex } from "../../flex";
 import { Box } from "../../box";
 import { IconButton } from "../../buttons/IconButton";
 import { BiDotsVertical } from "react-icons/bi";
+import { Button } from "../../buttons/Button";
 
 export default {
   title: "Components/Popover",
@@ -13,25 +14,43 @@ export default {
 } as Meta;
 
 const Template: Story<PopoverProps> = (args) => (
-  <Flex.Container
-    spacing={8}
-    justifyContent="center"
-    alignItems="center"
-    h="100vh"
-  >
-    <Flex.Item>
-      <Popover {...args} />
-    </Flex.Item>
-  </Flex.Container>
+  <Box h="100vh">
+    <Flex.Container
+      h="100%"
+      spacing={8}
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Flex.Item>
+        <Popover {...args} />
+      </Flex.Item>
+    </Flex.Container>
+  </Box>
 );
 
-export const PopoverClick = Template.bind({});
-PopoverClick.args = {
+export const Click = Template.bind({});
+Click.args = {
   children: <IconButton icon={BiDotsVertical} />,
   placement: "top",
-  content: (
-    <Box py={1} px={3}>
-      Teste
-    </Box>
+  content: (close) => (
+    <React.Fragment>
+      <Button
+        onClick={(e) => {
+          console.log("button clicked");
+          close();
+        }}
+      >
+        Click to close
+      </Button>
+    </React.Fragment>
   ),
+  trigger: "click",
+};
+
+export const Hover = Template.bind({});
+Hover.args = {
+  children: <Box>Hover over me!</Box>,
+  placement: "top",
+  content: (close) => <Button onClick={close}>Click to close</Button>,
+  trigger: "hover",
 };
