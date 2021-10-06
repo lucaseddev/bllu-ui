@@ -48,7 +48,7 @@ export interface FlexContainerProps extends FlexProps {
 }
 
 const item = styled({
-  flexBasis: 0,
+  flexBasis: "auto",
   maxWidth: "100%",
   margin: 0,
 });
