@@ -43,7 +43,9 @@ export interface ButtonProps {
   // Sizes
   size?: ButtonSize;
 
-  onClick?: () => void;
+  onClick?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
 
   className?: string | StyleObject | StyleFunction;
 }
@@ -72,6 +74,10 @@ const buttonBaseStyle = styled<ButtonProps>(({ theme }) => ({
   },
   display: "inline-flex",
   alignItems: "center",
+
+  "& > span": {
+    pointerEvents: "none",
+  },
 }));
 
 const buttonSize = {
