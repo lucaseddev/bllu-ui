@@ -188,6 +188,7 @@ export const Box = React.memo(
       mt,
       w,
       h,
+      ...rest
     } = props;
 
     const classNames = useMemo(
@@ -223,6 +224,7 @@ export const Box = React.memo(
           classNames
         ),
         ref,
+        ...rest,
       },
       children
     );
