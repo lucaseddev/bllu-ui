@@ -26,7 +26,7 @@ type PaddingSizes = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 const MARGINCOUNT = 11;
 type MarginSizes = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
-export interface BoxProps {
+export interface BoxProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
   rounded?: RoundedSizes;
   elevation?: ElevationSizes;
@@ -153,16 +153,18 @@ const cardThemedStyle = styled<Omit<BoxProps, "children">>(
     bg = theme.colors.default,
     h = "auto",
     w = "auto",
-  }) => ({
-    borderColor: borderColor,
-    background: bg,
-    height: h,
-    width: w,
-  })
+  }) => {
+    return {
+      borderColor: borderColor,
+      background: bg,
+      height: h,
+      width: w,
+    };
+  }
 );
 
-export const Box = React.memo(
-  React.forwardRef(function Box(props: BoxProps, ref) {
+export const Box: React.FC<BoxProps> = React.memo(
+  React.forwardRef(function (props: BoxProps, ref) {
     const {
       as = "div",
       children,
@@ -188,6 +190,7 @@ export const Box = React.memo(
       mt,
       w,
       h,
+      className,
       ...rest
     } = props;
 
@@ -221,7 +224,8 @@ export const Box = React.memo(
       {
         className: cx(
           cardThemedStyle({ borderColor, bg, w, h }),
-          classNames
+          classNames,
+          className
         ),
         ref,
         ...rest,

@@ -17,7 +17,7 @@ export interface PopoverProps {
 
   placement?: Position;
 
-  content: React.ReactNode | ((close: Function) => React.ReactNode);
+  content: ((close: Function) => React.ReactNode) | React.ReactNode;
 }
 
 interface PopoverStyleProps {
@@ -30,7 +30,7 @@ const PopoverStyle = styled<PopoverStyleProps>(({ theme, show }) => ({
   border: `1px solid ${theme.colors.surfaceStroke}`,
   borderRadius: pxStep(1, StepSize.PX4),
 
-  padding: `${pxStep(1, StepSize.PX4)} 0px`,
+  // padding: `${pxStep(2, StepSize.PX4)} 0px`,
 
   zIndex: 999,
 

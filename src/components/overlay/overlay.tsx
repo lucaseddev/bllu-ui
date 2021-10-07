@@ -7,7 +7,7 @@ export interface OverlayProps {
 }
 
 const overlayStyle = styled({
-  position: "absolute",
+  position: "fixed",
   inset: 0,
   zIndex: 998,
 });

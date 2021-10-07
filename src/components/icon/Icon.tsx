@@ -14,7 +14,7 @@ export interface IconProps {
   size?: number;
   icon: IconType | JSX.Element;
   color?: string;
-  className?: StyleObject;
+  className?: StyleObject | string;
 }
 
 const wrapperStyle: StyleFunction<IconProps> = ({
