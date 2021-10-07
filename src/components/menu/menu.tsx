@@ -1,6 +1,10 @@
+import { Intention } from "../../constants";
 import { pxStep, remStep, StepSize } from "helpers/scale";
 import { styled } from "hooks";
 import React from "react";
+import { IconType } from "react-icons";
+
+import { Icon } from "../icon";
 
 export interface MenuProps {
   children: React.ReactNode;
@@ -23,7 +27,8 @@ const MenuStyle = styled(({ theme }) => ({
     textOverflow: "ellipsis",
     wordWrap: "break-word",
     overflow: "hidden",
-    display: "block",
+    display: "flex",
+    alignItems: "center",
 
     cursor: "pointer",
 
@@ -41,6 +46,14 @@ const MenuStyle = styled(({ theme }) => ({
 
     "&:not(:hover)[data-selected='true'], &[data-selected='true']:hover": {
       background: theme.colors.underPrimary,
+    },
+
+    "&[data-intention='danger']": {
+      color: theme.colors.danger,
+
+      "&:active": {
+        background: theme.colors.underDanger,
+      },
     },
   },
 
@@ -69,6 +82,10 @@ const MenuStyle = styled(({ theme }) => ({
   },
 }));
 
+const MenuItemIcon = styled({
+  marginRight: pxStep(3, StepSize.PX4),
+});
+
 export function Menu(props: MenuProps) {
   const { children } = props;
 
@@ -83,15 +100,23 @@ export function Menu(props: MenuProps) {
   );
 }
 
-export interface MenuItemProps {
+export interface MenuItemProps
+  extends Omit<
+      React.AnchorHTMLAttributes<HTMLElement>,
+      "type" | "prefix"
+    >,
+    Omit<React.ButtonHTMLAttributes<HTMLElement>, "prefix"> {
   children: React.ReactNode;
 
   selected?: boolean;
   disabled?: boolean;
 
-  onClick?: (
-    event: React.MouseEvent<HTMLElement, MouseEvent>
-  ) => void;
+  as?: "button" | "a";
+
+  icon?: IconType | JSX.Element;
+  sufix?: React.ReactNode;
+
+  intention?: Intention;
 }
 
 export interface MenuGroupProps {
@@ -103,17 +128,40 @@ export namespace Menu {
   const ItemStyle = styled({});
 
   export function Item(props: MenuItemProps) {
-    const { children, selected, disabled, onClick } = props;
-    return (
-      <div
-        aria-disabled={!!disabled}
-        role="menuitem"
-        className={`${""}`}
-        data-selected={!!selected}
-        onClick={onClick}
-      >
-        {children}
-      </div>
+    const {
+      children,
+      selected,
+      disabled,
+      onClick,
+      as = "div",
+      icon: PrefixIcon,
+      sufix: SufixContent,
+      intention = Intention.NONE,
+      ...rest
+    } = props;
+
+    return React.createElement(
+      as,
+      {
+        "aria-disabled": !!disabled,
+        role: "menuitem",
+        className: `${""}`,
+        "data-selected": !!selected,
+        "data-intention": intention,
+        onClick: onClick,
+        ...rest,
+      },
+      <React.Fragment>
+        {PrefixIcon && (
+          <Icon
+            className={MenuItemIcon}
+            size={18}
+            icon={PrefixIcon}
+          />
+        )}
+        <span>{children}</span>
+        {SufixContent}
+      </React.Fragment>
     );
   }
 

@@ -2,6 +2,7 @@ import React from "react";
 import { Meta, Story } from "@storybook/react";
 
 import { Menu, MenuProps } from "..";
+import { BiEdit, BiMove, BiShare, BiTrash } from "react-icons/bi";
 
 export default {
   title: "Components/Menu",
@@ -28,13 +29,15 @@ export const Groups = Template.bind({});
 Groups.args = {
   children: (
     <React.Fragment>
-      <Menu.Item>Menu item 1</Menu.Item>
-      <Menu.Group label="Group Label 1">
-        <Menu.Item>Grouped item 1</Menu.Item>
+      <Menu.Group label="Actions">
+        <Menu.Item icon={BiEdit}>Rename</Menu.Item>
+        <Menu.Item icon={BiMove}>Move...</Menu.Item>
+        <Menu.Item icon={BiShare}>Share...</Menu.Item>
       </Menu.Group>
-      <Menu.Group label="Group Label 2">
-        <Menu.Item>Grouped item 1</Menu.Item>
-        <Menu.Item>Grouped item 2</Menu.Item>
+      <Menu.Group label="Destructive">
+        <Menu.Item icon={BiTrash} intention="danger">
+          Delete
+        </Menu.Item>
       </Menu.Group>
     </React.Fragment>
   ),
