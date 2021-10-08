@@ -150,8 +150,6 @@ export interface MenuGroupProps {
   children: React.ReactNode;
 }
 
-const ItemStyle = styled({});
-
 export const MenuItem = React.memo(function Item(
   props: MenuItemProps
 ) {
@@ -174,7 +172,6 @@ export const MenuItem = React.memo(function Item(
       "aria-disabled": !!disabled,
       disabled: disabled,
       role: "menuitem",
-      className: `${""}`,
       "data-selected": !!selected,
       "data-intention": intention,
       onClick: onClick,
@@ -190,14 +187,12 @@ export const MenuItem = React.memo(function Item(
   );
 });
 
-const GroupStyle = styled({});
-
 export const MenuGroup = React.memo(function Group(
   props: MenuGroupProps
 ) {
   const { children, label } = props;
   return (
-    <div role="group" className={`${""}`}>
+    <div role="group">
       {label && <span>{label}</span>}
       {children}
     </div>
