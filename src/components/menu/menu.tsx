@@ -1,4 +1,4 @@
-import { Intention } from "../../constants";
+import { Intent } from "../../constants";
 import { pxStep, remStep, StepSize } from "helpers/scale";
 import { styled } from "hooks";
 import React, { useEffect } from "react";
@@ -142,7 +142,7 @@ export interface MenuItemProps
   icon?: IconType | JSX.Element;
   sufix?: React.ReactNode;
 
-  intention?: Intention;
+  intent?: Intent;
 }
 
 export interface MenuGroupProps {
@@ -163,7 +163,7 @@ export const MenuItem = React.memo(function Item(
     as = "div",
     icon: PrefixIcon,
     sufix: SufixContent,
-    intention = Intention.NONE,
+    intent: intention = Intent.NONE,
     ...rest
   } = props;
 
