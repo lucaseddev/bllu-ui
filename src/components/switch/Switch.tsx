@@ -20,6 +20,8 @@ const SwitchSizes = {
   sm: styled({
     width: pxStep(7, StepSize.PX4),
     height: pxStep(4, StepSize.PX4),
+    minWidth: pxStep(7, StepSize.PX4),
+    minHeight: pxStep(4, StepSize.PX4),
 
     "& > label > span": {
       width: `calc(${pxStep(4, StepSize.PX4)} - 4px)`,
@@ -29,6 +31,8 @@ const SwitchSizes = {
   md: styled({
     width: pxStep(9, StepSize.PX4),
     height: pxStep(5, StepSize.PX4),
+    minWidth: pxStep(9, StepSize.PX4),
+    minHeight: pxStep(5, StepSize.PX4),
 
     "& > label > span": {
       width: `calc(${pxStep(5, StepSize.PX4)} - 4px)`,
@@ -38,6 +42,8 @@ const SwitchSizes = {
   lg: styled({
     width: pxStep(11, StepSize.PX4),
     height: pxStep(6, StepSize.PX4),
+    minWidth: pxStep(11, StepSize.PX4),
+    minHeight: pxStep(6, StepSize.PX4),
 
     "& > label > span": {
       width: `calc(${pxStep(6, StepSize.PX4)} - 4px)`,
