@@ -10,6 +10,9 @@ import arrify from "arrify";
 
 import * as ReactIs from "react-is";
 
+import { styled } from "hooks";
+import classNames from "classnames";
+
 export interface IconProps {
   size?: number;
   icon: IconType | JSX.Element;
@@ -17,33 +20,25 @@ export interface IconProps {
   className?: StyleObject | string;
 }
 
-const wrapperStyle: StyleFunction<IconProps> = ({
-  theme,
-  size,
-  color,
-}) => {
-  return {
-    display: "flex",
-    alignItems: "center",
-    fontSize: size || 16,
-    color: color || "",
-  };
-};
+export const IconStyle = styled<IconProps>(({ size, color }) => ({
+  display: "flex",
+  alignItems: "center",
+  fontSize: size || 16,
+  color: color || "",
+}));
 
 function Icon(props: IconProps) {
   const { icon, className } = props;
+
   const style = useStyles(
-    [
-      wrapperStyle,
-      (arrify(className).length !== 0 && className) || "",
-    ],
+    [(arrify(className).length !== 0 && className) || ""],
     props
   );
 
   if (ReactIs.isValidElementType(icon)) {
     const IconElementType = icon as IconType;
     return (
-      <div className={style}>
+      <div className={classNames(IconStyle(props), style)}>
         <IconElementType />
       </div>
     );
