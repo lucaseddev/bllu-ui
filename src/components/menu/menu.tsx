@@ -1,4 +1,4 @@
-import { Intention } from "../../constants";
+import { Intent } from "../../constants";
 import { pxStep, remStep, StepSize } from "helpers/scale";
 import { styled } from "hooks";
 import React, { useEffect } from "react";
@@ -142,15 +142,13 @@ export interface MenuItemProps
   icon?: IconType | JSX.Element;
   sufix?: React.ReactNode;
 
-  intention?: Intention;
+  intent?: Intent;
 }
 
 export interface MenuGroupProps {
   label?: string;
   children: React.ReactNode;
 }
-
-const ItemStyle = styled({});
 
 export const MenuItem = React.memo(function Item(
   props: MenuItemProps
@@ -163,7 +161,7 @@ export const MenuItem = React.memo(function Item(
     as = "div",
     icon: PrefixIcon,
     sufix: SufixContent,
-    intention = Intention.NONE,
+    intent: intention = Intent.NONE,
     ...rest
   } = props;
 
@@ -174,7 +172,6 @@ export const MenuItem = React.memo(function Item(
       "aria-disabled": !!disabled,
       disabled: disabled,
       role: "menuitem",
-      className: `${""}`,
       "data-selected": !!selected,
       "data-intention": intention,
       onClick: onClick,
@@ -190,14 +187,12 @@ export const MenuItem = React.memo(function Item(
   );
 });
 
-const GroupStyle = styled({});
-
 export const MenuGroup = React.memo(function Group(
   props: MenuGroupProps
 ) {
   const { children, label } = props;
   return (
-    <div role="group" className={`${""}`}>
+    <div role="group">
       {label && <span>{label}</span>}
       {children}
     </div>

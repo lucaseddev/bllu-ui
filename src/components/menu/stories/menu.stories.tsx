@@ -43,7 +43,7 @@ Groups.args = {
         <MenuItem icon={BiShare}>Share...</MenuItem>
       </MenuGroup>
       <MenuGroup label="Destructive">
-        <MenuItem icon={BiTrash} intention="danger">
+        <MenuItem icon={BiTrash} intent="danger">
           Delete
         </MenuItem>
       </MenuGroup>
@@ -61,7 +61,7 @@ WithDisabledItems.args = {
         <MenuItem icon={BiShare}>Share...</MenuItem>
       </MenuGroup>
       <MenuGroup label="Destructive">
-        <MenuItem icon={BiTrash} intention="danger" disabled>
+        <MenuItem icon={BiTrash} intent="danger" disabled>
           Delete
         </MenuItem>
       </MenuGroup>
@@ -79,7 +79,7 @@ export const DropdownMenu = (args: MenuProps) => (
           <MenuItem icon={BiShare}>Share...</MenuItem>
         </MenuGroup>
         <MenuGroup label="Destructive">
-          <MenuItem icon={BiTrash} intention="danger">
+          <MenuItem icon={BiTrash} intent="danger">
             Delete
           </MenuItem>
         </MenuGroup>
