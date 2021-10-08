@@ -14,6 +14,9 @@ export interface SwitchProps
   isInvalid?: boolean;
   required?: boolean;
   disabled?: boolean;
+
+  checked?: boolean;
+  defaultChecked?: boolean;
 }
 
 const SwitchSizes = {
