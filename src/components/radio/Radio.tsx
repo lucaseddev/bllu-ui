@@ -55,7 +55,7 @@ export const RadioStyle = styled({
   },
 
   "& > span": {
-    marginLeft: pxStep(3, StepSize.PX4),
+    marginLeft: pxStep(2, StepSize.PX4),
     fontSize: remStep(7, StepSize.REM125),
   },
 
