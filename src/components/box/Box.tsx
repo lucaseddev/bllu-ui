@@ -163,8 +163,11 @@ const cardThemedStyle = styled<Omit<BoxProps, "children">>(
   }
 );
 
-export const Box: React.FC<BoxProps> = React.memo(
-  React.forwardRef(function (props: BoxProps, ref) {
+export const Box = React.memo(
+  React.forwardRef(function (
+    props: BoxProps,
+    ref: React.ForwardedRef<HTMLElement>
+  ) {
     const {
       as = "div",
       children,
