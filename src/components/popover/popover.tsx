@@ -2,13 +2,15 @@ import { VirtualElement } from "@popperjs/core";
 import { Position } from "../../constants";
 import React, { useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
-import { styled } from "hooks";
+import { styled, StyleObject } from "hooks";
 import { pxStep, StepSize } from "helpers/scale";
 import { Portal } from "components/portal";
 
 import { isElement } from "react-is";
 import { Overlay } from "components/overlay";
 import isFunction from "is-function";
+
+import cx from "classnames";
 
 export interface PopoverProps {
   children: React.ReactElement;
@@ -18,6 +20,8 @@ export interface PopoverProps {
   placement?: Position;
 
   content: ((close: Function) => React.ReactNode) | React.ReactNode;
+
+  className?: string;
 }
 
 interface PopoverStyleProps {
@@ -103,6 +107,7 @@ export const Popover = React.memo(function Popover(
     children,
     placement = Position.BOTTOM,
     content,
+    className,
   } = props;
 
   if (!isElement(children)) {
@@ -172,7 +177,7 @@ export const Popover = React.memo(function Popover(
           show={trigger === "click" && show && true}
         />
         <div
-          className={`${PopoverStyle({ show })}`}
+          className={cx(PopoverStyle({ show }), className)}
           ref={setPopperRef}
           style={styles.popper}
           {...attributes.popper}
