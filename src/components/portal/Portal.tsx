@@ -1,6 +1,6 @@
 import isDomValid from "helpers/isDomValid";
-import React, { useEffect, useRef } from "react";
-import ReactDOM, { render } from "react-dom";
+import React from "react";
+import ReactDOM from "react-dom";
 
 export interface PortalProps {
   children: React.ReactNode;
@@ -15,6 +15,10 @@ export class Portal extends React.Component {
     super(props);
 
     if (!isDomValid) return;
+
+    blluPortal =
+      blluPortal ||
+      (document.getElementById("bllu-portal") as HTMLDivElement);
 
     if (!blluPortal) {
       blluPortal = document.createElement("div");

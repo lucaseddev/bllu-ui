@@ -1,16 +1,10 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useMemo, useRef } from "react";
 import { Theme } from "types/theme";
 import { useTheme } from "./useTheme";
 
 import cx from "classnames";
 import { isFunction, isObject } from "helpers/validations";
-import { css, Rule, StyleAttribute } from "glamor";
+import { css, StyleAttribute } from "glamor";
 import isEqual from "react-fast-compare";
 
 // type Modify<T, R> = Omit<T, keyof R> & R;

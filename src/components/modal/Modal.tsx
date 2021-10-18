@@ -3,7 +3,7 @@ import { Overlay } from "components/overlay";
 import { Portal } from "components/portal";
 import { Position } from "../../constants";
 import { styled } from "hooks";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import isFunction from "is-function";
 
 export type ModalChildFunction = (props: {

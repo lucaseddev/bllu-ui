@@ -1,7 +1,7 @@
 import { Intent } from "../../constants";
 import { pxStep, remStep, StepSize } from "helpers/scale";
 import { styled } from "hooks";
-import React, { useEffect } from "react";
+import React from "react";
 import { IconType } from "react-icons";
 
 import { Icon } from "../icon";

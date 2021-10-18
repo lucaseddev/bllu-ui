@@ -1,5 +1,4 @@
 import { SidebarProvider } from "contexts/SidebarProvider";
-import { useSidebar } from "hooks/useSidebar";
 import { styled } from "hooks/useStyles";
 import React from "react";
 

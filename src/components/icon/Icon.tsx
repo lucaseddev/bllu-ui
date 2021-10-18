@@ -1,8 +1,4 @@
-import {
-  StyleFunction,
-  StyleObject,
-  useStyles,
-} from "hooks/useStyles";
+import { StyleObject, useStyles } from "hooks/useStyles";
 import React from "react";
 import { IconType } from "react-icons";
 import cx from "classnames";

@@ -7,7 +7,7 @@ import {
   ModalProps,
 } from "components/modal";
 import isFunction from "is-function";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { BiX } from "react-icons/bi";
 

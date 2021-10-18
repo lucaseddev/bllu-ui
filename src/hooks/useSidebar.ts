@@ -2,7 +2,7 @@ import {
   SidebarContext,
   SidebarContextProps,
 } from "contexts/SidebarProvider";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 export const useSidebar: (
   defaultOpen?: boolean

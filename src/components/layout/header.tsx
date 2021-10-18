@@ -28,7 +28,7 @@ const HeaderStyle = styled<HeaderInternalProps>(
 export function Header(props: HeaderProps) {
   const { children, fixed } = props;
 
-  const [sticky, setSticky] = useState(false);
+  const [sticky /*, setSticky*/] = useState(false);
 
   return (
     <div className={`${WrapperStyle({ fixed })}`}>

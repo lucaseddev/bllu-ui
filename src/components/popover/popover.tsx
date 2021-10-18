@@ -1,8 +1,7 @@
-import { VirtualElement } from "@popperjs/core";
 import { Position } from "../../constants";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { usePopper } from "react-popper";
-import { styled, StyleObject } from "hooks";
+import { styled } from "hooks";
 import { pxStep, StepSize } from "helpers/scale";
 import { Portal } from "components/portal";
 

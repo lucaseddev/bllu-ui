@@ -13,7 +13,7 @@ export interface RadioProps
   size?: SM | MD | LG;
 }
 
-const selectors = {};
+// const selectors = {};
 
 export const RadioSizes = {
   sm: styled({
@@ -85,7 +85,7 @@ export const RadioStyle = styled({
 });
 
 export const RadioThemed = styled<Partial<RadioProps>>(
-  ({ theme, size = "md" }) => ({
+  ({ theme /*, size = "md"*/ }) => ({
     "&[aria-disabled='true']": {
       "& > div": {
         backgroundColor: theme.colors.surface,

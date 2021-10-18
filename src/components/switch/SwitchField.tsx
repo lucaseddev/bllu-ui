@@ -2,7 +2,7 @@ import { pxStep, remStep, StepSize } from "helpers/scale";
 import { styled } from "hooks";
 import React from "react";
 import { useUIDSeed } from "react-uid";
-import { Switch, SwitchProps } from ".";
+import { Switch, SwitchProps } from "./Switch";
 
 export interface SwitchFieldProps extends SwitchProps {
   position?: "left" | "right";

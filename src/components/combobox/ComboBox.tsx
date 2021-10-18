@@ -1,15 +1,10 @@
-import { InputText, InputTextProps } from "components/inputs";
+import { InputText } from "components/inputs";
 import { Portal } from "components/portal";
 import { Spinner } from "components/spinner";
-import {
-  useCombobox,
-  UseComboboxStateChange,
-  UseComboboxStateChangeTypes,
-} from "downshift";
+import { useCombobox, UseComboboxStateChange } from "downshift";
 import { pxStep, remStep, StepSize } from "helpers/scale";
 import { StyleFunction, useStyles } from "hooks/useStyles";
 import React, {
-  ForwardedRef,
   useCallback,
   useEffect,
   useMemo,
@@ -256,7 +251,7 @@ export const ComboBox = React.memo(function ComboBox(
 
   const controlledOptions = useMemo(() => {
     const newOptions: ComboBoxOptionItem[] = [];
-    options.forEach((option, index) => {
+    options.forEach((option) => {
       if ((option as ComboBoxOptionGroup).options) {
         if (inputValue?.length) {
           const filteredOptions = (option as ComboBoxOptionGroup).options.filter(

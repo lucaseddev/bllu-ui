@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { styled, StyleObject } from "hooks/useStyles";
+import { styled } from "hooks/useStyles";
 import cx from "classnames";
 import { pxStep, StepSize } from "helpers/scale";
 
@@ -17,7 +17,7 @@ type RoundedSizes =
   | 9
   | 10
   | "full";
-const ELEVATIONCOUNT = 10;
+// const ELEVATIONCOUNT = 10;
 type ElevationSizes = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
 const PADDINGCOUNT = 11;
@@ -36,21 +36,21 @@ export interface BoxProps extends React.HTMLAttributes<HTMLElement> {
 
   as?: string;
 
-  p?: number;
-  px?: number;
-  py?: number;
-  pl?: number;
-  pr?: number;
-  pb?: number;
-  pt?: number;
+  p?: PaddingSizes;
+  px?: PaddingSizes;
+  py?: PaddingSizes;
+  pl?: PaddingSizes;
+  pr?: PaddingSizes;
+  pb?: PaddingSizes;
+  pt?: PaddingSizes;
 
-  m?: number;
-  mx?: number;
-  my?: number;
-  ml?: number;
-  mr?: number;
-  mt?: number;
-  mb?: number;
+  m?: MarginSizes;
+  mx?: MarginSizes;
+  my?: MarginSizes;
+  ml?: MarginSizes;
+  mr?: MarginSizes;
+  mt?: MarginSizes;
+  mb?: MarginSizes;
 
   bg?: string;
 

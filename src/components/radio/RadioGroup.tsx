@@ -3,9 +3,8 @@ import { Box } from "components/box";
 import { remStep, StepSize } from "helpers/scale";
 import { styled } from "hooks";
 import React from "react";
-import { useUIDSeed } from "react-uid";
 import { LG, MD, SM } from "types/sizes";
-import { Radio } from ".";
+import { Radio } from "./Radio";
 
 export interface RadioOption {
   label: string;
@@ -27,12 +26,12 @@ export interface RadioGroupProps {
   onChange: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-export const RadioGroupStyle = styled(({ theme }) => ({
+export const RadioGroupStyle = styled({
   "& > span": {
     fontSize: remStep(7, StepSize.REM125),
     fontWeight: 600,
   },
-}));
+});
 
 export const RadioGroup = React.memo(
   React.forwardRef(function (
@@ -55,7 +54,7 @@ export const RadioGroup = React.memo(
     return (
       <Box
         ref={ref}
-        className={cx(RadioGroupStyle())}
+        className={cx(RadioGroupStyle)}
         aria-label={label}
         role="group"
       >

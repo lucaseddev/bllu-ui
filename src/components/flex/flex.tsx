@@ -1,5 +1,4 @@
 import cx from "classnames";
-import { style, StyleAttribute } from "glamor";
 import { pxStep, StepSize } from "helpers/scale";
 import { styled, StyleObject } from "hooks/useStyles";
 import React, { useMemo } from "react";
@@ -92,7 +91,7 @@ function generateResponsiveGridSize(
   breakpoint: string,
   stepCount: number
 ) {
-  let style: { [key: number | string]: StyleObject | string } = {};
+  let style: { [key: string]: StyleObject | string } = {};
 
   style[new Boolean(true).toString()] = {
     flexGrow: 1,

@@ -1,7 +1,7 @@
 import { useSidebar } from "hooks/useSidebar";
 import { styled } from "hooks/useStyles";
-import React, { useState } from "react";
-import { resCSS, SM } from "types/sizes";
+import React from "react";
+import { resCSS } from "types/sizes";
 
 export interface SidebarProps {
   children: React.ReactNode;
@@ -15,7 +15,7 @@ interface SidebarInternalProps
 }
 
 export const SidebarStyle = styled<SidebarInternalProps>(
-  ({ theme, isOpen = true, width = 200 }) => ({
+  ({ isOpen = true, width = 200 }) => ({
     transition: `transform 0.2s ease-in-out`,
     transform: `translateX(${isOpen ? "0px" : `-${width}px`})`,
 

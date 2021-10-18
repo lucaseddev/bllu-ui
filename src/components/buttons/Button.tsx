@@ -1,12 +1,7 @@
 import { Spinner } from "components/spinner";
 import { css } from "glamor";
 import { pxStep, remStep, StepSize } from "helpers/scale";
-import {
-  styled,
-  StyleFunction,
-  StyleObject,
-  useStyles,
-} from "hooks/useStyles";
+import { styled, StyleFunction, StyleObject } from "hooks/useStyles";
 import { SM, MD, LG } from "types/sizes";
 import React from "react";
 import { IconType } from "react-icons";

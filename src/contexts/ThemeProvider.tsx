@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { themeAnimations, themeLight } from "theme";
+import { themeAnimations } from "theme";
 import { Theme, ThemeColors } from "types/theme";
 
 interface ThemeContextProps {

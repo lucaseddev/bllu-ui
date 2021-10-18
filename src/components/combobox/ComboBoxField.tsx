@@ -1,9 +1,8 @@
-import cx from "classnames";
 import { pxStep, remStep, StepSize } from "helpers/scale";
 import { styled } from "hooks/useStyles";
 import React from "react";
 import { useUIDSeed } from "react-uid";
-import { ComboBox, ComboBoxProps } from ".";
+import { ComboBox, ComboBoxProps } from "./ComboBox";
 
 export interface ComboBoxFieldProps extends ComboBoxProps {
   id?: string;
