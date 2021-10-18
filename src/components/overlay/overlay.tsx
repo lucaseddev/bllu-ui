@@ -1,9 +1,11 @@
-import { styled } from "hooks";
+import { styled, StyleObject } from "hooks";
 import React from "react";
 
 export interface OverlayProps {
   onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   show: boolean;
+
+  className?: StyleObject | string;
 }
 
 const overlayStyle = styled({
@@ -13,9 +15,13 @@ const overlayStyle = styled({
 });
 
 export function Overlay(props: OverlayProps) {
+  const { className } = props;
   return (
     (props.show && (
-      <div className={`${overlayStyle}`} onClick={props.onClick} />
+      <div
+        className={`${overlayStyle} ${className}`}
+        onClick={props.onClick}
+      />
     )) ||
     null
   );

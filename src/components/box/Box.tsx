@@ -56,6 +56,8 @@ export interface BoxProps extends React.HTMLAttributes<HTMLElement> {
 
   w?: number | string;
   h?: number | string;
+  minw?: number | string;
+  minh?: number | string;
 }
 
 function generateRounded(roundedCount: number, stepSize: number) {
@@ -152,13 +154,17 @@ const cardThemedStyle = styled<Omit<BoxProps, "children">>(
     borderColor = theme.colors.defaultStroke,
     bg = theme.colors.default,
     h = "auto",
+    minh = "0",
     w = "auto",
+    minw = "0",
   }) => {
     return {
       borderColor: borderColor,
       background: bg,
       height: h,
       width: w,
+      minWidth: minw,
+      minHeight: minh,
     };
   }
 );
@@ -193,6 +199,8 @@ export const Box = React.memo(
       mt,
       w,
       h,
+      minw,
+      minh,
       className,
       ...rest
     } = props;
@@ -226,7 +234,7 @@ export const Box = React.memo(
       as,
       {
         className: cx(
-          cardThemedStyle({ borderColor, bg, w, h }),
+          cardThemedStyle({ borderColor, bg, w, h, minw, minh }),
           classNames,
           className
         ),

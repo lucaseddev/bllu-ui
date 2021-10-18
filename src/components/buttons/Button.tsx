@@ -10,7 +10,7 @@ import {
 import { SM, MD, LG } from "types/sizes";
 import React from "react";
 import { IconType } from "react-icons";
-import Icon from "components/icon/Icon";
+import { Icon } from "components/icon";
 import classNames from "classnames";
 
 export const PRIMARY = "primary";
@@ -24,7 +24,11 @@ export type LINK = typeof LINK;
 export type ButtonAppearance = PRIMARY | SECONDARY | LINK;
 export type ButtonSize = SM | MD | LG;
 
-export interface ButtonProps {
+export interface ButtonProps
+  extends Omit<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    "className"
+  > {
   children: any;
 
   submit?: boolean;
@@ -164,7 +168,9 @@ const buttonAppearance = {
 export const Button = React.memo(
   React.forwardRef(function Button(
     props: ButtonProps,
-    ref?: React.LegacyRef<HTMLButtonElement>
+    ref?:
+      | React.LegacyRef<HTMLButtonElement>
+      | ((e: HTMLButtonElement) => void)
   ) {
     const {
       children,

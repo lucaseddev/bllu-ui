@@ -27,7 +27,7 @@ export const IconStyle = styled<IconProps>(({ size, color }) => ({
   color: color || "",
 }));
 
-function Icon(props: IconProps) {
+export const Icon = React.memo(function (props: IconProps) {
   const { icon, className } = props;
 
   const style = useStyles(
@@ -49,6 +49,4 @@ function Icon(props: IconProps) {
   return (
     <div className={cx(style)}>{React.cloneElement(IconElement)}</div>
   );
-}
-
-export default React.memo(Icon);
+});
