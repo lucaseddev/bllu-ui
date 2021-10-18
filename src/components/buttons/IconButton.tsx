@@ -1,4 +1,4 @@
-import Icon from "components/icon/Icon";
+import { Icon } from "components/icon";
 import { Spinner } from "components/spinner";
 import { css } from "glamor";
 import { pxStep, StepSize } from "helpers/scale";
