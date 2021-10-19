@@ -1,8 +1,10 @@
-on:
-  release:
-    types: [created]
-
 name: Node.js Package
+
+on:
+  workflow_run:
+    workflows: ["Create Release"]
+    types:
+      - completed
 
 jobs:
   build:
