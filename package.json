@@ -1,13 +1,15 @@
 {
-  "name": "bllu-ui",
+  "name": "@lucaseddev/bllu-ui",
   "version": "1.0.18",
   "description": "UI Library for internal use of the bllu ecosystem.",
-  "repository": "git@github.com:lucaseddev/bllu-ui.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucaseddev/bllu-ui"
+  },
   "author": "lucaseddev <lucaseddev@gmail.com>",
   "license": "",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/",
-    "@lucaseddev:registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com/lucaseddev"
   },
   "devDependencies": {
     "@babel/core": "^7.14.8",

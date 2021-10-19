@@ -2224,6 +2224,66 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lucaseddev/bllu-ui@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@lucaseddev/bllu-ui@workspace:."
+  dependencies:
+    "@babel/core": ^7.14.8
+    "@mdx-js/react": ^1.6.22
+    "@popperjs/core": ^2.10.2
+    "@rollup/plugin-commonjs": ^20.0.0
+    "@rollup/plugin-json": ^4.1.0
+    "@rollup/plugin-node-resolve": ^13.0.4
+    "@storybook/addon-actions": ^6.3.6
+    "@storybook/addon-docs": ^6.3.6
+    "@storybook/addon-essentials": ^6.3.6
+    "@storybook/addon-links": ^6.3.6
+    "@storybook/react": ^6.3.6
+    "@testing-library/jest-dom": ^5.14.1
+    "@testing-library/react": ^12.0.0
+    "@types/fuzzaldrin-plus": ^0.6.2
+    "@types/jest": ^26.0.24
+    "@types/lodash.debounce": ^4.0.6
+    "@types/react": ^17.0.15
+    "@types/react-dom": ^17.0.9
+    "@types/react-is": ^17.0.2
+    arrify: ^3.0.0
+    babel-loader: ^8.2.2
+    babel-preset-react-app: ^10.0.0
+    classnames: ^2.3.1
+    downshift: ^6.1.3
+    fuzzaldrin-plus: ^0.6.0
+    glamor: ^2.20.40
+    identity-obj-proxy: ^3.0.0
+    jest: ^27.0.6
+    lodash.debounce: ^4.0.8
+    node-sass: ^6.0.1
+    postcss: ^8.3.6
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    react-fast-compare: ^3.2.0
+    react-hook-form: ^7.12.2
+    react-icons: ^4.2.0
+    react-is: ^17.0.2
+    react-popper: ^2.2.5
+    react-table: ^7.7.0
+    react-uid: ^2.3.1
+    react-virtual: ^2.8.1
+    rollup: ^2.55.1
+    rollup-plugin-peer-deps-external: ^2.2.4
+    rollup-plugin-postcss: ^4.0.0
+    rollup-plugin-terser: ^7.0.2
+    rollup-plugin-typescript2: ^0.30.0
+    sass-loader: ^12.1.0
+    ts-jest: ^27.0.4
+    typescript: ^4.3.5
+    webpack: ^5.49.0
+  peerDependencies:
+    react: ^17.0.2
+    react-dom: ^17.0.2
+  languageName: unknown
+  linkType: soft
+
 "@mdx-js/loader@npm:^1.6.22":
   version: 1.6.22
   resolution: "@mdx-js/loader@npm:1.6.22"
@@ -5421,66 +5481,6 @@ __metadata:
   checksum: 65b6b48095717c2e6105a021a7da4ea435aa8d3d3cd085cb9e85bcb6e5773cf318c4745c3f7c504412855940b585bdf9b918236612a1c7a7942491de176f1ae7
   languageName: node
   linkType: hard
-
-"bllu-ui@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "bllu-ui@workspace:."
-  dependencies:
-    "@babel/core": ^7.14.8
-    "@mdx-js/react": ^1.6.22
-    "@popperjs/core": ^2.10.2
-    "@rollup/plugin-commonjs": ^20.0.0
-    "@rollup/plugin-json": ^4.1.0
-    "@rollup/plugin-node-resolve": ^13.0.4
-    "@storybook/addon-actions": ^6.3.6
-    "@storybook/addon-docs": ^6.3.6
-    "@storybook/addon-essentials": ^6.3.6
-    "@storybook/addon-links": ^6.3.6
-    "@storybook/react": ^6.3.6
-    "@testing-library/jest-dom": ^5.14.1
-    "@testing-library/react": ^12.0.0
-    "@types/fuzzaldrin-plus": ^0.6.2
-    "@types/jest": ^26.0.24
-    "@types/lodash.debounce": ^4.0.6
-    "@types/react": ^17.0.15
-    "@types/react-dom": ^17.0.9
-    "@types/react-is": ^17.0.2
-    arrify: ^3.0.0
-    babel-loader: ^8.2.2
-    babel-preset-react-app: ^10.0.0
-    classnames: ^2.3.1
-    downshift: ^6.1.3
-    fuzzaldrin-plus: ^0.6.0
-    glamor: ^2.20.40
-    identity-obj-proxy: ^3.0.0
-    jest: ^27.0.6
-    lodash.debounce: ^4.0.8
-    node-sass: ^6.0.1
-    postcss: ^8.3.6
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    react-fast-compare: ^3.2.0
-    react-hook-form: ^7.12.2
-    react-icons: ^4.2.0
-    react-is: ^17.0.2
-    react-popper: ^2.2.5
-    react-table: ^7.7.0
-    react-uid: ^2.3.1
-    react-virtual: ^2.8.1
-    rollup: ^2.55.1
-    rollup-plugin-peer-deps-external: ^2.2.4
-    rollup-plugin-postcss: ^4.0.0
-    rollup-plugin-terser: ^7.0.2
-    rollup-plugin-typescript2: ^0.30.0
-    sass-loader: ^12.1.0
-    ts-jest: ^27.0.4
-    typescript: ^4.3.5
-    webpack: ^5.49.0
-  peerDependencies:
-    react: ^17.0.2
-    react-dom: ^17.0.2
-  languageName: unknown
-  linkType: soft
 
 "bluebird@npm:^3.3.5, bluebird@npm:^3.5.5":
   version: 3.7.2
