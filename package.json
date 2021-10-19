@@ -1,11 +1,12 @@
 {
   "name": "bllu-ui",
-  "version": "1.0.14",
+  "version": "1.0.18",
   "description": "UI Library for internal use of the bllu ecosystem.",
   "repository": "git@github.com:lucaseddev/bllu-ui.git",
   "author": "lucaseddev <lucaseddev@gmail.com>",
   "license": "",
   "publishConfig": {
+    "registry": "https://npm.pkg.github.com/",
     "@lucaseddev:registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
@@ -50,6 +51,7 @@
     "react-dom": "^17.0.2"
   },
   "scripts": {
+    "publish": "npm publish",
     "build": "rollup -c",
     "storybook": "start-storybook -p 6006",
     "storybook:export": "build-storybook",
