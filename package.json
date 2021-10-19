@@ -6,6 +6,7 @@
   "author": "lucaseddev <lucaseddev@gmail.com>",
   "license": "",
   "publishConfig": {
+    "access": "restricted",
     "registry": "https://npm.pkg.github.com/",
     "@lucaseddev:registry": "https://npm.pkg.github.com"
   },
