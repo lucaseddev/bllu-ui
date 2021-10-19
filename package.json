@@ -1,6 +1,6 @@
 {
   "name": "@lucaseddev/bllu-ui",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "UI Library for internal use of the bllu ecosystem.",
   "repository": {
     "type": "git",
