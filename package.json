@@ -1,6 +1,6 @@
 {
   "name": "@lucaseddev/bllu-ui",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "UI Library for internal use of the bllu ecosystem.",
   "repository": {
     "type": "git",
@@ -60,6 +60,9 @@
     "test:watch": "jest --watch",
     "build-storybook": "build-storybook"
   },
+  "files": [
+    "lib"
+  ],
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "types": "./lib/esm/index.d.ts",
