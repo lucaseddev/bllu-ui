@@ -1,3 +1,5 @@
+name: Node.js Package
+
 on:
   push:
     # Sequence of patterns matched against refs/tags
@@ -22,9 +24,6 @@ on:
         ${{ steps.Changelog.outputs.changelog }}
       draft: false
       prerelease: false
-
-
-name: Node.js Package
 
 on:
   release:
