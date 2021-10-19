@@ -7,7 +7,7 @@ on:
       - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
-  build:
+  build-release:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
@@ -32,3 +32,30 @@ jobs:
         id: Changelog
         env:
           REPO: ${{ github.repository }}
+
+  build-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+      - run: rm -rf node_modules && yarn install --frozen-lockfile
+      - run: yarn test
+
+  publish-gpr:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com/
+      - run: rm -rf node_modules && yarn install --frozen-lockfile
+      - run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
