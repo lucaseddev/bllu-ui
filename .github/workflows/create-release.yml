@@ -34,6 +34,7 @@ jobs:
           REPO: ${{ github.repository }}
 
   build-package:
+    needs: build-release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -44,7 +45,7 @@ jobs:
       - run: yarn test
 
   publish-gpr:
-    needs: build
+    needs: build-package
     runs-on: ubuntu-latest
     permissions:
       packages: write
