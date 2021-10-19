@@ -25,14 +25,13 @@ jobs:
             ${{ steps.Changelog.outputs.changelog }}
           draft: false
           prerelease: false
-
-- name: Check package version
-  uses: technote-space/package-version-check-action@v1
-- name: Changelog
-  uses: scottbrenner/generate-changelog-action@master
-  id: Changelog
-  env:
-    REPO: ${{ github.repository }}
+      - name: Check package version
+        uses: technote-space/package-version-check-action@v1
+      - name: Changelog
+        uses: scottbrenner/generate-changelog-action@master
+        id: Changelog
+        env:
+          REPO: ${{ github.repository }}
 
 name: Node.js Package
 
