@@ -1,5 +1,5 @@
 {
-  "name": "bllu-ui",
+  "name": "@lucaseddev/bllu-ui",
   "version": "1.0.14",
   "description": "UI Library for internal use of the bllu ecosystem.",
   "repository": "git@github.com:lucaseddev/bllu-ui.git",
