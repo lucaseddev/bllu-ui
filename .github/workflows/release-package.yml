@@ -33,11 +33,11 @@ jobs:
         env:
           REPO: ${{ github.repository }}
 
-name: Node.js Package
-
 on:
   release:
     types: [created]
+
+name: Node.js Package
 
 jobs:
   build:
