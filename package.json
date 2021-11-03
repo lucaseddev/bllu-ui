@@ -5,7 +5,6 @@
   "repository": "git@github.com:lucaseddev/bllu-ui.git",
   "author": "lucaseddev <lucaseddev@gmail.com>",
   "license": "",
-  "private": "true",
   "publishConfig": {
     "@lucaseddev:registry": "https://npm.pkg.github.com"
   },
