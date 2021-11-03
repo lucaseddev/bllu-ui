@@ -15,6 +15,10 @@ export function remStep(x: number, size: StepSize = StepSize.REM5) {
   return x * size + "rem";
 }
 
+export function emStep(x: number, size: StepSize = StepSize.REM5) {
+  return remStep(x, size).replace("r", "");
+}
+
 export function pxStep(x: number, size: StepSize = StepSize.PX8) {
   if (!Number.isInteger(x)) {
     throw new TypeError("x is not a number.");
