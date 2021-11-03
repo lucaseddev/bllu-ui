@@ -9,7 +9,6 @@ import {
   TextNoGutter,
   TextNoWrap,
   TextAlign,
-  TextSizes,
   TextProps,
 } from "../text";
 
