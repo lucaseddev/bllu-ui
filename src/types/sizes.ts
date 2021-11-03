@@ -4,7 +4,10 @@ export const MD = "md";
 export const LG = "lg";
 export const XL = "xl";
 export const XL2 = "2xl";
-export const XL3 = "4xl";
+export const XL3 = "3xl";
+export const XL4 = "4xl";
+export const XL5 = "5xl";
+export const XL6 = "6xl";
 
 export type XS = typeof XS;
 export type SM = typeof SM;
@@ -13,6 +16,9 @@ export type LG = typeof LG;
 export type XL = typeof XL;
 export type XL2 = typeof XL2;
 export type XL3 = typeof XL3;
+export type XL4 = typeof XL4;
+export type XL5 = typeof XL5;
+export type XL6 = typeof XL6;
 
 export const res = {
   [SM]: "640px",
