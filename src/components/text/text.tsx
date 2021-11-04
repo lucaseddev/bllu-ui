@@ -23,7 +23,9 @@ export interface TextProps {
     | "samp"
     | "sub"
     | "sup"
-    | "p";
+    | "p"
+    | "strong"
+    | "small";
 
   size?: XS | SM | MD | LG | XL | XL2 | XL3 | XL4 | XL5 | XL6;
 
