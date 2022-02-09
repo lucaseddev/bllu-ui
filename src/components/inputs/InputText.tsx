@@ -55,7 +55,7 @@ export interface InputTextProps
     | string;
 }
 
-const sizes = {
+export const inputTextSizes = {
   sm: { height: pxStep(4), fontSize: remStep(6, StepSize.REM125) },
   md: { height: pxStep(5), fontSize: remStep(6, StepSize.REM125) },
   lg: { height: pxStep(6), fontSize: remStep(7, StepSize.REM125) },
@@ -67,7 +67,7 @@ export const InputStyle: StyleFunction<InputTextProps> = ({
   width,
 }) => {
   return {
-    ...sizes[size || MD],
+    ...inputTextSizes[size || MD],
     border: `1px solid ${theme.colors.defaultStroke}`,
     borderRadius: pxStep(1, StepSize.PX4),
     width: width || "auto",

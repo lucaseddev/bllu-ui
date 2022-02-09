@@ -1,8 +1,8 @@
-import { InputText } from "components/inputs";
+import { InputText, inputTextSizes } from "components/inputs";
 import { Portal } from "components/portal";
 import { Spinner } from "components/spinner";
 import { useCombobox, UseComboboxStateChange } from "downshift";
-import { pxStep, remStep, StepSize } from "helpers/scale";
+import { pxStep, remStep, StepSize, stepToNumber } from "helpers/scale";
 import { StyleFunction, useStyles } from "hooks/useStyles";
 import React, {
   useCallback,
@@ -178,10 +178,13 @@ const SpinnerStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
   marginLeft: pxStep(3, StepSize.PX4),
 });
 
-const ListStateStyle: StyleFunction<{ isOpen: boolean }> = ({
+const ListStateStyle: StyleFunction<{ isOpen: boolean, position: { x: number, y: number } }> = ({
   isOpen,
+  position: { x, y }
 }) => ({
   transform: isOpen ? "translateX(0px)" : "translateX(-1000%)",
+  left: x,
+  top: y
 });
 
 export const ComboBox = React.memo(function ComboBox(
@@ -344,6 +347,10 @@ export const ComboBox = React.memo(function ComboBox(
   });
   const listStateStyle = useStyles([ListStateStyle], {
     isOpen,
+    position: {
+      x: wrapperRef.current?.offsetLeft || 0, 
+      y: (wrapperRef.current?.offsetTop || 0) + stepToNumber(inputTextSizes[size].height)
+    }
   });
 
   useEffect(() => {

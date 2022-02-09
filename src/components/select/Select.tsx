@@ -12,7 +12,7 @@ import {
   RiArrowUpSLine,
   RiCloseCircleFill,
 } from "react-icons/ri";
-import { pxStep, remStep, StepSize } from "helpers/scale";
+import { pxStep, remStep, StepSize, stepToNumber } from "helpers/scale";
 import { LG, MD, SM } from "types/sizes";
 import cx from "classnames";
 import { Portal } from "components/portal";
@@ -214,10 +214,13 @@ const ListStyle: StyleFunction<StyleSelectProps> = ({
   },
 });
 
-const ListStateStyle: StyleFunction<{ isOpen: boolean }> = ({
+const ListStateStyle: StyleFunction<{ isOpen: boolean, position: { x: number, y: number } }> = ({
   isOpen,
+  position: { x, y }
 }) => ({
   transform: isOpen ? "translateX(0px)" : "translateX(-1000%)",
+  left: x,
+  top: y
 });
 
 export const Select = React.memo(
@@ -322,8 +325,13 @@ export const Select = React.memo(
     const listStyle = useStyles([ListStyle], {
       width: dropdownWidth,
     });
+
     const listStateStyle = useStyles([ListStateStyle], {
       isOpen,
+      position: {
+        x: wrapperRef.current?.offsetLeft || 0, 
+        y: (wrapperRef.current?.offsetTop || 0) + stepToNumber(sizes[size].height)
+      }
     });
 
     useEffect(() => {

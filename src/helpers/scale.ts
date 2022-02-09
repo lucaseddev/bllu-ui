@@ -26,3 +26,7 @@ export function pxStep(x: number, size: StepSize = StepSize.PX8) {
 
   return x * size + "px";
 }
+
+export function stepToNumber(x: string) {
+  return +x.slice(0, x.length - 2);
+}
