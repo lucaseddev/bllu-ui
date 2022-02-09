@@ -150,42 +150,43 @@ export interface MenuGroupProps {
   children: React.ReactNode;
 }
 
-export const MenuItem = React.memo(function Item(
-  props: MenuItemProps
-) {
-  const {
-    children,
-    selected,
-    disabled,
-    onClick,
-    as = "div",
-    icon: PrefixIcon,
-    sufix: SufixContent,
-    intent: intention = Intent.NONE,
-    ...rest
-  } = props;
+export const MenuItem = React.memo(
+  React.forwardRef(function Item(props: MenuItemProps, ref) {
+    const {
+      children,
+      selected,
+      disabled,
+      onClick,
+      as = "div",
+      icon: PrefixIcon,
+      sufix: SufixContent,
+      intent: intention = Intent.NONE,
+      ...rest
+    } = props;
 
-  return React.createElement(
-    as,
-    {
-      tabIndex: 0,
-      "aria-disabled": !!disabled,
-      disabled: disabled,
-      role: "menuitem",
-      "data-selected": !!selected,
-      "data-intention": intention,
-      onClick: onClick,
-      ...rest,
-    },
-    <React.Fragment>
-      {PrefixIcon && (
-        <Icon className={MenuItemIcon} icon={PrefixIcon} />
-      )}
-      <span>{children}</span>
-      {SufixContent}
-    </React.Fragment>
-  );
-});
+    return React.createElement(
+      as,
+      {
+        ref,
+        tabIndex: 0,
+        "aria-disabled": !!disabled,
+        disabled: disabled,
+        role: "menuitem",
+        "data-selected": !!selected,
+        "data-intention": intention,
+        onClick: onClick,
+        ...rest,
+      },
+      <React.Fragment>
+        {PrefixIcon && (
+          <Icon className={MenuItemIcon} icon={PrefixIcon} />
+        )}
+        <span>{children}</span>
+        {SufixContent}
+      </React.Fragment>
+    );
+  })
+);
 
 export const MenuGroup = React.memo(function Group(
   props: MenuGroupProps
