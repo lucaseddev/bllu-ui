@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useSelect, UseSelectStateChange } from "downshift";
-import { StyleFunction, useStyles } from "hooks/useStyles";
+import { StyleFunction, useStyles, styled } from "hooks/useStyles";
 import {
   RiArrowDownSLine,
   RiArrowUpSLine,
@@ -58,18 +58,13 @@ const sizes = {
 
 type StyleSelectProps = Omit<SelectProps, "options">;
 
-const WrapperStyle: StyleFunction<StyleSelectProps> = ({
-  width,
-}) => ({
+const WrapperStyle: StyleFunction<StyleSelectProps> = ({ width }) => ({
   position: "relative",
   width: width || "auto",
   display: "inline-block",
 });
 
-const SelectStyle: StyleFunction<StyleSelectProps> = ({
-  theme,
-  size,
-}) => ({
+const SelectStyle: StyleFunction<StyleSelectProps> = ({ theme, size }) => ({
   ...sizes[size || MD],
   display: "inline-flex",
   alignItems: "center",
@@ -144,10 +139,7 @@ const SelectStyle: StyleFunction<StyleSelectProps> = ({
   },
 });
 
-const ListStyle: StyleFunction<StyleSelectProps> = ({
-  theme,
-  width,
-}) => ({
+const ListStyle: StyleFunction<StyleSelectProps> = ({ theme, width }) => ({
   maxHeight: "180px",
   minWidth: width || "auto",
   width: width || "auto",
@@ -206,22 +198,19 @@ const ListStyle: StyleFunction<StyleSelectProps> = ({
     "& > li:first-child": {
       fontSize: 10,
       fontWeight: "bold",
-      padding: `${pxStep(2, StepSize.PX4)} ${pxStep(
-        3,
-        StepSize.PX4
-      )}`,
+      padding: `${pxStep(2, StepSize.PX4)} ${pxStep(3, StepSize.PX4)}`,
     },
   },
 });
 
-const ListStateStyle: StyleFunction<{ isOpen: boolean, position: { x: number, y: number } }> = ({
-  isOpen,
-  position: { x, y }
-}) => ({
-  transform: isOpen ? "translateX(0px)" : "translateX(-1000%)",
+const ListStateStyle = styled<{
+  isOpen: boolean;
+  x: number;
+  y: number;
+}>(({ x, y }) => ({
   left: x,
-  top: y
-});
+  top: y,
+}));
 
 export const Select = React.memo(
   React.forwardRef(function Select(
@@ -247,7 +236,6 @@ export const Select = React.memo(
     const [dropdownWidth, setDropdownWidth] = useState<number>();
     const [isHover, setIsHover] = useState<boolean>(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const listRef = useRef<HTMLDivElement>(null);
 
     const handleSelectedItemChange = useCallback(
       (value: UseSelectStateChange<SelectOptionItem>) => {
@@ -317,12 +305,12 @@ export const Select = React.memo(
       onSelectedItemChange: handleSelectedItemChange,
       selectedItem: controlledValue,
       onIsOpenChange: (changes) => {
-        if(changes.isOpen) {
+        if (changes.isOpen) {
           document.body.setAttribute("style", "overflow: hidden;");
         } else {
           document.body.setAttribute("style", "overflow: auto;");
         }
-      }
+      },
     });
 
     const wrapperStyle = useStyles([WrapperStyle], {
@@ -335,12 +323,10 @@ export const Select = React.memo(
 
     const boundingWrapperRect = wrapperRef.current?.getBoundingClientRect();
 
-    const listStateStyle = useStyles([ListStateStyle], {
+    const listStateStyle = ListStateStyle({
       isOpen,
-      position: {
-        x: boundingWrapperRect?.x || 0, 
-        y: (boundingWrapperRect?.y || 0) + stepToNumber(sizes[size].height)
-      }
+      x: boundingWrapperRect?.x || 0,
+      y: (boundingWrapperRect?.y || 0) + stepToNumber(sizes[size].height),
     });
 
     useEffect(() => {
@@ -353,6 +339,8 @@ export const Select = React.memo(
     }, [width, wrapperRef.current, selectedItem]);
 
     let indexCounter = 0;
+
+    const menuProps = getMenuProps({}, { suppressRefError: true });
 
     return (
       <div className={wrapperStyle} ref={wrapperRef}>
@@ -382,9 +370,7 @@ export const Select = React.memo(
           data-isinvalid={isInvalid}
         >
           <span data-isselected={(selectedItem && true) || false}>
-            {selectedItem?.label ||
-              placeholder ||
-              "Selecione um item..."}
+            {selectedItem?.label || placeholder || "Selecione um item..."}
           </span>
           {isHover ? (
             <span
@@ -404,70 +390,63 @@ export const Select = React.memo(
             </span>
           ) : (
             (isLoading && <Spinner />) || (
-              <span>
-                {isOpen ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
-              </span>
+              <span>{isOpen ? <RiArrowUpSLine /> : <RiArrowDownSLine />}</span>
             )
           )}
         </button>
-        <Portal>
-          <ul
-            {...getMenuProps({ ref: listRef })}
-            className={cx(listStyle, listStateStyle)}
-          >
-            {options.map(
-              (item, index) =>
-                ((item as SelectOptionGroup).options && (
-                  <ul key={`group-${item.label}-${index}`}>
-                    <li>{item.label}</li>
-                    {(item as SelectOptionGroup).options.map(
-                      (groupedITem) => (
-                        <li
-                          key={`option_grouped${
-                            (groupedITem as SelectOptionItem).value
-                          }-${indexCounter}`}
-                          {...getItemProps({
-                            item: groupedITem,
-                            index: indexCounter,
-                            onClick: () => selectItem(groupedITem),
-                          })}
-                          data-hover={
-                            highlightedIndex === indexCounter++
-                          }
-                          data-selected={
-                            (selectedItem as SelectOptionItem)
-                              ?.value ===
-                            (groupedITem as SelectOptionItem).value
-                          }
-                        >
-                          {groupedITem.label}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                )) || (
-                  <li
-                    key={`option${
-                      (item as SelectOptionItem).value
-                    }-${indexCounter}`}
-                    {...getItemProps({
-                      item: item as SelectOptionItem,
-                      index: indexCounter,
-                      onClick: () =>
-                        selectItem(item as SelectOptionItem),
-                    })}
-                    data-hover={highlightedIndex === indexCounter++}
-                    data-selected={
-                      (selectedItem as SelectOptionItem)?.value ===
-                      (item as SelectOptionItem).value
-                    }
-                  >
-                    {item.label}
-                  </li>
-                )
-            )}
-          </ul>
-        </Portal>
+        {isOpen && (
+          <Portal>
+            <ul {...menuProps} className={cx(listStyle, listStateStyle)}>
+              {options.map(
+                (item, index) =>
+                  ((item as SelectOptionGroup).options && (
+                    <ul key={`group-${item.label}-${index}`}>
+                      <li>{item.label}</li>
+                      {(item as SelectOptionGroup).options.map(
+                        (groupedITem) => (
+                          <li
+                            key={`option_grouped${
+                              (groupedITem as SelectOptionItem).value
+                            }-${indexCounter}`}
+                            {...getItemProps({
+                              item: groupedITem,
+                              index: indexCounter,
+                              onClick: () => selectItem(groupedITem),
+                            })}
+                            data-hover={highlightedIndex === indexCounter++}
+                            data-selected={
+                              (selectedItem as SelectOptionItem)?.value ===
+                              (groupedITem as SelectOptionItem).value
+                            }
+                          >
+                            {groupedITem.label}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  )) || (
+                    <li
+                      key={`option${
+                        (item as SelectOptionItem).value
+                      }-${indexCounter}`}
+                      {...getItemProps({
+                        item: item as SelectOptionItem,
+                        index: indexCounter,
+                        onClick: () => selectItem(item as SelectOptionItem),
+                      })}
+                      data-hover={highlightedIndex === indexCounter++}
+                      data-selected={
+                        (selectedItem as SelectOptionItem)?.value ===
+                        (item as SelectOptionItem).value
+                      }
+                    >
+                      {item.label}
+                    </li>
+                  )
+              )}
+            </ul>
+          </Portal>
+        )}
       </div>
     );
   })

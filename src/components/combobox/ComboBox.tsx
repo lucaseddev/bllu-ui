@@ -3,7 +3,7 @@ import { Portal } from "components/portal";
 import { Spinner } from "components/spinner";
 import { useCombobox, UseComboboxStateChange } from "downshift";
 import { pxStep, remStep, StepSize, stepToNumber } from "helpers/scale";
-import { StyleFunction, useStyles } from "hooks/useStyles";
+import { StyleFunction, useStyles, styled } from "hooks/useStyles";
 import React, {
   useCallback,
   useEffect,
@@ -178,18 +178,16 @@ const SpinnerStyle: StyleFunction<Omit<ComboBoxProps, "options">> = ({
   marginLeft: pxStep(3, StepSize.PX4),
 });
 
-const ListStateStyle: StyleFunction<{ isOpen: boolean, position: { x: number, y: number } }> = ({
-  isOpen,
-  position: { x, y }
-}) => ({
-  transform: isOpen ? "translateX(0px)" : "translateX(-1000%)",
+const ListStateStyle = styled<{
+  isOpen: boolean;
+  x: number;
+  y: number;
+}>(({ x, y }) => ({
   left: x,
-  top: y
-});
+  top: y,
+}));
 
-export const ComboBox = React.memo(function ComboBox(
-  props: ComboBoxProps
-) {
+export const ComboBox = React.memo(function ComboBox(props: ComboBoxProps) {
   const {
     options,
     value,
@@ -277,10 +275,8 @@ export const ComboBox = React.memo(function ComboBox(
         }
       } else if (
         !inputValue.length ||
-        fuzzaldrin.match(
-          (option as ComboBoxOptionItem).label,
-          inputValue
-        ).length
+        fuzzaldrin.match((option as ComboBoxOptionItem).label, inputValue)
+          .length
       ) {
         newOptions.push(option as ComboBoxOptionItem);
       }
@@ -295,12 +291,9 @@ export const ComboBox = React.memo(function ComboBox(
     return newOptions;
   }, [options, inputValue]);
 
-  const debounceUpdateInputValue = useCallback(
-    ({ inputValue: newValue }) => {
-      setInputValue(newValue || "");
-    },
-    []
-  );
+  const debounceUpdateInputValue = useCallback(({ inputValue: newValue }) => {
+    setInputValue(newValue || "");
+  }, []);
 
   const {
     selectedItem,
@@ -326,7 +319,7 @@ export const ComboBox = React.memo(function ComboBox(
     itemToString: (item) => (item ? String(item.label) : ""),
     onInputValueChange: debounce(debounceUpdateInputValue, 100),
     onIsOpenChange: ({ selectedItem, isOpen, type }) => {
-      if(isOpen) {
+      if (isOpen) {
         document.body.setAttribute("style", "overflow: hidden;");
       } else {
         document.body.setAttribute("style", "overflow: auto;");
@@ -354,12 +347,11 @@ export const ComboBox = React.memo(function ComboBox(
 
   const boundingWrapperRect = wrapperRef.current?.getBoundingClientRect();
 
-  const listStateStyle = useStyles([ListStateStyle], {
+  const listStateStyle = ListStateStyle({
     isOpen,
-    position: {
-      x: boundingWrapperRect?.x || 0, 
-      y: (boundingWrapperRect?.y || 0) + stepToNumber(inputTextSizes[size].height)
-    }
+    x: boundingWrapperRect?.x || 0,
+    y:
+      (boundingWrapperRect?.y || 0) + stepToNumber(inputTextSizes[size].height),
   });
 
   useEffect(() => {
@@ -390,13 +382,14 @@ export const ComboBox = React.memo(function ComboBox(
     overscan: 2,
   });
 
+  const menuProps = getMenuProps({ ref: listRef }, { suppressRefError: true });
+
   return (
     <div
       className={wrapperStyle}
       {...getComboboxProps({
         ref: wrapperRef,
-        onMouseEnter: () =>
-          selectedItem && !suppressClear && setIsHover(true),
+        onMouseEnter: () => selectedItem && !suppressClear && setIsHover(true),
         onMouseLeave: () => !suppressClear && setIsHover(false),
       })}
       data-disabled={isLoading || disabled}
@@ -432,8 +425,7 @@ export const ComboBox = React.memo(function ComboBox(
                 selectItem(undefined);
                 handleSelectedItemChange({
                   selectedItem: undefined,
-                  type:
-                    useCombobox.stateChangeTypes.FunctionSelectItem,
+                  type: useCombobox.stateChangeTypes.FunctionSelectItem,
                 });
                 setIsHover(false);
                 event.stopPropagation();
@@ -443,99 +435,88 @@ export const ComboBox = React.memo(function ComboBox(
             </span>
           ) : (
             (isLoading && <Spinner className={spinnerStyle} />) || (
-              <span
-                className={suffixStyle}
-                {...getToggleButtonProps()}
-              >
+              <span className={suffixStyle} {...getToggleButtonProps()}>
                 {isOpen ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
               </span>
             )
           )
         }
       />
-      <Portal>
-        <ul
-          className={cx(listStyle, listStateStyle)}
-          {...getMenuProps({ ref: listRef })}
-        >
-          <li
-            key="total-size"
-            style={{ height: rowVirtualizer.totalSize }}
-          />
-          {(rowVirtualizer.virtualItems.length &&
-            rowVirtualizer.virtualItems.map((virtualRow) => {
-              switch (controlledOptions[virtualRow.index].value) {
-                case "group-label":
-                  return (
-                    <li
-                      key={`grouped_option${
-                        controlledOptions[virtualRow.index].value
-                      }-${virtualRow.index}`}
-                      style={{
-                        position: "absolute",
-                        top: 4,
-                        left: 0,
-                        width: "100%",
-                        height: virtualRow.size,
-                        transform: `translateY(${virtualRow.start}px)`,
-                      }}
-                      data-isgroup={true}
-                    >
-                      {controlledOptions[virtualRow.index].label}
-                    </li>
-                  );
-                case "group-divider":
-                  return (
-                    <li
-                      key={`group_divider-${virtualRow.index}`}
-                      style={{
-                        position: "absolute",
-                        top: 4,
-                        left: 0,
-                        width: "100%",
-                        height: virtualRow.size,
-                        transform: `translateY(${virtualRow.start}px)`,
-                      }}
-                      data-isdivider={true}
-                    />
-                  );
-                default:
-                  return (
-                    <li
-                      key={`group_option${
-                        controlledOptions[virtualRow.index].value
-                      }-${virtualRow.index}`}
-                      style={{
-                        position: "absolute",
-                        top: 4,
-                        left: 0,
-                        width: "100%",
-                        height: virtualRow.size,
-                        transform: `translateY(${virtualRow.start}px)`,
-                      }}
-                      {...getItemProps({
-                        item: controlledOptions[virtualRow.index],
-                        index: virtualRow.index,
-                        onClick: () =>
-                          selectItem(
-                            controlledOptions[virtualRow.index]
-                          ),
-                      })}
-                      data-hover={
-                        highlightedIndex === virtualRow.index
-                      }
-                      data-selected={
-                        controlledOptions[virtualRow.index].value ===
-                        selectedItem?.value
-                      }
-                    >
-                      {controlledOptions[virtualRow.index].label}
-                    </li>
-                  );
-              }
-            })) || <li data-nooption>No options</li>}
-        </ul>
-      </Portal>
+      {isOpen && (
+        <Portal>
+          <ul {...menuProps} className={cx(listStyle, listStateStyle)}>
+            <li key="total-size" style={{ height: rowVirtualizer.totalSize }} />
+            {(rowVirtualizer.virtualItems.length &&
+              rowVirtualizer.virtualItems.map((virtualRow) => {
+                switch (controlledOptions[virtualRow.index].value) {
+                  case "group-label":
+                    return (
+                      <li
+                        key={`grouped_option${
+                          controlledOptions[virtualRow.index].value
+                        }-${virtualRow.index}`}
+                        style={{
+                          position: "absolute",
+                          top: 4,
+                          left: 0,
+                          width: "100%",
+                          height: virtualRow.size,
+                          transform: `translateY(${virtualRow.start}px)`,
+                        }}
+                        data-isgroup={true}
+                      >
+                        {controlledOptions[virtualRow.index].label}
+                      </li>
+                    );
+                  case "group-divider":
+                    return (
+                      <li
+                        key={`group_divider-${virtualRow.index}`}
+                        style={{
+                          position: "absolute",
+                          top: 4,
+                          left: 0,
+                          width: "100%",
+                          height: virtualRow.size,
+                          transform: `translateY(${virtualRow.start}px)`,
+                        }}
+                        data-isdivider={true}
+                      />
+                    );
+                  default:
+                    return (
+                      <li
+                        key={`group_option${
+                          controlledOptions[virtualRow.index].value
+                        }-${virtualRow.index}`}
+                        style={{
+                          position: "absolute",
+                          top: 4,
+                          left: 0,
+                          width: "100%",
+                          height: virtualRow.size,
+                          transform: `translateY(${virtualRow.start}px)`,
+                        }}
+                        {...getItemProps({
+                          item: controlledOptions[virtualRow.index],
+                          index: virtualRow.index,
+                          onClick: () =>
+                            selectItem(controlledOptions[virtualRow.index]),
+                        })}
+                        data-hover={highlightedIndex === virtualRow.index}
+                        data-selected={
+                          controlledOptions[virtualRow.index].value ===
+                          selectedItem?.value
+                        }
+                      >
+                        {controlledOptions[virtualRow.index].label}
+                      </li>
+                    );
+                }
+              })) || <li data-nooption>No options</li>}
+          </ul>
+        </Portal>
+      )}
     </div>
   );
 });
