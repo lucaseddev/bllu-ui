@@ -326,6 +326,12 @@ export const ComboBox = React.memo(function ComboBox(
     itemToString: (item) => (item ? String(item.label) : ""),
     onInputValueChange: debounce(debounceUpdateInputValue, 100),
     onIsOpenChange: ({ selectedItem, isOpen, type }) => {
+      if(isOpen) {
+        document.body.setAttribute("style", "overflow: hidden;");
+      } else {
+        document.body.setAttribute("style", "overflow: auto;");
+      }
+
       if (
         type === useCombobox.stateChangeTypes.InputBlur &&
         !isOpen &&
@@ -345,11 +351,14 @@ export const ComboBox = React.memo(function ComboBox(
   const listStyle = useStyles([ListStyle], {
     width: dropdownWidth,
   });
+
+  const boundingWrapperRect = wrapperRef.current?.getBoundingClientRect();
+
   const listStateStyle = useStyles([ListStateStyle], {
     isOpen,
     position: {
-      x: wrapperRef.current?.offsetLeft || 0, 
-      y: (wrapperRef.current?.offsetTop || 0) + stepToNumber(inputTextSizes[size].height)
+      x: boundingWrapperRect?.x || 0, 
+      y: (boundingWrapperRect?.y || 0) + stepToNumber(inputTextSizes[size].height)
     }
   });
 

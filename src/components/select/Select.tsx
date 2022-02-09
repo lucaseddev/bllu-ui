@@ -316,6 +316,13 @@ export const Select = React.memo(
       itemToString: (item) => (item ? String(item.label) : ""),
       onSelectedItemChange: handleSelectedItemChange,
       selectedItem: controlledValue,
+      onIsOpenChange: (changes) => {
+        if(changes.isOpen) {
+          document.body.setAttribute("style", "overflow: hidden;");
+        } else {
+          document.body.setAttribute("style", "overflow: auto;");
+        }
+      }
     });
 
     const wrapperStyle = useStyles([WrapperStyle], {
@@ -326,11 +333,13 @@ export const Select = React.memo(
       width: dropdownWidth,
     });
 
+    const boundingWrapperRect = wrapperRef.current?.getBoundingClientRect();
+
     const listStateStyle = useStyles([ListStateStyle], {
       isOpen,
       position: {
-        x: wrapperRef.current?.offsetLeft || 0, 
-        y: (wrapperRef.current?.offsetTop || 0) + stepToNumber(sizes[size].height)
+        x: boundingWrapperRect?.x || 0, 
+        y: (boundingWrapperRect?.y || 0) + stepToNumber(sizes[size].height)
       }
     });
 

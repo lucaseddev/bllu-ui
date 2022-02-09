@@ -8,10 +8,10 @@ export interface PortalProps {
 
 var blluPortal: HTMLDivElement;
 
-export class Portal extends React.Component {
+export class Portal extends React.Component<PortalProps> {
   container: HTMLDivElement;
 
-  constructor(props: {} | Readonly<{}>) {
+  constructor(props: PortalProps | Readonly<PortalProps>) {
     super(props);
 
     if (!isDomValid) return;
